@@ -14,7 +14,7 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
   height: 48,
   position: 'relative',
   textTransform: 'capitalize',
-  color: theme.palette.text.secondary,
+  color: theme.palette.primary.main,
   borderRadius: theme.shape.borderRadius,
 }));
 
@@ -39,7 +39,7 @@ function NavItem({ item, active }) {
 
   const isActiveRoot = active(item.path);
 
-  const { title, path, icon, info, children } = item;
+  const { title, path, icon, /* outlineIcon, */ info, children } = item;
 
   const [open, setOpen] = useState(isActiveRoot);
 
