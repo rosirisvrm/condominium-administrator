@@ -6,10 +6,15 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import { Login } from './pages/Login';
 import { Page404 } from './pages/Page404';
 import DashboardApp from './pages/DashboardApp';
-// import { Landing } from './pages/Landing';
-import { Accounting } from './pages/Accounting';
-import { Users } from './pages/Users';
-import { Groups } from './pages/Groups';
+
+import User from './pages/User';
+import Blog from './pages/Blog';
+import Products from './pages/Products';
+
+import { Landing } from './pages/Landing';
+// import { Accounting } from './pages/Accounting';
+// import { Users } from './pages/Users';
+// import { Groups } from './pages/Groups';
 import { Employees } from './pages/Employees';
 import { Providers } from './pages/Providers';
 import { News } from './pages/News';
@@ -27,10 +32,10 @@ import { Settings } from './pages/Settings';
 
 export default function Router() {
   return useRoutes([
-    // {
-    //   path: '/',
-    //   element: <Landing />,
-    // },
+    {
+      path: '/',
+      element: <Landing />,
+    },
     {
       path: 'login',
       element: <Login />,
@@ -40,9 +45,9 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'home', element: <DashboardApp /> },
-        { path: 'contabilidad', element: <Accounting /> },
-        { path: 'usuarios', element: <Users /> },
-        { path: 'grupos', element: <Groups /> },
+        { path: 'contabilidad', element: <Blog /> },
+        { path: 'usuarios', element: <User /> },
+        { path: 'grupos', element: <Products /> },
         { path: 'empleados', element: <Employees /> },
         { path: 'proveedores', element: <Providers /> },
         { path: 'noticias', element: <News /> },

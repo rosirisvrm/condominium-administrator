@@ -7,11 +7,13 @@ import { Box } from '@mui/material';
 NewLogo.propTypes = {
   disabledLink: PropTypes.bool,
   sx: PropTypes.object,
+  width: PropTypes.number,
+  height: PropTypes.number,
 };
 
-function NewLogo({ disabledLink = false, sx }) {
+function NewLogo({ disabledLink = false, sx, width = 200, height = 126 }) {
   const logo = (
-    <Box sx={{ width: 200, height: 126, ...sx }}>
+    <Box sx={{ width, height, ...sx }}>
       <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 375 169.5">
         <defs>
           <clipPath id="a">
