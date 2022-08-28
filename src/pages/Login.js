@@ -21,7 +21,7 @@ const HeaderStyle = styled('header')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     alignItems: 'flex-start',
     justifyContent: 'start',
-    padding: theme.spacing(1, 4, 0, 4),
+    padding: theme.spacing(2, 6, 0, 6),
   },
 }));
 
