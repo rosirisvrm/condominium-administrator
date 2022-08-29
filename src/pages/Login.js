@@ -21,7 +21,7 @@ const HeaderStyle = styled('header')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     alignItems: 'flex-start',
     justifyContent: 'start',
-    padding: theme.spacing(2, 6, 0, 6),
+    padding: theme.spacing(0, 9),
   },
 }));
 
@@ -45,7 +45,7 @@ function Login() {
   return (
     <Page title="Login">
       <HeaderStyle>
-        {mdUp ? <NewLogo width={180} height={110} disabledLink /> : <NewLogo disabledLink />}
+        {mdUp ? <NewLogo width={160} height={100} /> : <NewLogo />}
       </HeaderStyle>
 
       <Container maxWidth="sm">
