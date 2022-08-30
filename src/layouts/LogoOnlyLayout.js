@@ -12,9 +12,9 @@ const HeaderStyle = styled('header')(({ theme }) => ({
   lineHeight: 0,
   width: '100%',
   position: 'absolute',
-  padding: theme.spacing(3, 3, 0),
+  padding: theme.spacing(0, 3),
   [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(1, 2.5, 0),
+    padding: theme.spacing(0, 9),
   },
 }));
 
@@ -24,7 +24,7 @@ export default function LogoOnlyLayout() {
   return (
     <>
       <HeaderStyle>
-        <NewLogo />
+        <NewLogo width={160} height={100} />
       </HeaderStyle>
       <Outlet />
     </>
