@@ -56,7 +56,7 @@ function NewLogo({ disabledLink = false, sx, width = 200, height = 126 }) {
     return <>{logo}</>;
   }
 
-  return <RouterLink to="/">{logo}</RouterLink>;
+  return <RouterLink to="/dashboard/home">{logo}</RouterLink>;
 }
 
 export { NewLogo };

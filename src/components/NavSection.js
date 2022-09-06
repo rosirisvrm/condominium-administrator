@@ -53,10 +53,10 @@ function NavItem({ item, active }) {
     bgcolor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
   };
 
-  const activeSubStyle = {
-    color: 'text.primary',
-    fontWeight: 'fontWeightMedium',
-  };
+  // const activeSubStyle = {
+  //   color: 'text.primary',
+  //   fontWeight: 'fontWeightMedium',
+  // };
 
   if (children) {
     return (
@@ -72,7 +72,7 @@ function NavItem({ item, active }) {
           {info && info}
           <Iconify
             icon={open ? 'eva:arrow-ios-downward-fill' : 'eva:arrow-ios-forward-fill'}
-            sx={{ width: 16, height: 16, ml: 1 }}
+            sx={{ width: 16, height: 16, mx: 1 }}
           />
         </ListItemStyle>
 
@@ -88,7 +88,7 @@ function NavItem({ item, active }) {
                   component={RouterLink}
                   to={path}
                   sx={{
-                    ...(isActiveSub && activeSubStyle),
+                    ...(isActiveSub && activeRootStyle),
                   }}
                 >
                   <ListItemIconStyle>

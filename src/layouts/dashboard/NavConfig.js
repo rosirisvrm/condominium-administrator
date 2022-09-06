@@ -17,6 +17,20 @@ const navConfig = [
     path: '/dashboard/contabilidad',
     icon: getIcon('bi:calculator-fill'),
     outlineIcon: getIcon('bi:calculator'),
+    children: [
+      {
+        title: 'Egresos',
+        path: '/dashboard/contabilidad/egresos', 
+      },
+      {
+        title: 'Ingresos',
+        path: '/dashboard/contabilidad/ingresos',
+      },
+      // {
+      //   title: 'Facturas y Recibos',
+      //   path: '/dashboard/contabilidad/facturas',
+      // }
+    ]
   },
   {
     title: 'usuarios',
@@ -29,6 +43,12 @@ const navConfig = [
     path: '/dashboard/grupos',
     icon: getIcon('mdi:account-group'),
     outlineIcon: getIcon('mdi:account-group-outline'),
+  },
+  {
+    title: 'permisos',
+    path: '/dashboard/permisos',
+    icon: getIcon('bxs:lock-alt'),
+    outlineIcon: getIcon('bx:lock-alt'),
   },
   {
     title: 'empleados',

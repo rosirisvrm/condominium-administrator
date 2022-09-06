@@ -12,11 +12,11 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function DashboardApp() {
+function DashboardApp() {
   // const theme = useTheme();
 
   return (
-    <Page title="Condominium Administrator">
+    <Page>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hola, bienvenido 
@@ -60,3 +60,5 @@ export default function DashboardApp() {
     </Page>
   );
 }
+
+export { DashboardApp };

@@ -29,7 +29,6 @@ const HeaderStyle = styled('header')(({ theme }) => ({
 const ContentStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
   margin: 'auto',
-  // minHeight: '100vh',
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
@@ -45,7 +44,7 @@ function Login() {
   return (
     <Page title="Login">
       <HeaderStyle>
-        {mdUp ? <NewLogo width={160} height={100} /> : <NewLogo />}
+        {mdUp ? <NewLogo width={160} height={100} disabledLink /> : <NewLogo disabledLink />}
       </HeaderStyle>
 
       <Container maxWidth="sm">

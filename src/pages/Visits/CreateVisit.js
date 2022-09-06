@@ -5,12 +5,12 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-function RequestsSuggestions() {
+function CreateVisit() {
   return (
-    <Page title="Solicitudes y Sugerencias">
+    <Page title="Crear Visita">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Solicitudes y Sugerencias
+          Crear Visita
         </Typography>
 
       </Container>
@@ -18,4 +18,4 @@ function RequestsSuggestions() {
   );
 }
 
-export { RequestsSuggestions };
+export { CreateVisit };
