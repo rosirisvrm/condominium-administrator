@@ -8,31 +8,31 @@ import { styled, useTheme } from '@mui/material/styles';
 // ----------------------------------------------------------------------
 
 const FormControlStyle = styled(FormControl)(() => ({
-width: '100%',
+    width: '100%',
 }))
 
 const LabelStyle = styled('span')(() => ({
-marginBottom: 8,
+    marginBottom: 8,
 }));
 
 const InputStyle = styled(OutlinedInput)(({ theme }) => ({
-'&.Mui-focused': { border: `2px solid ${theme.palette.primary.main}` },
-'& fieldset': {
-    borderWidth: `1px !important`,
-    borderColor: `${theme.palette.grey[500_32]} !important`,
-},
+    '&.Mui-focused': { border: `2px solid ${theme.palette.primary.main}` },
+    '& fieldset': {
+        borderWidth: `1px !important`,
+        borderColor: `${theme.palette.grey[500_32]} !important`,
+    }
 }));
 
 const SelectStyle = styled(Select)(({ theme }) => ({
-'&.Mui-focused': { border: `2px solid ${theme.palette.primary.main}` },
-'&:hover': { 
-    borderWidth: `1px !important`,
-    borderColor: `${theme.palette.grey[500_32]} !important`,
-},
-'& fieldset': {
-    borderWidth: `1px !important`,
-    borderColor: `${theme.palette.grey[500_32]} !important`,
-},
+    '&.Mui-focused': { border: `2px solid ${theme.palette.primary.main}` },
+    '&:hover': {
+        borderWidth: `1px !important`,
+        borderColor: `${theme.palette.grey[500_32]} !important`,
+    },
+    '& fieldset': {
+        borderWidth: `1px !important`,
+        borderColor: `${theme.palette.grey[500_32]} !important`,
+    },
 }));
 
 // ----------------------------------------------------------------------
@@ -45,7 +45,8 @@ Input.propTypes = {
     isSelect: PropTypes.bool,
     selectOptions: PropTypes.array,
     multiline: PropTypes.bool,
-    rows: PropTypes.number
+    rows: PropTypes.number,
+    disabled: PropTypes.bool
 }
 
 function Input({ 
@@ -57,6 +58,7 @@ function Input({
     selectOptions = [],
     multiline = false,
     rows = 4,
+    disabled = false
 }){
 
     const theme = useTheme()
@@ -80,12 +82,14 @@ function Input({
                 placeholder={placeholder}
                 multiline={multiline}
                 rows={rows}
+                disabled={disabled}
             /> :
             <SelectStyle
                 value={inputValue}
                 onChange={onChange}
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
+                disabled={disabled}
             >
                 <MenuItem disabled value="">
                     <em style={emStyle}>{placeholder}</em>

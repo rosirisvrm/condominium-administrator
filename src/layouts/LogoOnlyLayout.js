@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 // components
-import { NewLogo } from '../components/NewLogo';
+import { Logo } from '../components/Logo';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ export default function LogoOnlyLayout() {
   return (
     <>
       <HeaderStyle>
-        <NewLogo width={160} height={100} />
+        <Logo width={160} height={100} />
       </HeaderStyle>
       <Outlet />
     </>

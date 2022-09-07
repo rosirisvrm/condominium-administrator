@@ -6,7 +6,7 @@ import { Container, Typography, Button, Box } from '@mui/material';
 import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
-import { NewLogo } from '../components/NewLogo';
+import { Logo } from '../components/Logo';
 
 // ----------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ function Landing() {
   return (
     <Page title="Condominium Administrator">
         <HeaderStyle>
-          {mdUp ? <NewLogo width={160} height={100} disabledLink /> : <NewLogo width={140} height={80} disabledLink />}
+          {mdUp ? <Logo width={160} height={100} disabledLink /> : <Logo width={140} height={80} disabledLink />}
           
           <Link to="/login" style={{ textDecoration: 'none' }}>
             <Button 

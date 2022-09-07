@@ -5,7 +5,7 @@ import { Container, Typography } from '@mui/material';
 import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
-import { NewLogo } from '../components/NewLogo';
+import { Logo } from '../components/Logo';
 // sections
 import { LoginForm } from '../sections/auth/login';
 
@@ -44,7 +44,7 @@ function Login() {
   return (
     <Page title="Login">
       <HeaderStyle>
-        {mdUp ? <NewLogo width={160} height={100} disabledLink /> : <NewLogo disabledLink />}
+        {mdUp ? <Logo width={160} height={100} disabledLink /> : <Logo disabledLink />}
       </HeaderStyle>
 
       <Container maxWidth="sm">

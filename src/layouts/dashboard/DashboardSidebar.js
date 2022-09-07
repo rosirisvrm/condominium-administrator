@@ -7,7 +7,7 @@ import { Box, Drawer } from '@mui/material';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // components
-import { NewLogo } from '../../components/NewLogo';
+import { Logo } from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
@@ -51,7 +51,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       }}
     >
       <Box sx={{ px: 2.5, pt: 1, pb: 0, display: 'flex', justifyContent: 'center' }}>
-        <NewLogo />
+        <Logo />
       </Box>
 
       <NavSection navConfig={navConfig} />
