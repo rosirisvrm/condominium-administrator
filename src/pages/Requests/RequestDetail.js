@@ -25,8 +25,10 @@ function RequestDetail() {
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
     status: 'Pendiente',
     comments: [
-      { user: 'Administrador', 
-        date:'', 
+      { 
+        user: 'Administrador', 
+        date: '09-09-2022',
+        time: '18:02', 
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.' 
       }
     ]
@@ -121,6 +123,7 @@ function RequestDetail() {
                       multiline
                       rows={2}
                       disabled
+                      helperText={`${item.user} ${item.date} ${item.time}`}
                     />
                   </Grid>
                 ))}

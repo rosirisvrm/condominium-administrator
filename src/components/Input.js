@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 // @mui
-import { OutlinedInput, FormControl, Select, MenuItem } from '@mui/material';
+import { OutlinedInput, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 
 
@@ -35,6 +35,11 @@ const SelectStyle = styled(Select)(({ theme }) => ({
     },
 }));
 
+const HelperTextStyle = styled(FormHelperText)(() => ({
+    textAlign: 'end',
+    marginRight: 0,
+}))
+
 // ----------------------------------------------------------------------
 
 Input.propTypes = {
@@ -46,7 +51,8 @@ Input.propTypes = {
     selectOptions: PropTypes.array,
     multiline: PropTypes.bool,
     rows: PropTypes.number,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    helperText: PropTypes.string
 }
 
 function Input({ 
@@ -58,7 +64,8 @@ function Input({
     selectOptions = [],
     multiline = false,
     rows = 4,
-    disabled = false
+    disabled = false,
+    helperText = '',
 }){
 
     const theme = useTheme()
@@ -70,6 +77,7 @@ function Input({
   
     const onChange = (event) => {
       setInputValue(event.target.value)
+      console.log(event.target.value);
     }
 
     return(
@@ -99,6 +107,7 @@ function Input({
                 ))}
             </SelectStyle>
         }
+        {helperText && <HelperTextStyle>{helperText}</HelperTextStyle>}
     </FormControlStyle>
     );
 }

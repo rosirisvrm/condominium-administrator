@@ -4,6 +4,9 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import { Login } from './pages/Login';
+import Products from './pages/Products';
+import Blog from './pages/Blog';
+
 import { Page404 } from './pages/Page404';
 import { Landing } from './pages/Landing';
 import { DashboardApp } from './pages/DashboardApp';
@@ -68,8 +71,8 @@ export default function Router() {
         { path: 'usuarios/detalle', element: <UserDetail /> },
 
 
-        { path: 'grupos', element: <Groups /> },
-        { path: 'permisos', element: <Permissions /> },
+        { path: 'grupos', element: <Products /> },
+        { path: 'permisos', element: <Blog /> },
         { path: 'empleados', element: <Employees /> },
         { path: 'proveedores', element: <Providers /> },
         { path: 'noticias', element: <News /> },
