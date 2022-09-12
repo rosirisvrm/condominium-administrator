@@ -1,45 +1,32 @@
-import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { filter } from 'lodash';
+import PropTypes from 'prop-types';
 // material
 import {
   Card,
   Table,
-  Stack,
-  Avatar,
-  Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
-  Container,
-  Typography,
   TableContainer,
   TablePagination,
 } from '@mui/material';
 // components
-import Page from './components/Page';
-import Label from './components/Label';
-import Scrollbar from './components/Scrollbar';
-import Iconify from './components/Iconify';
-import SearchNotFound from './components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-// mock
-// import USERLIST from '../../_mock/user';
+import Scrollbar from './Scrollbar';
+import SearchNotFound from './SearchNotFound';
+import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 
 // ----------------------------------------------------------------------
 
-// const tableHead = [
-//   { id: 'name', label: 'Nombre', alignRight: false },
-//   { id: 'address', label: 'Dirección', alignRight: false },
-//   { id: 'subject', label: 'Teléfono', alignRight: false },
-//   { id: 'level', label: 'Correo', alignRight: false },
-//   { id: 'status', label: 'Rol', alignRight: false },
-//   { id: '' },
-// ];
-
 // ----------------------------------------------------------------------
+
+CustomTable.propTypes = {
+    tableHead: PropTypes.array,
+    elementList: PropTypes.array,
+    children: PropTypes.func,
+    selected: PropTypes.array,
+    setSelected: PropTypes.func
+}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -70,18 +57,13 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function Users({
-    tableHead,
-    listElements,
-}) {
+function CustomTable({ tableHead, elementList, children, selected, setSelected }) {
 
-  const renderFunc = props.children
+  const renderFunc = children
 
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
 
   const [orderBy, setOrderBy] = useState('name');
 
@@ -97,26 +79,11 @@ function Users({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = elementList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -132,9 +99,9 @@ function Users({
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - elementList.length) : 0;
 
-  const filteredElements = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredElements = applySortFilter(elementList, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredElements.length === 0;
 
@@ -149,14 +116,15 @@ function Users({
                   order={order}
                   orderBy={orderBy}
                   headLabel={tableHead}
-                  rowCount={USERLIST.length}
+                  rowCount={elementList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  
+                  {/* props.searchedTodos.map(todo => renderFunc(todo)) */}
 
+                  {filteredElements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => renderFunc(row))}
 
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
@@ -181,7 +149,7 @@ function Users({
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={elementList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -191,4 +159,4 @@ function Users({
   );
 }
 
-export { Users };
+export { CustomTable };

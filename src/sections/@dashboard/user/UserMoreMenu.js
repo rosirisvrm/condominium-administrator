@@ -1,3 +1,4 @@
+// import PropTypes from 'prop-types'
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -7,7 +8,11 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu() {
+// UserMoreMenu.propTypes = {
+//   actions: PropTypes.array,
+// }
+
+export default function UserMoreMenu(/* { actions } */) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
