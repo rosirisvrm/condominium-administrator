@@ -52,7 +52,8 @@ Input.propTypes = {
     multiline: PropTypes.bool,
     rows: PropTypes.number,
     disabled: PropTypes.bool,
-    helperText: PropTypes.string
+    helperText: PropTypes.string,
+    type: PropTypes.string
 }
 
 function Input({ 
@@ -66,6 +67,7 @@ function Input({
     rows = 4,
     disabled = false,
     helperText = '',
+    type = 'text'
 }){
 
     const theme = useTheme()
@@ -91,6 +93,7 @@ function Input({
                 multiline={multiline}
                 rows={rows}
                 disabled={disabled}
+                type={type}
             /> :
             <SelectStyle
                 value={inputValue}

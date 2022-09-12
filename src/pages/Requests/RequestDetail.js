@@ -46,6 +46,10 @@ function RequestDetail() {
     console.log(request);
   }
 
+  const sendComment = () => {
+    console.log('add comment');
+  }
+
   return (
     <Page title="Detalle de Solicitud o Sugerencia">
       <Container maxWidth="xl">
@@ -137,6 +141,18 @@ function RequestDetail() {
                     rows={2}
                   />
                 </Grid>
+
+                <Grid  
+                  container
+                  item
+                  direction="row"
+                  justifyContent="flex-end"
+                  alignItems="flex-end"
+                >
+                  <OutlinedButton size='small' onClick={sendComment}>
+                    Enviar comentario
+                  </OutlinedButton>
+                </Grid>
               </Grid>
 
               <Grid
@@ -147,12 +163,17 @@ function RequestDetail() {
                 alignItems="flex-end"
                 mt={8}
               >
-                <OutlinedButton isRouterLink path="/dashboard/solicitudes-sugerencias">
+                <OutlinedButton 
+                  isRouterLink 
+                  path="/dashboard/solicitudes-sugerencias"
+                  defaultPadding
+                  defaultMarginRight 
+                >
                   Volver
                 </OutlinedButton>
 
                 <ContainedButton type='submit'>
-                  Agregar
+                  Actualizar
                 </ContainedButton>
               </Grid>
 

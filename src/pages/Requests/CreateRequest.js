@@ -94,7 +94,12 @@ function CreateRequest() {
                 alignItems="flex-end"
                 mt={8}
               >
-                <OutlinedButton isRouterLink path="/dashboard/solicitudes-sugerencias">
+                <OutlinedButton 
+                  isRouterLink 
+                  path="/dashboard/solicitudes-sugerencias" 
+                  defaultMarginRight 
+                  defaultPadding
+                >
                   Volver
                 </OutlinedButton>
 

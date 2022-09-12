@@ -163,6 +163,18 @@ function Requests() {
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, address, subject, level, status, /* avatarUrl */} = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
+                    let color;
+
+                    if(status === 'Pendiente'){
+                      color = 'warning'
+
+                    }else if(status === 'Aprobada'){
+                      color = 'success'
+
+                    }else if(status === 'Rechazada'){
+                      color = 'error'
+
+                    }
 
                     return (
                       <TableRow
@@ -193,7 +205,7 @@ function Requests() {
                         <TableCell align="left">{subject}</TableCell>
                         <TableCell align="left">{level}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'Rechazada' ? 'error' : 'success')}>
+                          <Label variant="ghost" color={color}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
