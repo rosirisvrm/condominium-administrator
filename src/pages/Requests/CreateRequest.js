@@ -20,6 +20,7 @@ function CreateRequest() {
   const [level, setLevel] = React.useState('')
   const [description, setDescription] = React.useState('')
   const [comment, setComment] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
 
   const levelOptions = [
     { label: 'Alta', value: 0 },
@@ -31,6 +32,7 @@ function CreateRequest() {
     event.preventDefault();
     console.log('submit');
     console.log(subject, level, description, comment);
+    setLoading(false)
   }
 
   return (
@@ -103,7 +105,7 @@ function CreateRequest() {
                   Volver
                 </OutlinedButton>
 
-                <ContainedButton type='submit'>
+                <ContainedButton type='submit' defaultPadding loading={loading}>
                   Agregar
                 </ContainedButton>
               </Grid>

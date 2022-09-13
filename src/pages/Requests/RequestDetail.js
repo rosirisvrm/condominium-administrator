@@ -16,6 +16,8 @@ function RequestDetail() {
 
   const [status, setStatus] = React.useState(0)
   const [newComment, setNewComment] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
+  const [loadingComment, setLoadingComment] = React.useState(false)
 
   const request = {
     user: 'Ann Bode',
@@ -44,10 +46,12 @@ function RequestDetail() {
     event.preventDefault();
     console.log('submit');
     console.log(request);
+    setLoading(false)
   }
 
   const sendComment = () => {
     console.log('add comment');
+    setLoadingComment(false)
   }
 
   return (
@@ -149,7 +153,7 @@ function RequestDetail() {
                   justifyContent="flex-end"
                   alignItems="flex-end"
                 >
-                  <OutlinedButton size='small' onClick={sendComment}>
+                  <OutlinedButton size='small' onClick={sendComment} loading={loadingComment}>
                     Enviar comentario
                   </OutlinedButton>
                 </Grid>
@@ -172,7 +176,7 @@ function RequestDetail() {
                   Volver
                 </OutlinedButton>
 
-                <ContainedButton type='submit'>
+                <ContainedButton type='submit' defaultPadding loading={loading}>
                   Actualizar
                 </ContainedButton>
               </Grid>

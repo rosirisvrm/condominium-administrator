@@ -3,16 +3,22 @@ import { PropTypes } from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Button } from '@mui/material';
-import { styled,useTheme } from '@mui/material/styles';
+import { LoadingButton } from '@mui/lab';
+import { styled, useTheme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
 const ButtonStyle = styled(Button)(({ theme }) => ({
-    // padding: theme.spacing(1, 6),
-    // marginRight: theme.spacing(2),
     border: `2px solid ${theme.palette.primary.main}`,
     '&:hover': { border: `2px solid ${theme.palette.primary.main}` },
 }))
+
+const LoadingButtonStyle = styled(LoadingButton)(({ theme }) => ({
+    border: `2px solid ${theme.palette.primary.main}`,
+    '&:hover': { border: `2px solid ${theme.palette.primary.main}` },
+}))
+
+// ----------------------------------------------------------------------
 
 OutlinedButton.propTypes = {
     children: PropTypes.string,
@@ -26,6 +32,7 @@ OutlinedButton.propTypes = {
     defaultPadding: PropTypes.bool,
     customPadding: PropTypes.string,
     onClick: PropTypes.func,
+    loading: PropTypes.bool
 }
 
 function OutlinedButton({ 
@@ -39,36 +46,39 @@ function OutlinedButton({
     customMarginRight,
     defaultPadding,
     customPadding,
-    onClick
+    onClick,
+    loading
 }){
     
     const theme = useTheme()
 
     const marginRight = defaultMarginRight ? theme.spacing(2) : customMarginRight;
+    
     const padding = defaultPadding ? theme.spacing(1, 6) : customPadding;
-
 
     return(
         <>
-            {isRouterLink ?
+            {isRouterLink &&
                 <ButtonStyle 
                     variant="outlined"
                     color={color}
+                    size={size}
                     component={RouterLink}
                     to={path}
-                    size={size}
                     sx={{
                         marginRight,
                         padding
                     }}
                 >
                     {children}
-                </ButtonStyle> : 
+                </ButtonStyle>
+            }       
+            {(!isRouterLink && !loading) &&     
                 <ButtonStyle 
                     variant="outlined"
                     color={color}
-                    type={type}
                     size={size}
+                    type={type}
                     onClick={() => onClick()}
                     sx={{
                         marginRight,
@@ -77,6 +87,20 @@ function OutlinedButton({
                 >
                     {children}
                 </ButtonStyle>
+            }
+            {(!isRouterLink && loading) && 
+                <LoadingButtonStyle
+                    variant="outlined"
+                    color={color}
+                    size={size}
+                    loading
+                    sx={{
+                        marginRight,
+                        padding
+                    }}
+                >
+                    {children}
+                </LoadingButtonStyle>
             }
         </>
     );

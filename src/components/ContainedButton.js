@@ -3,14 +3,20 @@ import { PropTypes } from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Button } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { LoadingButton } from '@mui/lab';
+import { styled, useTheme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
 const ButtonStyle = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(1, 6),
     boxShadow: 'none',
     border: `2px solid ${theme.palette.primary.main}`,
+}))
+
+const LoadingButtonStyle = styled(LoadingButton)(({ theme }) => ({
+    backgroundColor: `${theme.palette.primary.main} !important`,
+    boxShadow: 'none',
+    border: `1px solid ${theme.palette.primary.main}`,
 }))
 
 // ----------------------------------------------------------------------
@@ -21,27 +27,72 @@ ContainedButton.propTypes = {
     path: PropTypes.string,
     type: PropTypes.string,
     color: PropTypes.string,
+    size: PropTypes.string,
+    defaultPadding: PropTypes.bool,
+    customPadding: PropTypes.string,
+    onClick: PropTypes.func,
+    loading: PropTypes.bool
 }
 
-function ContainedButton({ children, isRouterLink = false, path = '', type = 'button', color = 'primary' }) {
+function ContainedButton({ 
+    children, 
+    isRouterLink = false, 
+    path = '', 
+    type = 'button', 
+    color = 'primary',
+    size = 'medium',
+    defaultPadding,
+    customPadding,
+    onClick,
+    loading
+}) {
+
+    const theme = useTheme()
+
+    const padding = defaultPadding ? theme.spacing(1, 6) : customPadding;
+
     return(
         <>
-            {isRouterLink ? 
+            {isRouterLink &&
                 <ButtonStyle 
                     variant="contained"
                     color={color}
+                    size={size}
                     component={RouterLink}
                     to={path}
-                >
-                    {children}    
-                </ButtonStyle> :
-                <ButtonStyle 
-                    variant="contained"
-                    color={color}
-                    type={type}
+                    sx={{
+                        padding
+                    }}
                 >
                     {children}    
                 </ButtonStyle>
+            }
+            {(!isRouterLink && !loading) && 
+                <ButtonStyle 
+                    variant="contained"
+                    color={color}
+                    size={size}
+                    type={type}
+                    onClick={() => onClick()}
+                    sx={{
+                        padding
+                    }}
+                >
+                    {children}    
+                </ButtonStyle>
+            }
+            {(!isRouterLink && loading) &&
+                <LoadingButtonStyle
+                    variant="contained"
+                    color={color}
+                    size={size}
+                    loading
+                    sx={{
+                        padding
+                    }}
+                >
+                    {children}
+                </LoadingButtonStyle>
             }
         </>
     );

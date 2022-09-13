@@ -18,6 +18,7 @@ function CreateUser() {
   const [role, setRole] = React.useState('')
   const [phone, setPhone] = React.useState('')
   const [email, setEmail] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
 
   const roleOptions = [
     { label: 'Propietario', value: 0 },
@@ -28,6 +29,7 @@ function CreateUser() {
     event.preventDefault();
     console.log('submit');
     console.log(name, identification, address, role, phone, email);
+    setLoading(false)
   }
 
   return (
@@ -118,7 +120,7 @@ function CreateUser() {
                   Volver
                 </OutlinedButton>
 
-                <ContainedButton type='submit'>
+                <ContainedButton type='submit' defaultPadding loading={loading}>
                   Agregar
                 </ContainedButton>
               </Grid>
