@@ -7,12 +7,10 @@ import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
-
-
-// ----------------------------------------------------------------------
-
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 
 // ----------------------------------------------------------------------
+
 
 function CreateRequest() {
   
@@ -21,6 +19,8 @@ function CreateRequest() {
   const [description, setDescription] = React.useState('')
   const [comment, setComment] = React.useState('')
   const [loading, setLoading] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
 
   const levelOptions = [
     { label: 'Alta', value: 0 },
@@ -33,6 +33,8 @@ function CreateRequest() {
     console.log('submit');
     console.log(subject, level, description, comment);
     setLoading(false)
+    setColor('success')
+    setOpen(true);
   }
 
   return (
@@ -113,6 +115,12 @@ function CreateRequest() {
             </Grid>
           </form>
         </FormCard>
+
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

@@ -15,7 +15,7 @@ import {
 import Page from '../../components/Page';
 import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
-import { CustomTable } from '../../components/Table';
+import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
 // mock
 import LIST from '../../_mock/request';

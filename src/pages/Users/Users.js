@@ -13,7 +13,7 @@ import {
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
-import { CustomTable } from '../../components/Table';
+import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
 // mock
 import USERLIST from '../../_mock/user';

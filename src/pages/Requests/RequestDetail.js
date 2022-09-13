@@ -7,8 +7,7 @@ import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
-
-// ----------------------------------------------------------------------
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +17,8 @@ function RequestDetail() {
   const [newComment, setNewComment] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [loadingComment, setLoadingComment] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
 
   const request = {
     user: 'Ann Bode',
@@ -47,11 +48,15 @@ function RequestDetail() {
     console.log('submit');
     console.log(request);
     setLoading(false)
+    setColor('success')
+    setOpen(true);
   }
 
   const sendComment = () => {
     console.log('add comment');
     setLoadingComment(false)
+    setOpen(true);
+    setColor('success')
   }
 
   return (
@@ -184,6 +189,12 @@ function RequestDetail() {
             </Grid>
           </form>
         </FormCard>
+
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

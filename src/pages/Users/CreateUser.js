@@ -7,8 +7,13 @@ import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 
 // ----------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------
+
 
 function CreateUser() {
 
@@ -19,6 +24,8 @@ function CreateUser() {
   const [phone, setPhone] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [loading, setLoading] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
 
   const roleOptions = [
     { label: 'Propietario', value: 0 },
@@ -30,6 +37,8 @@ function CreateUser() {
     console.log('submit');
     console.log(name, identification, address, role, phone, email);
     setLoading(false)
+    setColor('success')
+    setOpen(true);
   }
 
   return (
@@ -129,6 +138,11 @@ function CreateUser() {
           </form>
         </FormCard>
 
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );
