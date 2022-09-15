@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 // components
@@ -13,6 +14,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 
 
 function CreateRequest() {
+
+  const { id } = useParams()
   
   const [subject, setSubject] = React.useState('')
   const [level, setLevel] = React.useState('')
@@ -38,10 +41,10 @@ function CreateRequest() {
   }
 
   return (
-    <Page title="Crear Solicitud o Sugerencia">
+    <Page title={`${!id ? 'Crear' : 'Editar'} Solicitud o Sugerencia`}>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Crear Solicitud o Sugerencia
+          {`${!id ? 'Crear' : 'Editar'} Solicitud o Sugerencia`}
         </Typography>
 
         <FormCard>   

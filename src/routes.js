@@ -13,25 +13,17 @@ import { DashboardApp } from './pages/DashboardApp';
 import { Ingresos, Egresos, CreatePay, PayDetail } from './pages/Accounting';
 import { Users, CreateUser, UserDetail } from './pages/Users';
 
-import { Groups } from './pages/Groups';
-import { Permissions } from './pages/Permissions';
+// import { Groups } from './pages/Groups';
+// import { Permissions } from './pages/Permissions';
 
 import { Employees } from './pages/Employees';
-
 import { Providers } from './pages/Providers';
-
 import { News } from './pages/News';
-
 import { Notifications } from './pages/Notifications';
-
 import { Events } from './pages/Events';
-
 import { Surveys } from './pages/Surveys';
-
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
-
 import { Requests, CreateRequest, RequestDetail } from './pages/Requests';
-
 import { ExternalCommunication } from './pages/ExternalCommunication';
 import { CustomizeSite } from './pages/CustomizeSite';
 import { Profile } from './pages/Profile';
@@ -67,8 +59,8 @@ export default function Router() {
         
         { path: 'usuarios', element: <Users /> },
         { path: 'usuarios/crear', element: <CreateUser /> },
-        { path: 'usuarios/editar', element: <CreateUser /> },
-        { path: 'usuarios/detalle', element: <UserDetail /> },
+        { path: 'usuarios/editar/:id', element: <CreateUser /> },
+        { path: 'usuarios/detalle/:id', element: <UserDetail /> },
 
 
         { path: 'grupos', element: <Products /> },
@@ -87,8 +79,8 @@ export default function Router() {
 
         { path: 'solicitudes-sugerencias', element: <Requests /> },
         { path: 'solicitudes-sugerencias/crear', element: <CreateRequest /> },
-        { path: 'solicitudes-sugerencias/editar', element: <CreateRequest /> },
-        { path: 'solicitudes-sugerencias/detalle', element: <RequestDetail /> },
+        { path: 'solicitudes-sugerencias/editar/:id', element: <CreateRequest /> },
+        { path: 'solicitudes-sugerencias/detalle/:id', element: <RequestDetail /> },
 
         { path: 'comunicacion-externa', element: <ExternalCommunication /> },
         { path: 'personalizar-sitio', element: <CustomizeSite /> },

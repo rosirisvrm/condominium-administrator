@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 // components
@@ -13,6 +14,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 
 function RequestDetail() {
 
+  const { id } = useParams()
+
   const [status, setStatus] = React.useState(0)
   const [newComment, setNewComment] = React.useState('')
   const [loading, setLoading] = React.useState(false)
@@ -21,6 +24,7 @@ function RequestDetail() {
   const [color, setColor] = React.useState('')
 
   const request = {
+    id,
     user: 'Ann Bode',
     userAddress: 'C-2-3',
     subject: 'Reserva de área común',

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 // components
@@ -16,6 +17,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 
 
 function CreateUser() {
+
+  const { id } = useParams()
 
   const [name, setName] = React.useState('')
   const [identification, setIdentification] = React.useState('')
@@ -42,10 +45,10 @@ function CreateUser() {
   }
 
   return (
-    <Page title="Crear Usuario">
+    <Page title={`${!id ? 'Crear' : 'Editar'} Usuario`}>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Crear Usuario
+          {`${!id ? 'Crear' : 'Editar'} Usuario`}
         </Typography>
 
         <FormCard>   

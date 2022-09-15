@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 // components
@@ -11,7 +12,10 @@ import { OutlinedButton } from '../../components/OutlinedButton';
 
 function UserDetail() {
 
+  const { id } = useParams()
+
   const user = {
+    id,
     name: 'Ann Bode',
     identification: '0000000',
     address: 'C-2-3',
