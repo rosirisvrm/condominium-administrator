@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom'
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
+import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
 import { FormCard } from '../../components/FormCard';
@@ -9,6 +10,14 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+//
+import useResponsive from '../../hooks/useResponsive';
+
+// ----------------------------------------------------------------------
+
+const GridStyle = styled(Grid)(({ theme }) => ({
+  padding: `${theme.spacing(0)} !important`
+}))
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +25,9 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 function CreateRequest() {
 
   const { id } = useParams()
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
   
   const [subject, setSubject] = React.useState('')
   const [level, setLevel] = React.useState('')
@@ -40,6 +52,10 @@ function CreateRequest() {
     setOpen(true);
   }
 
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
   return (
     <Page title={`${!id ? 'Crear' : 'Editar'} Solicitud o Sugerencia`}>
       <Container maxWidth="xl">
@@ -51,8 +67,8 @@ function CreateRequest() {
           <form onSubmit={onSubmit}>
             <Grid container spacing={2}>
 
-              <Grid container item spacing={12}>
-                <Grid item xs={6}>
+              <Grid container item spacing={spacing}>
+                <Grid item xs={12} sm={6}>
                    <Input 
                     label='Asunto'
                     placeholder='Ingrese un asunto'
@@ -61,7 +77,7 @@ function CreateRequest() {
                    />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                   <Input 
                     label='Nivel'
                     placeholder='Seleccione un nivel'
@@ -96,23 +112,28 @@ function CreateRequest() {
               <Grid
                 container
                 item
+                spacing={2}
                 direction="row"
                 justifyContent="flex-end"
                 alignItems="flex-end"
                 mt={8}
               >
-                <OutlinedButton 
-                  isRouterLink 
-                  path="/dashboard/solicitudes-sugerencias" 
-                  defaultMarginRight 
-                  defaultPadding
-                >
-                  Volver
-                </OutlinedButton>
+                <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
+                  <OutlinedButton 
+                    isRouterLink 
+                    path="/dashboard/solicitudes-sugerencias"
+                    defaultPadding
+                    defaultMarginRight={smUp}
+                  >
+                    Volver
+                  </OutlinedButton>
+                </GridStyle>
 
-                <ContainedButton type='submit' defaultPadding loading={loading}>
-                  Agregar
-                </ContainedButton>
+                <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
+                  <ContainedButton type='submit' defaultPadding loading={loading}>
+                    Agregar
+                  </ContainedButton>
+                </GridStyle>
               </Grid>
 
             </Grid>

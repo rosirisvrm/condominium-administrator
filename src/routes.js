@@ -48,7 +48,7 @@ export default function Router() {
         { path: 'home', element: <DashboardApp /> },
 
         { 
-          path: 'contabilidad', 
+          path: 'contabilidad',
           children: [
             { path: 'egresos', element: <Egresos /> },
             { path: 'ingresos', element: <Ingresos /> },

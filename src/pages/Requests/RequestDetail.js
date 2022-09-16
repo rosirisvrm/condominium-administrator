@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom'
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
+import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
 import { FormCard } from '../../components/FormCard';
@@ -9,12 +10,24 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+//
+import useResponsive from '../../hooks/useResponsive';
 
 // ----------------------------------------------------------------------
+
+const GridStyle = styled(Grid)(({ theme }) => ({
+  padding: `${theme.spacing(0)} !important`
+}))
+
+// ----------------------------------------------------------------------
+
 
 function RequestDetail() {
 
   const { id } = useParams()
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
 
   const [status, setStatus] = React.useState(0)
   const [newComment, setNewComment] = React.useState('')
@@ -63,6 +76,10 @@ function RequestDetail() {
     setColor('success')
   }
 
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
   return (
     <Page title="Detalle de Solicitud o Sugerencia">
       <Container maxWidth="xl">
@@ -74,8 +91,8 @@ function RequestDetail() {
           <form onSubmit={onSubmit}>
             <Grid container spacing={2}>
 
-              <Grid container item spacing={12}>
-                <Grid item xs={6}>
+              <Grid container item spacing={spacing}>
+                <Grid item xs={12} sm={6}>
                    <Input 
                     label='Usuario'
                     inputValue={request.user}
@@ -83,7 +100,7 @@ function RequestDetail() {
                    />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                   <Input 
                     label='Dirección'
                     inputValue={request.userAddress}
@@ -92,8 +109,8 @@ function RequestDetail() {
                 </Grid>
               </Grid>
 
-              <Grid container item spacing={12}>
-                <Grid item xs={6}>
+              <Grid container item spacing={spacing}>
+                <Grid item xs={12} sm={6}>
                    <Input 
                     label='Asunto'
                     inputValue={request.subject}
@@ -101,7 +118,7 @@ function RequestDetail() {
                    />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                   <Input 
                     label='Nivel'
                     inputValue={request.level}
@@ -110,8 +127,8 @@ function RequestDetail() {
                 </Grid>
               </Grid>
               
-              <Grid container item spacing={12}>
-                <Grid item xs={6}>
+              <Grid container item spacing={spacing}>
+                <Grid item xs={12} sm={6}>
                   <Input 
                     label='Descripción'
                     inputValue={request.description}
@@ -120,7 +137,7 @@ function RequestDetail() {
                     disabled
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                   <Input 
                     label='Status'
                     inputValue={status}
@@ -171,23 +188,28 @@ function RequestDetail() {
               <Grid
                 container
                 item
+                spacing={2}
                 direction="row"
                 justifyContent="flex-end"
                 alignItems="flex-end"
                 mt={8}
               >
-                <OutlinedButton 
-                  isRouterLink 
-                  path="/dashboard/solicitudes-sugerencias"
-                  defaultPadding
-                  defaultMarginRight 
-                >
-                  Volver
-                </OutlinedButton>
+                <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
+                  <OutlinedButton 
+                    isRouterLink 
+                    path="/dashboard/solicitudes-sugerencias"
+                    defaultPadding
+                    defaultMarginRight={smUp}
+                  >
+                    Volver
+                  </OutlinedButton>
+                </GridStyle>
 
-                <ContainedButton type='submit' defaultPadding loading={loading}>
-                  Actualizar
-                </ContainedButton>
+                <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
+                  <ContainedButton type='submit' defaultPadding loading={loading}>
+                    Actualizar
+                  </ContainedButton>
+                </GridStyle>
               </Grid>
 
             </Grid>
