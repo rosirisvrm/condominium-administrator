@@ -39,8 +39,8 @@ const navConfig = [
     outlineIcon: getIcon('ph:users'),
   },
   {
-    title: 'grupos',
-    path: '/dashboard/grupos',
+    title: 'roles',
+    path: '/dashboard/roles',
     icon: getIcon('mdi:account-group'),
     outlineIcon: getIcon('mdi:account-group-outline'),
   },

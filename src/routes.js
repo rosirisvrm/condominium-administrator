@@ -63,7 +63,7 @@ export default function Router() {
         { path: 'usuarios/detalle/:id', element: <UserDetail /> },
 
 
-        { path: 'grupos', element: <Products /> },
+        { path: 'roles', element: <Products /> },
         { path: 'permisos', element: <Blog /> },
         { path: 'empleados', element: <Employees /> },
         { path: 'proveedores', element: <Providers /> },
