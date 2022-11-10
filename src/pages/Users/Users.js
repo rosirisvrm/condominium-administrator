@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // material
 import {
   Stack,
@@ -15,8 +16,12 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { getUsers } from '../../services';
+import { setUsers } from '../../actions'
+
 // mock
-import USERLIST from '../../_mock/user';
+// import USERLIST from '../../_mock/user';
+
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +29,18 @@ import USERLIST from '../../_mock/user';
 // ----------------------------------------------------------------------
 
 function Users() {
+
+  const users = useSelector(state => state.users)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const resUsers = await getUsers()
+      dispatch(setUsers(resUsers))
+    }
+
+    fetchUsers()
+  }, [])
 
   const tableHead = [
     { id: 'name', label: 'Nombre', alignRight: false },
@@ -67,7 +84,7 @@ function Users() {
 
         <CustomTable 
           tableHead={tableHead} 
-          elementList={USERLIST} 
+          elementList={users} 
           selected={selected} 
           setSelected={setSelected}
         >

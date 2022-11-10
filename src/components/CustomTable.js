@@ -57,7 +57,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function CustomTable({ tableHead, elementList, children, selected, setSelected }) {
+function CustomTable({ tableHead, elementList = [], children, selected, setSelected }) {
 
   const renderFunc = children
 
@@ -103,7 +103,7 @@ function CustomTable({ tableHead, elementList, children, selected, setSelected }
 
   const filteredElements = applySortFilter(elementList, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredElements.length === 0;
+  const isDataNotFound = filteredElements.length === 0;
 
   return (
         <Card>
@@ -133,7 +133,7 @@ function CustomTable({ tableHead, elementList, children, selected, setSelected }
                   )}
                 </TableBody>
 
-                {isUserNotFound && (
+                {isDataNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
