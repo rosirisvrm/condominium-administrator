@@ -17,14 +17,7 @@ import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
 import { getUsers } from '../../services';
-import { setUsers } from '../../actions'
-
-// mock
-// import USERLIST from '../../_mock/user';
-
-
-// ----------------------------------------------------------------------
-
+import { setUsers, setLoading } from '../../actions'
 
 // ----------------------------------------------------------------------
 
@@ -35,12 +28,16 @@ function Users() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const resUsers = await getUsers()
-      dispatch(setUsers(resUsers))
+      dispatch(setLoading(true))
+      setTimeout(async () => {
+        const resUsers = await getUsers()
+        dispatch(setUsers(resUsers))
+        dispatch(setLoading(false))
+      }, 1000)
     }
 
     fetchUsers()
-  }, [])
+  }, [dispatch])
 
   const tableHead = [
     { id: 'name', label: 'Nombre', alignRight: false },
@@ -50,8 +47,6 @@ function Users() {
     { id: 'status', label: 'Rol', alignRight: false },
     { id: '' },
   ];
-
-  const actions = ['delete', 'edit', 'detail'];
 
   const [selected, setSelected] = useState([]);
 
@@ -69,6 +64,12 @@ function Users() {
     }
     setSelected(newSelected);
   };
+
+  const actions = ['delete', 'edit', 'detail'];
+
+  const deleteItem = (id) => {
+    console.log('eliminando item', id);
+  }
 
   return (
     <Page title="Usuarios">
@@ -114,7 +115,15 @@ function Users() {
                 <TableCell align="left">{email}</TableCell>
                 <TableCell align="left">{role}</TableCell>
                 <TableCell align="right">
-                  <UserMoreMenu actions={actions} />
+                  <UserMoreMenu 
+                    actions={actions} 
+                    id={id}
+                    deleteItem={deleteItem} 
+                    actionsRedirect={{
+                      edit: `/dashboard/usuarios/editar/${id}` ,
+                      detail: `/dashboard/usuarios/detalle/${id}`,
+                    }} 
+                  />
                 </TableCell>
               </TableRow>
             );

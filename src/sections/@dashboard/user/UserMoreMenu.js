@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -8,11 +8,14 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-// UserMoreMenu.propTypes = {
-//   actions: PropTypes.array,
-// }
+  UserMoreMenu.propTypes = {
+    actions: PropTypes.array,
+    deleteItem: PropTypes.func,
+    idItem: PropTypes.number,
+    actionsRedirect: PropTypes.object,
+  }
 
-export default function UserMoreMenu(/* { actions } */) {
+export default function UserMoreMenu({ actions, idItem, deleteItem, actionsRedirect }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,19 +35,44 @@ export default function UserMoreMenu(/* { actions } */) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
-          <ListItemIcon>
-            <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
 
-        <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
-          <ListItemIcon>
-            <Iconify icon="eva:edit-fill" width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
+        {actions.map(element => {
+
+          if(element === 'delete'){
+            return (
+              <MenuItem sx={{ color: 'text.secondary' }} onClick={() => deleteItem(idItem)} key={element}>
+                <ListItemIcon>
+                  <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                </ListItemIcon>
+                <ListItemText primary="Eliminar" primaryTypographyProps={{ variant: 'body2' }} />
+              </MenuItem>
+            );
+
+          }
+          
+          if(element === 'edit'){
+            return (
+              <MenuItem component={RouterLink} to={actionsRedirect[element]} sx={{ color: 'text.secondary' }} key={element}>
+                <ListItemIcon>
+                  <Iconify icon="eva:edit-fill" width={24} height={24} />
+                </ListItemIcon>
+                <ListItemText primary="Editar" primaryTypographyProps={{ variant: 'body2' }} />
+              </MenuItem>
+            );
+          }
+          
+          // Detail
+          return(
+            <MenuItem component={RouterLink} to={actionsRedirect[element]} sx={{ color: 'text.secondary' }} key={element}>
+              <ListItemIcon>
+                <Iconify icon="charm:eye" width={24} height={24} />
+              </ListItemIcon>
+              <ListItemText primary="Ver Detalle" primaryTypographyProps={{ variant: 'body2' }} />
+            </MenuItem>
+          );
+          
+        })}
+
       </Menu>
     </>
   );

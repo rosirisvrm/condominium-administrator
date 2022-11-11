@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { filter } from 'lodash';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 // material
 import {
   Card,
@@ -14,6 +15,7 @@ import {
 // components
 import Scrollbar from './Scrollbar';
 import SearchNotFound from './SearchNotFound';
+import { Loader } from './Loader'
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 
 // ----------------------------------------------------------------------
@@ -58,6 +60,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 function CustomTable({ tableHead, elementList = [], children, selected, setSelected }) {
+
+  const loading = useSelector(state => state.loading)
 
   const renderFunc = children
 
@@ -106,6 +110,9 @@ function CustomTable({ tableHead, elementList = [], children, selected, setSelec
   const isDataNotFound = filteredElements.length === 0;
 
   return (
+    <>
+      {loading ? 
+        <Loader /> :
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -156,6 +163,8 @@ function CustomTable({ tableHead, elementList = [], children, selected, setSelec
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+      }
+    </>
   );
 }
 
