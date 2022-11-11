@@ -22,9 +22,6 @@ import LIST from '../../_mock/request';
 
 // ----------------------------------------------------------------------
 
-
-// ----------------------------------------------------------------------
-
 function Requests() {
 
   const tableHead = [
@@ -35,6 +32,8 @@ function Requests() {
     { id: 'status', label: 'Status', alignRight: false },
     { id: '' },
   ];
+
+  console.log('list ', LIST);
 
   const [selected, setSelected] = useState([]);
 
@@ -52,6 +51,10 @@ function Requests() {
     }
     setSelected(newSelected);
   };
+
+  const deleteItem = (id) => {
+    console.log('eliminando item ', id)
+  }
 
   return (
     <Page title="Solicitudes y Sugerencias">
@@ -114,7 +117,15 @@ function Requests() {
                 </TableCell>
 
                 <TableCell align="right">
-                  <UserMoreMenu />
+                  <UserMoreMenu 
+                    actions={['delete', 'edit', 'detail']}
+                    deleteItem={deleteItem}
+                    idItem={id}
+                    actionsRedirect={{
+                      edit: `/dashboard/solicitudes-sugerencias/editar/${id}`,
+                      detail: `/dashboard/solicitudes-sugerencias/detalle/${id}`,
+                    }}
+                  />
                 </TableCell>
               </TableRow>
             );

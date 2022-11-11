@@ -73,7 +73,7 @@ function ContainedButton({
                     color={color}
                     size={size}
                     type={type}
-                    onClick={() => onClick()}
+                    onClick={onClick ? () => onClick() : null}
                     sx={{
                         padding
                     }}

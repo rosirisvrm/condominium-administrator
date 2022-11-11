@@ -11,7 +11,7 @@ import { Page404 } from './pages/Page404';
 import { Landing } from './pages/Landing';
 import { DashboardApp } from './pages/DashboardApp';
 import { Ingresos, Egresos, CreatePay, PayDetail } from './pages/Accounting';
-import { Users, CreateUser, UserDetail } from './pages/Users';
+import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
 // import { Groups } from './pages/Groups';
 // import { Permissions } from './pages/Permissions';
@@ -59,7 +59,7 @@ export default function Router() {
         
         { path: 'usuarios', element: <Users /> },
         { path: 'usuarios/crear', element: <CreateUser /> },
-        { path: 'usuarios/editar/:id', element: <CreateUser /> },
+        { path: 'usuarios/editar/:id', element: <EditUser /> },
         { path: 'usuarios/detalle/:id', element: <UserDetail /> },
 
 
