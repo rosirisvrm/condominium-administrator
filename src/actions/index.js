@@ -15,7 +15,22 @@ export const setRoleOptions = (payload) => ({
     payload,
 })
 
-export const setLoading = (payload) => ({
-    type: actionsTypes.SET_LOADING,
+export const setLoadingUsersList = (payload) => ({
+    type: actionsTypes.SET_LOADING_USERS_LIST,
+    payload,
+})
+
+export const setLoadingCreateUser = (payload) => ({
+    type: actionsTypes.SET_LOADING_CREATE_USER,
+    payload,
+})
+
+export const setLoadingEditUser = (payload) => ({
+    type: actionsTypes.SET_LOADING_EDIT_USER,
+    payload,
+})
+
+export const setLoadingUser = (payload) => ({
+    type: actionsTypes.SET_LOADING_USER,
     payload,
 })

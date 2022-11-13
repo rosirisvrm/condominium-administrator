@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -12,7 +13,7 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { setRoleOptions, setLoading as setLoadingAction } from '../../actions';
+import { setRoleOptions, setLoadingCreateUser } from '../../actions';
 import { getRoleOptions } from '../../services';
 
 // ----------------------------------------------------------------------
@@ -26,9 +27,11 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 function CreateUser() {
 
   const roleOptions = useSelector(state => state.roleOptions)
-  const loading = useSelector(state => state.loading)
+  const loadingCreateUser = useSelector(state => state.loadingCreateUser)
 
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchRoleOptions = async () => {
@@ -36,9 +39,7 @@ function CreateUser() {
       dispatch(setRoleOptions(resRoleOptions))
     }
 
-    setTimeout(() => {
-      fetchRoleOptions()
-    }, 2000)
+    fetchRoleOptions()
   }, [dispatch])
 
   const smUp = useResponsive('up', 'sm');
@@ -56,14 +57,20 @@ function CreateUser() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(setLoadingAction(true))
+    dispatch(setLoadingCreateUser(true))
 
+   setTimeout(() => {
     console.log('submit');
     console.log(name, identification, address, role, phone, email);
     
-    dispatch(setLoadingAction(false))
+    dispatch(setLoadingCreateUser(false))
     setColor('success')
     setOpen(true);
+
+    setTimeout(() => {
+      navigate('/dashboard/usuarios')
+    }, 2000)
+   }, 1000)
   }
 
   let spacing = 2;
@@ -162,7 +169,7 @@ function CreateUser() {
                 </GridStyle>
 
                 <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                  <ContainedButton type='submit' defaultPadding loading={loading}>
+                  <ContainedButton type='submit' defaultPadding loading={loadingCreateUser}>
                     Agregar
                   </ContainedButton>
                 </GridStyle>

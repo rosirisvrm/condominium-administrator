@@ -17,22 +17,23 @@ import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
 import { getUsers } from '../../services';
-import { setUsers, setLoading } from '../../actions'
+import { setUsers, setLoadingUsersList } from '../../actions'
 
 // ----------------------------------------------------------------------
 
 function Users() {
 
   const users = useSelector(state => state.users)
+  const loadingUsersList = useSelector(state => state.loadingUsersList)
   const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUsers = async () => {
-      dispatch(setLoading(true))
+      dispatch(setLoadingUsersList(true))
       setTimeout(async () => {
         const resUsers = await getUsers()
         dispatch(setUsers(resUsers))
-        dispatch(setLoading(false))
+        dispatch(setLoadingUsersList(false))
       }, 1000)
     }
 
@@ -88,6 +89,7 @@ function Users() {
           elementList={users} 
           selected={selected} 
           setSelected={setSelected}
+          loading={loadingUsersList}
         >
           {row => {
             const { id, name, address, email, phone, role } = row;

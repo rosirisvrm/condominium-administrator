@@ -3,7 +3,10 @@ import { actionsTypes } from "../actions/types";
 const initialState = {
     users: [],
     user: null,
-    loading: false,
+    loadingUsersList: false,
+    loadingUser: false,
+    loadingCreateUser: false,
+    loadingEditUser: false,
     roleOptions: []
 };
 
@@ -31,9 +34,21 @@ const reducerObject = (state, payload) => ({
         ...state, 
         roleOptions: payload
     },
-    [actionsTypes.SET_LOADING]: {
+    [actionsTypes.SET_LOADING_USERS_LIST]: {
         ...state, 
-        loading: payload
+        loadingUsersList: payload
+    },
+    [actionsTypes.SET_LOADING_CREATE_USER]: {
+        ...state, 
+        loadingCreateUser: payload
+    },
+    [actionsTypes.SET_LOADING_EDIT_USER]: {
+        ...state, 
+        loadingEditUser: payload
+    },
+    [actionsTypes.SET_LOADING_USER]: {
+        ...state,
+        loadingUser: payload
     },
 })
   

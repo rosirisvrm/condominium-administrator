@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { filter } from 'lodash';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 // material
 import {
   Card,
@@ -59,9 +59,9 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function CustomTable({ tableHead, elementList = [], children, selected, setSelected }) {
+function CustomTable({ tableHead, elementList = [], children, selected, setSelected, loading }) {
 
-  const loading = useSelector(state => state.loading)
+  // const loading = useSelector(state => state.loading)
 
   const renderFunc = children
 

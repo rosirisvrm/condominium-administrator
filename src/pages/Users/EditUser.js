@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
@@ -14,7 +14,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { setUser, setRoleOptions, setLoading as setLoadingAction } from '../../actions';
+import { setUser, setRoleOptions, setLoadingUser, setLoadingEditUser } from '../../actions';
 import { getUser, getRoleOptions } from '../../services';
 
 // ----------------------------------------------------------------------
@@ -31,14 +31,23 @@ function EditUser() {
 
   const user = useSelector(state => state.user)
   const roleOptions = useSelector(state => state.roleOptions)
-  const loading = useSelector(state => state.loading)
+  const loadingUser = useSelector(state => state.loadingUser)
+  const loadingEditUser = useSelector(state => state.loadingEditUser)
 
   const dispatch = useDispatch()
 
+  const navigate = useNavigate()
+
   useEffect(() => {
+
     const fetchUser = async () => {
-      const resUser = await getUser(id)
-      dispatch(setUser(resUser))
+      dispatch(setLoadingUser(true))
+      setTimeout(async ()=> {
+        const resUser = await getUser(id)
+        dispatch(setUser(resUser))
+        setFormValues(resUser)
+        dispatch(setLoadingUser(false))
+      }, 1000)
     }
   
     const fetchRoleOptions = async () => {
@@ -46,10 +55,8 @@ function EditUser() {
       dispatch(setRoleOptions(resRoleOptions))
     }
 
-    setTimeout(() => {
-      fetchUser()
-      fetchRoleOptions()
-    }, 2000)
+    fetchUser()
+    fetchRoleOptions()
   }, [dispatch, id])
 
   const smUp = useResponsive('up', 'sm');
@@ -62,20 +69,35 @@ function EditUser() {
   const [phone, setPhone] = React.useState('')
   const [email, setEmail] = React.useState('')
 
+  const setFormValues = (user) => {
+    setName(user?.name || '')
+    setIdentification(user?.identification || '')
+    setAddress(user?.address || '')
+    setRole(user.role ? user.role.value : '')
+    setPhone(user?.phone || '')
+    setEmail(user?.email || '')
+  }
+
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(setLoadingAction(true))
+    dispatch(setLoadingEditUser(true))
 
-    console.log('submit');
-    console.log('form values:', name, identification, address, role, phone, email);
-    console.log('user: ', user);
-    
-    dispatch(setLoadingAction(false))
-    setColor('success')
-    setOpen(true);
+    setTimeout(() => {
+      console.log('submit');
+      console.log('form values:', name, identification, address, role, phone, email);
+      console.log('user: ', user);
+      
+      dispatch(setLoadingEditUser(false))
+      setColor('success')
+      setOpen(true);
+
+      setTimeout(() => {
+        navigate('/dashboard/usuarios')
+      }, 2000)
+    }, 1000)
   }
 
   let spacing = 2;
@@ -86,10 +108,10 @@ function EditUser() {
     <Page title="Editar Usuario">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-            Editar Usuario
+          Editar Usuario
         </Typography>
 
-        {(id && !user) ?
+        {loadingUser ?
           <Loader /> :
           <FormCard>   
             <form onSubmit={onSubmit}>
@@ -100,7 +122,7 @@ function EditUser() {
                     <Input 
                       label='Nombre y Apellido'
                       placeholder='Ingrese nombre y apellido'
-                      inputValue={name || user.name}
+                      inputValue={name}
                       setInputValue={setName}
                     />
                   </Grid>
@@ -109,7 +131,7 @@ function EditUser() {
                     <Input 
                       label='Cédula de Identidad'
                       placeholder='Ingrese la cédula de identidad '
-                      inputValue={identification || user.identification}
+                      inputValue={identification}
                       setInputValue={setIdentification}
                     />
                   </Grid>
@@ -120,7 +142,7 @@ function EditUser() {
                     <Input 
                       label='Dirección'
                       placeholder='Ingrese la dirección'
-                      inputValue={address || user.address}
+                      inputValue={address}
                       setInputValue={setAddress}
                     />
                   </Grid>
@@ -128,7 +150,8 @@ function EditUser() {
                     <Input 
                       label='Rol'
                       placeholder='Seleccione un rol'
-                      inputValue={role === '' ? user.role.value : role}
+                      // inputValue={role === '' ? user.role.value : role}
+                      inputValue={role}
                       setInputValue={setRole}
                       isSelect
                       selectOptions={roleOptions}
@@ -141,7 +164,7 @@ function EditUser() {
                     <Input 
                       label='Teléfono'
                       placeholder='Ingrese el número de teléfono'
-                      inputValue={phone || user.phone}
+                      inputValue={phone}
                       setInputValue={setPhone}
                     />
                   </Grid>
@@ -149,7 +172,7 @@ function EditUser() {
                     <Input 
                       label='Correo electrónico'
                       placeholder='Ingrese el correo electrónico'
-                      inputValue={email || user.email}
+                      inputValue={email}
                       setInputValue={setEmail}
                     />
                   </Grid>
@@ -176,7 +199,7 @@ function EditUser() {
                   </GridStyle>
 
                   <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                    <ContainedButton type='submit' defaultPadding loading={loading}>
+                    <ContainedButton type='submit' defaultPadding loading={loadingEditUser}>
                       Actualizar
                     </ContainedButton>
                   </GridStyle>

@@ -12,7 +12,7 @@ import { OutlinedButton } from '../../components/OutlinedButton';
 import { Loader } from '../../components/Loader'
 //
 import useResponsive from '../../hooks/useResponsive';
-import { setUser, setLoading } from '../../actions';
+import { setUser, setLoadingUser } from '../../actions';
 import { getUser } from '../../services';
 
 // ----------------------------------------------------------------------
@@ -28,14 +28,18 @@ function UserDetail() {
   const { id } = useParams()
   
   const user = useSelector(state => state.user)
+  const loadingUser = useSelector(state => state.loadingUser)
   const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUser = async () => {
-      dispatch(setLoading(true))
-      const resUser = await getUser(id)
-      dispatch(setUser(resUser))
-      dispatch(setLoading(false))
+      dispatch(setLoadingUser(true))
+      
+      setTimeout(async () => {
+        const resUser = await getUser(id)
+        dispatch(setUser(resUser))
+        dispatch(setLoadingUser(false))
+      }, 1000)
     }
 
     fetchUser()
@@ -55,7 +59,7 @@ function UserDetail() {
           Detalle de Usuario
         </Typography>
 
-        {!user ?
+        {loadingUser ?
           <Loader/> :
 
           <FormCard>   
