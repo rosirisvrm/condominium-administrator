@@ -14,7 +14,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { setUser, setRoleOptions, setLoadingUser, setLoadingEditUser } from '../../actions';
+import { setUser, setRoleOptions, setLoadingUser, setLoadingEditUser } from '../../slices/usersSlice';
 import { getUser, getRoleOptions } from '../../services';
 
 // ----------------------------------------------------------------------
@@ -29,10 +29,10 @@ function EditUser() {
 
   const { id } = useParams()
 
-  const user = useSelector(state => state.user)
-  const roleOptions = useSelector(state => state.roleOptions)
-  const loadingUser = useSelector(state => state.loadingUser)
-  const loadingEditUser = useSelector(state => state.loadingEditUser)
+  const user = useSelector(state => state.users.user)
+  const roleOptions = useSelector(state => state.users.roleOptions)
+  const loadingUser = useSelector(state => state.users.loadingUser)
+  const loadingEditUser = useSelector(state => state.users.loadingEditUser)
 
   const dispatch = useDispatch()
 

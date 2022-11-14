@@ -17,19 +17,20 @@ import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
 import { getUsers } from '../../services';
-import { setUsers, setLoadingUsersList } from '../../actions'
+import { setUsers, setLoadingUsersList } from '../../slices/usersSlice'
 
 // ----------------------------------------------------------------------
 
 function Users() {
 
-  const users = useSelector(state => state.users)
-  const loadingUsersList = useSelector(state => state.loadingUsersList)
+  const users = useSelector(state => state.users.users)
+  const loadingUsersList = useSelector(state => state.users.loadingUsersList)
   const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUsers = async () => {
       dispatch(setLoadingUsersList(true))
+
       setTimeout(async () => {
         const resUsers = await getUsers()
         dispatch(setUsers(resUsers))
@@ -119,7 +120,7 @@ function Users() {
                 <TableCell align="right">
                   <UserMoreMenu 
                     actions={actions} 
-                    id={id}
+                    idItem={id}
                     deleteItem={deleteItem} 
                     actionsRedirect={{
                       edit: `/dashboard/usuarios/editar/${id}` ,

@@ -13,7 +13,7 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { setRoleOptions, setLoadingCreateUser } from '../../actions';
+import { setRoleOptions, setLoadingCreateUser } from '../../slices/usersSlice';
 import { getRoleOptions } from '../../services';
 
 // ----------------------------------------------------------------------
@@ -26,8 +26,8 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 
 function CreateUser() {
 
-  const roleOptions = useSelector(state => state.roleOptions)
-  const loadingCreateUser = useSelector(state => state.loadingCreateUser)
+  const roleOptions = useSelector(state => state.users.roleOptions)
+  const loadingCreateUser = useSelector(state => state.users.loadingCreateUser)
 
   const dispatch = useDispatch()
 
