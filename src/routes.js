@@ -2,6 +2,8 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
+// components
+import { AuthRoute } from './components/AuthRoute';
 //
 import { Login } from './pages/Login';
 import Products from './pages/Products';
@@ -45,47 +47,274 @@ export default function Router() {
       path: 'dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: 'home', element: <DashboardApp /> },
-
+        { 
+          path: 'home', 
+          element: (
+            <AuthRoute>
+              <DashboardApp /> 
+            </AuthRoute>
+          ) 
+        },
+        // Accounting
         { 
           path: 'contabilidad',
           children: [
-            { path: 'egresos', element: <Egresos /> },
-            { path: 'ingresos', element: <Ingresos /> },
-            { path: 'enviar-pago', element: <CreatePay /> },
-            { path: 'detalle-pago', element: <PayDetail /> },
+            { 
+              path: 'egresos', 
+              element: (
+                <AuthRoute>
+                  <Egresos />
+                </AuthRoute>
+              )
+            },
+            { 
+              path: 'ingresos', 
+              element: (
+                <AuthRoute>
+                  <Ingresos />
+                </AuthRoute>
+              )
+            },
+            { 
+              path: 'enviar-pago', 
+              element: (
+                <AuthRoute>
+                  <CreatePay />
+                </AuthRoute>
+              )
+            },
+            { 
+              path: 'detalle-pago', 
+              element: (
+                <AuthRoute>
+                  <PayDetail />
+                </AuthRoute>
+              )
+            },
           ] 
         },
         
-        { path: 'usuarios', element: <Users /> },
-        { path: 'usuarios/crear', element: <CreateUser /> },
-        { path: 'usuarios/editar/:id', element: <EditUser /> },
-        { path: 'usuarios/detalle/:id', element: <UserDetail /> },
+        // Users
+        { 
+          path: 'usuarios', 
+          element: ( 
+            <AuthRoute>
+              <Users />
+            </AuthRoute>
+          ) 
+        },
+        { 
+          path: 'usuarios/crear', 
+          element: (
+            <AuthRoute>
+              <CreateUser />
+            </AuthRoute>
+          ) 
+        },
+        { 
+          path: 'usuarios/editar/:id', 
+          element: (
+            <AuthRoute>
+              <EditUser />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'usuarios/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <UserDetail />
+            </AuthRoute>
+          )
+        },
 
+        // Roles
+        { 
+          path: 'roles', 
+          element: (
+            <AuthRoute>
+              <Products />
+            </AuthRoute>
+          )
+        },
 
-        { path: 'roles', element: <Products /> },
-        { path: 'permisos', element: <Blog /> },
-        { path: 'empleados', element: <Employees /> },
-        { path: 'proveedores', element: <Providers /> },
-        { path: 'noticias', element: <News /> },
-        { path: 'notificaciones', element: <Notifications /> },
-        { path: 'eventos', element: <Events /> },
-        { path: 'encuestas', element: <Surveys /> },
+        // Permisssions
+        { 
+          path: 'permisos', 
+          element: (
+            <AuthRoute>
+              <Blog />
+            </AuthRoute>
+          )
+        },
 
-        { path: 'visitas', element: <Visits /> },
-        { path: 'visitas', element: <CreateVisit /> },
-        { path: 'visitas', element: <CreateVisit /> },
-        { path: 'visitas', element: <VisitDetail /> },
+        // Employees
+        { 
+          path: 'empleados', 
+          element: (
+            <AuthRoute>
+              <Employees />
+            </AuthRoute>
+          )
+        },
 
-        { path: 'solicitudes-sugerencias', element: <Requests /> },
-        { path: 'solicitudes-sugerencias/crear', element: <CreateRequest /> },
-        { path: 'solicitudes-sugerencias/editar/:id', element: <CreateRequest /> },
-        { path: 'solicitudes-sugerencias/detalle/:id', element: <RequestDetail /> },
+        // Providers
+        { 
+          path: 'proveedores', 
+          element: (
+            <AuthRoute>
+              <Providers />
+            </AuthRoute>
+          )
+        },
 
-        { path: 'comunicacion-externa', element: <ExternalCommunication /> },
-        { path: 'personalizar-sitio', element: <CustomizeSite /> },
-        { path: 'perfil', element: <Profile /> },
-        { path: 'ajustes', element: <Settings /> },
+        // News
+        { 
+          path: 'noticias', 
+          element: (
+            <AuthRoute>
+              <News />
+            </AuthRoute>
+          ) 
+        },
+
+        // Notifications
+        { 
+          path: 'notificaciones', 
+          element: (
+            <AuthRoute>
+              <Notifications /> 
+            </AuthRoute>
+          )
+        },
+
+        // Events
+        { 
+          path: 'eventos', 
+          element: (
+            <AuthRoute>
+              <Events />
+            </AuthRoute>
+          )
+        },
+
+        // Polls
+        { 
+          path: 'encuestas', 
+          element: (
+            <AuthRoute>
+              <Surveys />
+            </AuthRoute>
+          )
+        },
+
+        // Visits
+        { 
+          path: 'visitas', 
+          element: (
+            <AuthRoute>
+              <Visits />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'visitas', 
+          element: (
+            <AuthRoute>
+              <CreateVisit />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'visitas', 
+          element: (
+            <AuthRoute>
+              <CreateVisit /> 
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'visitas', 
+          element: (
+            <AuthRoute>
+              <VisitDetail /> 
+            </AuthRoute>
+          )
+        },
+
+        // Request and Suggestions
+        { 
+          path: 'solicitudes-sugerencias', 
+          element: (
+            <AuthRoute>
+              <Requests />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'solicitudes-sugerencias/crear', 
+          element: (
+            <AuthRoute>
+              <CreateRequest /> 
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'solicitudes-sugerencias/editar/:id', 
+          element: (
+            <AuthRoute>
+              <CreateRequest /> 
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'solicitudes-sugerencias/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <RequestDetail /> 
+            </AuthRoute>
+          )
+        },
+
+        // External Communication
+        { 
+          path: 'comunicacion-externa', 
+          element: (
+            <AuthRoute>
+              <ExternalCommunication />
+            </AuthRoute>
+          )
+        },
+
+        // Customize Site
+        { 
+          path: 'personalizar-sitio', 
+          element: (
+            <AuthRoute>
+              <CustomizeSite />
+            </AuthRoute>
+          )
+        },
+
+        // Profile
+        { 
+          path: 'perfil', 
+          element: (
+            <AuthRoute>
+              <Profile />
+            </AuthRoute>
+          )
+        },
+
+        // Settings
+        { 
+          path: 'ajustes', 
+          element: (
+            <AuthRoute>
+              <Settings />
+            </AuthRoute>
+          )
+        },
       ],
     },
     {

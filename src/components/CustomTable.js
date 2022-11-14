@@ -27,7 +27,8 @@ CustomTable.propTypes = {
     elementList: PropTypes.array,
     children: PropTypes.func,
     selected: PropTypes.array,
-    setSelected: PropTypes.func
+    setSelected: PropTypes.func,
+    loading: PropTypes.bool,
 }
 
 function descendingComparator(a, b, orderBy) {
