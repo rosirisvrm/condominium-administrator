@@ -13,7 +13,7 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getRoleOptions } from '../../services/users';
+import { getRoleOptions, postUser } from '../../services/users';
 import { setRoleOptions, setLoadingCreateUser } from '../../slices/usersSlice';
 
 // ----------------------------------------------------------------------
@@ -35,8 +35,8 @@ function CreateUser() {
 
   useEffect(() => {
     const fetchRoleOptions = async () => {
-      const resRoleOptions = await getRoleOptions()
-      dispatch(setRoleOptions(resRoleOptions))
+      const res = await getRoleOptions()
+      dispatch(setRoleOptions(res))
     }
 
     fetchRoleOptions()
@@ -59,18 +59,35 @@ function CreateUser() {
     event.preventDefault();
     dispatch(setLoadingCreateUser(true))
 
-   setTimeout(() => {
     console.log('submit');
-    console.log(name, identification, address, role, phone, email);
-    
-    dispatch(setLoadingCreateUser(false))
-    setColor('success')
-    setOpen(true);
+    console.log('form values: ', name, identification, address, role, phone, email);
+
+    const body = {
+      name,
+      identification,
+      address,
+      role,
+      phone,
+      email
+    }
 
     setTimeout(() => {
-      navigate('/dashboard/usuarios')
+      const createUserRequest = async () => {
+        const res = await postUser(body)
+  
+        dispatch(setLoadingCreateUser(false))
+        setColor(res ? 'success' : 'error')
+        setOpen(true);
+
+        if(res){
+          setTimeout(() => {
+            navigate('/dashboard/usuarios')
+          }, 2000)
+        }
+      }
+
+      createUserRequest()
     }, 2000)
-   }, 1000)
   }
 
   let spacing = 2;

@@ -27,7 +27,6 @@ import { setRequests, setLoadingRequestsList } from '../../slices/requestsSlice'
 function Requests() {
 
   const requests = useSelector(state => state.requests.requestsList)
-  console.log("🚀 ~ file: Requests.js ~ line 30 ~ Requests ~ requests", requests)
   const loadingRequestsList = useSelector(state => state.requests.loadingRequestsList)
   
   const dispatch = useDispatch()
@@ -37,8 +36,8 @@ function Requests() {
       dispatch(setLoadingRequestsList(true))
 
       setTimeout(async () => {
-        const resRequests = await getRequests()
-        dispatch(setRequests(resRequests))
+        const res = await getRequests()
+        dispatch(setRequests(res))
         dispatch(setLoadingRequestsList(false))
       }, 1000)
     }

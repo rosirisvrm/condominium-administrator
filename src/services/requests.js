@@ -30,6 +30,12 @@ export const getRequest = (id) => ({
         date: '09-09-2022',
         time: '18:02', 
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.' 
+      },
+      { 
+        user: 'Administrador', 
+        date: '09-09-2022',
+        time: '18:02', 
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.' 
       }
     ]
 });
@@ -39,5 +45,20 @@ export const getStatusOptions = () => ([
     { label: 'Aprobada', value: 1 },
     { label: 'Rechazada', value: 2 }
 ])
+
+export const postRequest = (body) => {
+    console.log('creando solicitud o sugerencia');
+    console.log('body: ', body);
+
+    return true;
+}
+
+export const putRequest = (id, body) => {
+    console.log('editando solicitud o sugerencia');
+    console.log('id: ', id);
+    console.log('body: ', body);
+
+    return true;
+}
 
 

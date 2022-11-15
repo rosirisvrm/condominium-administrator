@@ -13,7 +13,7 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getLevelOptions } from '../../services/requests';
+import { getLevelOptions, postRequest } from '../../services/requests';
 import { setLevelOptions, setLoadingCreateRequest } from '../../slices/requestsSlice';
 
 // ----------------------------------------------------------------------
@@ -48,7 +48,6 @@ function CreateRequest() {
   const [subject, setSubject] = React.useState('')
   const [level, setLevel] = React.useState('')
   const [description, setDescription] = React.useState('')
-  const [comment, setComment] = React.useState('')
 
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
@@ -57,18 +56,30 @@ function CreateRequest() {
     event.preventDefault();
     dispatch(setLoadingCreateRequest(true))
 
+    console.log('submit');
+    console.log('form values:', subject, level, description);
+
+    const body = {
+      subject,
+      level,
+      description,
+    }
+
     setTimeout(() => {
-      console.log('submit');
-      console.log(subject, level, description, comment);
+      const createRequest = async () => {
+        const res = await postRequest(body)
 
-      dispatch(setLoadingCreateRequest(false))
-      setColor('success')
-      setOpen(true);
+        dispatch(setLoadingCreateRequest(false))
+        setColor(res ? 'success' : 'error')
+        setOpen(true);
+  
+        setTimeout(() => {
+          navigate('/dashboard/solicitudes-sugerencias')
+        }, 2000)
+      }
 
-      setTimeout(() => {
-        navigate('/dashboard/solicitudes-sugerencias')
-      }, 2000)
-    }, 1000)
+      createRequest()
+    }, 2000)
   }
 
   let spacing = 2;
@@ -114,16 +125,6 @@ function CreateRequest() {
                   placeholder='Ingrese una descripción'
                   inputValue={description}
                   setInputValue={setDescription}
-                  multiline
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Input 
-                  label='Comentarios'
-                  placeholder='Ingrese un comentario'
-                  inputValue={comment}
-                  setInputValue={setComment}
                   multiline
                 />
               </Grid>

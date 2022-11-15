@@ -14,7 +14,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getRequest, getLevelOptions } from '../../services/requests';
+import { getRequest, getLevelOptions, putRequest } from '../../services/requests';
 import { setRequest, setLoadingRequest, setLevelOptions, setLoadingEditRequest } from '../../slices/requestsSlice';
 
 // ----------------------------------------------------------------------
@@ -45,16 +45,16 @@ function EditRequest() {
       dispatch(setLoadingRequest(true))
 
       setTimeout(async ()=> {
-        const resRequest = await getRequest(id)
-        dispatch(setRequest(resRequest))
-        setFormValues(resRequest)
+        const res = await getRequest(id)
+        dispatch(setRequest(res))
+        setFormValues(res)
         dispatch(setLoadingRequest(false))
       }, 1000)
     }
 
     const fetchLevelOptions = async () => {
-      const resLevelOptions = await getLevelOptions()
-      dispatch(setLevelOptions(resLevelOptions))
+      const res = await getLevelOptions()
+      dispatch(setLevelOptions(res))
     }
 
     fetchRequest()
@@ -67,7 +67,9 @@ function EditRequest() {
   const [subject, setSubject] = React.useState('')
   const [level, setLevel] = React.useState('')
   const [description, setDescription] = React.useState('')
-  const [comment, setComment] = React.useState('')
+  const [newComment, setNewComment] = React.useState('')
+
+  const [loadingComment, setLoadingComment] = React.useState(false)
 
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
@@ -82,20 +84,42 @@ function EditRequest() {
     event.preventDefault();
     dispatch(setLoadingEditRequest(true))
 
+    console.log('submit');
+    console.log('form values:', subject, level, description);
+    console.log('request:', request);
+
+    const body = {
+      subject,
+      level,
+      description,
+    }
+
     setTimeout(() => {
-      console.log('submit');
-      console.log('form values:', subject, level, description, comment);
-      console.log('request:', request);
+      const editRequest = async () => {
+        const res = putRequest(id, body)
 
-      dispatch(setLoadingEditRequest(false))
-      setColor('success')
-      setOpen(true);
+        dispatch(setLoadingEditRequest(false))
+        setColor(res ? 'success' : 'error')
+        setOpen(true);
+  
+        if(res){
+          setTimeout(() => {
+            navigate('/dashboard/solicitudes-sugerencias')
+          }, 2000)
+        }
+      }
 
-      setTimeout(() => {
-        navigate('/dashboard/solicitudes-sugerencias')
-      }, 2000)
-    }, 1000)
+      editRequest()
+    }, 2000)
   }
+
+  const sendComment = () => {
+    console.log('post comment');
+    setLoadingComment(false)
+    setOpen(true);
+    setColor('success')
+  }
+
 
   let spacing = 2;
   if(smUp) spacing = 6;
@@ -146,14 +170,42 @@ function EditRequest() {
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <Input 
-                  label='Comentarios'
-                  placeholder='Ingrese un comentario'
-                  inputValue={comment}
-                  setInputValue={setComment}
-                  multiline
-                />
+              <Grid container item spacing={1}>
+                {request?.comments.map((item, index) => (
+                  <Grid item xs={12} key={index}>
+                    <Input 
+                      label={index === 0 && 'Comentarios'}
+                      inputValue={item.content}
+                      multiline
+                      rows={2}
+                      disabled
+                      helperText={`${item.user} ${item.date} ${item.time}`}
+                    />
+                  </Grid>
+                ))}
+
+                <Grid item xs={12}>
+                  <Input
+                    label={(request?.comments.length === 0 )&& 'Comentarios'}
+                    placeholder='Ingrese un comentario'
+                    inputValue={newComment}
+                    setInputValue={setNewComment}
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
+
+                <Grid  
+                  container
+                  item
+                  direction="row"
+                  justifyContent="flex-end"
+                  alignItems="flex-end"
+                >
+                  <OutlinedButton size='small' onClick={sendComment} loading={loadingComment}>
+                    Enviar comentario
+                  </OutlinedButton>
+                </Grid>
               </Grid>
 
               <Grid

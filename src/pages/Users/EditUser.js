@@ -14,7 +14,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getUser, getRoleOptions } from '../../services/users';
+import { getUser, getRoleOptions, putUser } from '../../services/users';
 import { setUser, setRoleOptions, setLoadingUser, setLoadingEditUser } from '../../slices/usersSlice';
 
 // ----------------------------------------------------------------------
@@ -39,21 +39,20 @@ function EditUser() {
   const navigate = useNavigate()
 
   useEffect(() => {
-
     const fetchUser = async () => {
       dispatch(setLoadingUser(true))
       
       setTimeout(async ()=> {
-        const resUser = await getUser(id)
-        dispatch(setUser(resUser))
-        setFormValues(resUser)
+        const res = await getUser(id)
+        dispatch(setUser(res))
+        setFormValues(res)
         dispatch(setLoadingUser(false))
       }, 1000)
     }
   
     const fetchRoleOptions = async () => {
-      const resRoleOptions = await getRoleOptions()
-      dispatch(setRoleOptions(resRoleOptions))
+      const res = await getRoleOptions()
+      dispatch(setRoleOptions(res))
     }
 
     fetchUser()
@@ -86,19 +85,36 @@ function EditUser() {
     event.preventDefault();
     dispatch(setLoadingEditUser(true))
 
-    setTimeout(() => {
-      console.log('submit');
-      console.log('form values:', name, identification, address, role, phone, email);
-      console.log('user: ', user);
-      
-      dispatch(setLoadingEditUser(false))
-      setColor('success')
-      setOpen(true);
+    console.log('submit');
+    console.log('form values:', name, identification, address, role, phone, email);
+    console.log('user: ', user);
 
-      setTimeout(() => {
-        navigate('/dashboard/usuarios')
-      }, 2000)
-    }, 1000)
+    const body = {
+      name,
+      identification,
+      address,
+      role,
+      phone,
+      email
+    }
+
+    setTimeout(() => {
+      const editUser = async () => {
+        const res = await putUser(id, body)
+
+        dispatch(setLoadingEditUser(false))
+        setColor(res ? 'success' : 'error')
+        setOpen(true);
+
+        if(res){
+          setTimeout(() => {
+            navigate('/dashboard/usuarios')
+          }, 2000)
+        }
+      }
+
+      editUser()
+    }, 2000)
   }
 
   let spacing = 2;

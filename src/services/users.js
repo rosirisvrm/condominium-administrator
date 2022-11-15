@@ -26,3 +26,18 @@ export const getRoleOptions = () => ([
     { label: 'Propietario', value: 0 },
     { label: 'Junta de Condominio', value: 1 },
 ]);
+
+export const postUser = (body) => {
+    console.log('creando usuario');
+    console.log('body: ', body);
+
+    return true;
+}
+
+export const putUser = (id, body) => {
+    console.log('editando usuario');
+    console.log('id: ', id);
+    console.log('body: ', body);
+
+    return true;
+}

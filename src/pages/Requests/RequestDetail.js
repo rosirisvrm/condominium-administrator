@@ -14,7 +14,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getRequest, getStatusOptions } from '../../services/requests';
+import { getRequest, getStatusOptions, putRequest } from '../../services/requests';
 import { setRequest, setLoadingRequest, setLoadingEditRequest, setStatusOptions } from '../../slices/requestsSlice';
 
 // ----------------------------------------------------------------------
@@ -65,35 +65,48 @@ function RequestDetail() {
   const [status, setStatus] = React.useState(0)
   const [newComment, setNewComment] = React.useState('')
 
-  const setFormValues = (request) =>{
-    setStatus(request?.status ? request.status.value : '')
-  }
-
   const [loadingComment, setLoadingComment] = React.useState(false)
+  
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
 
+  const setFormValues = (request) =>{
+    setStatus(request?.status ? request.status.value : '')
+  }
+  
   const onSubmit = (event) => {
     event.preventDefault();
     dispatch(setLoadingEditRequest(true))
 
+    console.log('submit');
+    console.log('form values: ', status);
+    console.log(request);
+
+    const body = {
+      status
+    }
+
     setTimeout(() => {
-      console.log('submit');
-      console.log(request);
+      const editRequest = async() => {
+        const res = await putRequest(id, body)
 
-      dispatch(setLoadingEditRequest(false))
-      setColor('success')
-      setOpen(true);
+        dispatch(setLoadingEditRequest(false))
+        setColor(res ? 'success' : 'error')
+        setOpen(true);
+  
+        if(res){
+          setTimeout(() => {
+            navigate('/dashboard/solicitudes-sugerencias')
+          }, 2000)
+        }
+      }
 
-      setTimeout(() => {
-        navigate('/dashboard/solicitudes-sugerencias')
-      }, 2000)
-
+      editRequest()
     }, 1000)
   }
 
   const sendComment = () => {
-    console.log('add comment');
+    console.log('post comment');
     setLoadingComment(false)
     setOpen(true);
     setColor('success')
@@ -190,7 +203,8 @@ function RequestDetail() {
 
                 <Grid item xs={12}>
                   <Input
-                    placeholder='Agregar un comentario'
+                    label={(request?.comments.length === 0 )&& 'Comentarios'}
+                    placeholder='Ingrese un comentario'
                     inputValue={newComment}
                     setInputValue={setNewComment}
                     multiline

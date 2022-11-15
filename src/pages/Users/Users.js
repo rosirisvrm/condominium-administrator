@@ -25,7 +25,6 @@ import { setUsers, setLoadingUsersList } from '../../slices/usersSlice'
 function Users() {
 
   const users = useSelector(state => state.users.usersList)
-  console.log("🚀 ~ file: Users.js ~ line 28 ~ Users ~ users", users)
   const loadingUsersList = useSelector(state => state.users.loadingUsersList)
   
   const dispatch = useDispatch()
@@ -35,8 +34,8 @@ function Users() {
       dispatch(setLoadingUsersList(true))
 
       setTimeout(async () => {
-        const resUsers = await getUsers()
-        dispatch(setUsers(resUsers))
+        const res = await getUsers()
+        dispatch(setUsers(res))
         dispatch(setLoadingUsersList(false))
       }, 1000)
     }

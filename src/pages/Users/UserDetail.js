@@ -37,8 +37,8 @@ function UserDetail() {
       dispatch(setLoadingUser(true))
       
       setTimeout(async () => {
-        const resUser = await getUser(id)
-        dispatch(setUser(resUser))
+        const res = await getUser(id)
+        dispatch(setUser(res))
         dispatch(setLoadingUser(false))
       }, 1000)
     }
