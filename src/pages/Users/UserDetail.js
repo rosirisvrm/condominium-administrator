@@ -12,8 +12,8 @@ import { OutlinedButton } from '../../components/OutlinedButton';
 import { Loader } from '../../components/Loader'
 //
 import useResponsive from '../../hooks/useResponsive';
+import { getUser } from '../../services/users';
 import { setUser, setLoadingUser } from '../../slices/usersSlice';
-import { getUser } from '../../services';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +29,7 @@ function UserDetail() {
   
   const user = useSelector(state => state.users.user)
   const loadingUser = useSelector(state => state.users.loadingUser)
+  
   const dispatch = useDispatch()
 
   useEffect(() => {

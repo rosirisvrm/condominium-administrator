@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useSelector,useDispatch } from 'react-redux';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -17,12 +18,33 @@ import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
-// mock
-import LIST from '../../_mock/request';
+//
+import { getRequests } from '../../services/requests';
+import { setRequests, setLoadingRequestsList } from '../../slices/requestsSlice';
 
 // ----------------------------------------------------------------------
 
 function Requests() {
+
+  const requests = useSelector(state => state.requests.requestsList)
+  console.log("🚀 ~ file: Requests.js ~ line 30 ~ Requests ~ requests", requests)
+  const loadingRequestsList = useSelector(state => state.requests.loadingRequestsList)
+  
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      dispatch(setLoadingRequestsList(true))
+
+      setTimeout(async () => {
+        const resRequests = await getRequests()
+        dispatch(setRequests(resRequests))
+        dispatch(setLoadingRequestsList(false))
+      }, 1000)
+    }
+
+    fetchRequests()
+  }, [dispatch])
 
   const tableHead = [
     { id: 'name', label: 'Nombre', alignRight: false },
@@ -32,8 +54,6 @@ function Requests() {
     { id: 'status', label: 'Status', alignRight: false },
     { id: '' },
   ];
-
-  console.log('list ', LIST);
 
   const [selected, setSelected] = useState([]);
 
@@ -70,9 +90,10 @@ function Requests() {
 
         <CustomTable
           tableHead={tableHead} 
-          elementList={LIST} 
+          elementList={requests} 
           selected={selected} 
           setSelected={setSelected}
+          loading={loadingRequestsList}
         >
           {row => {
             const { id, name, address, subject, level, status } = row;
@@ -119,8 +140,8 @@ function Requests() {
                 <TableCell align="right">
                   <UserMoreMenu 
                     actions={['delete', 'edit', 'detail']}
-                    deleteItem={deleteItem}
                     idItem={id}
+                    deleteItem={deleteItem}
                     actionsRedirect={{
                       edit: `/dashboard/solicitudes-sugerencias/editar/${id}`,
                       detail: `/dashboard/solicitudes-sugerencias/detalle/${id}`,

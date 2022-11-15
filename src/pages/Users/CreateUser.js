@@ -13,8 +13,8 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import useResponsive from '../../hooks/useResponsive';
+import { getRoleOptions } from '../../services/users';
 import { setRoleOptions, setLoadingCreateUser } from '../../slices/usersSlice';
-import { getRoleOptions } from '../../services';
 
 // ----------------------------------------------------------------------
 

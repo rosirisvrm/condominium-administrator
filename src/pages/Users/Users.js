@@ -16,15 +16,18 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
-import { getUsers } from '../../services';
+//
+import { getUsers } from '../../services/users';
 import { setUsers, setLoadingUsersList } from '../../slices/usersSlice'
 
 // ----------------------------------------------------------------------
 
 function Users() {
 
-  const users = useSelector(state => state.users.users)
+  const users = useSelector(state => state.users.usersList)
+  console.log("🚀 ~ file: Users.js ~ line 28 ~ Users ~ users", users)
   const loadingUsersList = useSelector(state => state.users.loadingUsersList)
+  
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -66,8 +69,6 @@ function Users() {
     }
     setSelected(newSelected);
   };
-
-  const actions = ['delete', 'edit', 'detail'];
 
   const deleteItem = (id) => {
     console.log('eliminando item', id);
@@ -119,7 +120,7 @@ function Users() {
                 <TableCell align="left">{role}</TableCell>
                 <TableCell align="right">
                   <UserMoreMenu 
-                    actions={actions} 
+                    actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 
                     actionsRedirect={{

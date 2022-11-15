@@ -14,8 +14,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
+import { getUser, getRoleOptions } from '../../services/users';
 import { setUser, setRoleOptions, setLoadingUser, setLoadingEditUser } from '../../slices/usersSlice';
-import { getUser, getRoleOptions } from '../../services';
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +42,7 @@ function EditUser() {
 
     const fetchUser = async () => {
       dispatch(setLoadingUser(true))
+      
       setTimeout(async ()=> {
         const resUser = await getUser(id)
         dispatch(setUser(resUser))
@@ -73,7 +74,7 @@ function EditUser() {
     setName(user?.name || '')
     setIdentification(user?.identification || '')
     setAddress(user?.address || '')
-    setRole(user.role ? user.role.value : '')
+    setRole(user?.role ? user.role.value : '')
     setPhone(user?.phone || '')
     setEmail(user?.email || '')
   }

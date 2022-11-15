@@ -11,7 +11,7 @@ import Iconify from '../../../components/Iconify';
   UserMoreMenu.propTypes = {
     actions: PropTypes.array,
     deleteItem: PropTypes.func,
-    idItem: PropTypes.number,
+    idItem: PropTypes.string,
     actionsRedirect: PropTypes.object,
   }
 

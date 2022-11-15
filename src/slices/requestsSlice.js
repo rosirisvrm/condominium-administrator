@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    requests: [],
+    requestsList: [],
     request: null,
     loadingRequestsList: false,
     loadingRequest: false,
     loadingCreateRequest: false,
     loadingEditRequest: false,
+    levelOptions: [],
+    statusOptions: []
 }
 
 export const requestSlice = createSlice({
@@ -14,12 +16,12 @@ export const requestSlice = createSlice({
     initialState,
     reducers: {
         setRequests: (state, action) => {
-            state.requests = action.payload;
+            state.requestsList = action.payload;
         },
         setLoadingRequestsList: (state, action) => {
             state.loadingRequestsList = action.payload;
         },
-         setRequest: (state, action) => {
+        setRequest: (state, action) => {
             state.request = action.payload;
         },
         setLoadingRequest: (state, action) => {
@@ -30,6 +32,12 @@ export const requestSlice = createSlice({
         },
         setLoadingEditRequest: (state, action) => {
             state.loadingEditRequest = action.payload;
+        },
+        setLevelOptions: (state, action) => {
+            state.levelOptions = action.payload
+        },
+        setStatusOptions: (state, action) => {
+            state.statusOptions = action.payload
         }
     }
 })
@@ -41,6 +49,8 @@ export const {
     setLoadingRequest,
     setLoadingCreateRequest,
     setLoadingEditRequest,
+    setLevelOptions,
+    setStatusOptions
 } = requestSlice.actions;
 
 export const requestsReducer = requestSlice.reducer;

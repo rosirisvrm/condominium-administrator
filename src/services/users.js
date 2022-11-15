@@ -26,6 +26,3 @@ export const getRoleOptions = () => ([
     { label: 'Propietario', value: 0 },
     { label: 'Junta de Condominio', value: 1 },
 ]);
-    
-
-

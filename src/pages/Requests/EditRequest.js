@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
@@ -11,10 +11,11 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getLevelOptions } from '../../services/requests';
-import { setLevelOptions, setLoadingCreateRequest } from '../../slices/requestsSlice';
+import { getRequest, getLevelOptions } from '../../services/requests';
+import { setRequest, setLoadingRequest, setLevelOptions, setLoadingEditRequest } from '../../slices/requestsSlice';
 
 // ----------------------------------------------------------------------
 
@@ -24,23 +25,41 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function CreateRequest() {
+function EditRequest() {
 
+  const { id } = useParams()
+
+  const request = useSelector(state => state.requests.request)
   const levelOptions = useSelector(state => state.requests.levelOptions)
-  const loadingCreateRequest = useSelector(state => state.requests.loadingCreateRequest)
+  const loadingRequest = useSelector(state => state.requests.loadingRequest)
+ 
+  const loadingEditRequest = useSelector(state => state.requests.loadingEditRequest)
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
+
   useEffect(() => {
+    const fetchRequest = async () => {
+      dispatch(setLoadingRequest(true))
+
+      setTimeout(async ()=> {
+        const resRequest = await getRequest(id)
+        dispatch(setRequest(resRequest))
+        setFormValues(resRequest)
+        dispatch(setLoadingRequest(false))
+      }, 1000)
+    }
+
     const fetchLevelOptions = async () => {
       const resLevelOptions = await getLevelOptions()
       dispatch(setLevelOptions(resLevelOptions))
     }
 
+    fetchRequest()
     fetchLevelOptions()
-  }, [dispatch])
+  }, [dispatch, id])
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
@@ -53,15 +72,22 @@ function CreateRequest() {
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
 
+  const setFormValues = (request) => {
+    setSubject(request?.subject || '')
+    setLevel(request?.level ? request.level.value : '')
+    setDescription(request?.description || '')
+  }
+
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(setLoadingCreateRequest(true))
+    dispatch(setLoadingEditRequest(true))
 
     setTimeout(() => {
       console.log('submit');
-      console.log(subject, level, description, comment);
+      console.log('form values:', subject, level, description, comment);
+      console.log('request:', request);
 
-      dispatch(setLoadingCreateRequest(false))
+      dispatch(setLoadingEditRequest(false))
       setColor('success')
       setOpen(true);
 
@@ -76,13 +102,15 @@ function CreateRequest() {
   if(mdUp) spacing = 12;
 
   return (
-    <Page title='Crear Solicitud o Sugerencia'>
+    <Page title='Editar Solicitud o Sugerencia'>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Crear Solicitud o Sugerencia
+          Editar Solicitud o Sugerencia
         </Typography>
 
-        <FormCard>   
+       {loadingRequest ? 
+        <Loader /> :
+        <FormCard>
           <form onSubmit={onSubmit}>
             <Grid container spacing={2}>
 
@@ -149,7 +177,7 @@ function CreateRequest() {
                 </GridStyle>
 
                 <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                  <ContainedButton type='submit' defaultPadding loading={loadingCreateRequest}>
+                  <ContainedButton type='submit' defaultPadding loading={loadingEditRequest}>
                     Agregar
                   </ContainedButton>
                 </GridStyle>
@@ -158,6 +186,7 @@ function CreateRequest() {
             </Grid>
           </form>
         </FormCard>
+        }
 
         <CustomSnackbar
           open={open}
@@ -169,4 +198,4 @@ function CreateRequest() {
   );
 }
 
-export { CreateRequest };
+export { EditRequest };

@@ -1,5 +1,6 @@
-import React from 'react';
-import { useParams } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -10,8 +11,11 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+import { Loader } from '../../components/Loader';
 //
 import useResponsive from '../../hooks/useResponsive';
+import { getRequest, getStatusOptions } from '../../services/requests';
+import { setRequest, setLoadingRequest, setLoadingEditRequest, setStatusOptions } from '../../slices/requestsSlice';
 
 // ----------------------------------------------------------------------
 
@@ -21,52 +25,71 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
 function RequestDetail() {
 
   const { id } = useParams()
+
+  const request = useSelector(state => state.requests.request)
+  const loadingRequest = useSelector(state => state.requests.loadingRequest)
+  const loadingEditRequest = useSelector(state => state.requests.loadingEditRequest)
+  const statusOptions = useSelector(state => state.requests.statusOptions)
+
+  const dispatch = useDispatch()
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchRequest = async () => {
+      dispatch(setLoadingRequest(true))
+      
+      setTimeout(async () => {
+        const res = await getRequest(id)
+        dispatch(setRequest(res))
+        setFormValues(res)
+        dispatch(setLoadingRequest(false))
+      }, 1000)
+    }
+
+    const fetchStatusOptions = async () => {
+      const res = await getStatusOptions()
+      dispatch(setStatusOptions (res))
+    }
+
+    fetchRequest()
+    fetchStatusOptions()
+  }, [dispatch, id])
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
   const [status, setStatus] = React.useState(0)
   const [newComment, setNewComment] = React.useState('')
-  const [loading, setLoading] = React.useState(false)
+
+  const setFormValues = (request) =>{
+    setStatus(request?.status ? request.status.value : '')
+  }
+
   const [loadingComment, setLoadingComment] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
 
-  const request = {
-    id,
-    user: 'Ann Bode',
-    userAddress: 'C-2-3',
-    subject: 'Reserva de área común',
-    level: 'Alta',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
-    status: 'Pendiente',
-    comments: [
-      { 
-        user: 'Administrador', 
-        date: '09-09-2022',
-        time: '18:02', 
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.' 
-      }
-    ]
-  }
-
-  const statusOptions = [
-    { label: 'Pendiente', value: 0 },
-    { label: 'Aprobada', value: 1 },
-    { label: 'Rechazada', value: 2 }
-  ]
-
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log('submit');
-    console.log(request);
-    setLoading(false)
-    setColor('success')
-    setOpen(true);
+    dispatch(setLoadingEditRequest(true))
+
+    setTimeout(() => {
+      console.log('submit');
+      console.log(request);
+
+      dispatch(setLoadingEditRequest(false))
+      setColor('success')
+      setOpen(true);
+
+      setTimeout(() => {
+        navigate('/dashboard/solicitudes-sugerencias')
+      }, 2000)
+
+    }, 1000)
   }
 
   const sendComment = () => {
@@ -87,6 +110,9 @@ function RequestDetail() {
             Detalle de Solicitud o Sugerencia
         </Typography>
 
+
+        {loadingRequest ? 
+        <Loader /> :
         <FormCard>   
           <form onSubmit={onSubmit}>
             <Grid container spacing={2}>
@@ -95,7 +121,7 @@ function RequestDetail() {
                 <Grid item xs={12} sm={6}>
                    <Input 
                     label='Usuario'
-                    inputValue={request.user}
+                    inputValue={request?.user || ''}
                     disabled
                    />
                 </Grid>
@@ -103,7 +129,7 @@ function RequestDetail() {
                 <Grid item xs={12} sm={6}>
                   <Input 
                     label='Dirección'
-                    inputValue={request.userAddress}
+                    inputValue={request?.userAddress || ''}
                     disabled
                   />
                 </Grid>
@@ -113,7 +139,7 @@ function RequestDetail() {
                 <Grid item xs={12} sm={6}>
                    <Input 
                     label='Asunto'
-                    inputValue={request.subject}
+                    inputValue={request?.subject || ''}
                     disabled
                    />
                 </Grid>
@@ -121,7 +147,7 @@ function RequestDetail() {
                 <Grid item xs={12} sm={6}>
                   <Input 
                     label='Nivel'
-                    inputValue={request.level}
+                    inputValue={request?.level ? request.level.label : ''}
                     disabled
                   />
                 </Grid>
@@ -131,7 +157,7 @@ function RequestDetail() {
                 <Grid item xs={12} sm={6}>
                   <Input 
                     label='Descripción'
-                    inputValue={request.description}
+                    inputValue={request?.description || ''}
                     multiline
                     rows={3}
                     disabled
@@ -149,7 +175,7 @@ function RequestDetail() {
               </Grid>
 
               <Grid container item spacing={1}>
-                {request.comments.map((item, index) => (
+                {request?.comments.map((item, index) => (
                   <Grid item xs={12} key={index}>
                     <Input 
                       label={index === 0 && 'Comentarios'}
@@ -206,7 +232,7 @@ function RequestDetail() {
                 </GridStyle>
 
                 <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                  <ContainedButton type='submit' defaultPadding loading={loading}>
+                  <ContainedButton type='submit' defaultPadding loading={loadingEditRequest}>
                     Actualizar
                   </ContainedButton>
                 </GridStyle>
@@ -215,6 +241,7 @@ function RequestDetail() {
             </Grid>
           </form>
         </FormCard>
+        }
 
         <CustomSnackbar
           open={open}

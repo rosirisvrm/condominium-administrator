@@ -25,7 +25,7 @@ import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
 import { Surveys } from './pages/Surveys';
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
-import { Requests, CreateRequest, RequestDetail } from './pages/Requests';
+import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
 import { ExternalCommunication } from './pages/ExternalCommunication';
 import { CustomizeSite } from './pages/CustomizeSite';
 import { Profile } from './pages/Profile';
@@ -263,7 +263,7 @@ export default function Router() {
           path: 'solicitudes-sugerencias/editar/:id', 
           element: (
             <AuthRoute>
-              <CreateRequest /> 
+              <EditRequest /> 
             </AuthRoute>
           )
         },
