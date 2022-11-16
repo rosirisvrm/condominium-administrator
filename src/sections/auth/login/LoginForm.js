@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,11 +11,23 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+//
+import { login } from '../../../services/auth'
+import { setAuth, setLoadingLogin } from '../../../slices/authSlice';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
+
   const navigate = useNavigate();
+  
+  const location = useLocation();
+
+  const dispatch = useDispatch();
+
+  const auth = useSelector(state => state.auth.user);
+
+  const loadingLogin = useSelector(state => state.auth.loadingLogin);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,12 +49,32 @@ export default function LoginForm() {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    // formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async () => {
-    navigate('/dashboard/home', { replace: true });
+    dispatch(setLoadingLogin(true))
+
+    setTimeout(() => {
+      const authRequest = async () => {
+        const authRes = await login(methods.getValues())
+
+        dispatch(setAuth(authRes))
+        dispatch(setLoadingLogin(false))
+  
+        if(authRes){
+          const from = location.state?.from?.pathname || '/dashboard/home';
+          navigate(from, { replace: true });
+        }
+      }
+  
+      authRequest()
+    }, 2000)
   };
+
+  console.log('user auth', auth);
+
+  if(auth) return(<Navigate to='/dashboard/home' />)
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -66,12 +99,12 @@ export default function LoginForm() {
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <RHFCheckbox name="remember" label="Recordar" />
-        <Link variant="subtitle2" underline="hover">
+        <Link variant="subtitle2" underline="hover" style={{ cursor: 'pointer' }}>
           ¿Olvidó su contraseña?
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loadingLogin}>
         Ingresar
       </LoadingButton>
     </FormProvider>
