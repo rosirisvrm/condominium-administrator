@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from "react-hook-form";
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -33,6 +34,14 @@ function CreateRequest() {
 
   const navigate = useNavigate()
 
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      subject: '',
+      level: '',
+      description: '',
+    }
+  });
+
   useEffect(() => {
     const fetchLevelOptions = async () => {
       const resLevelOptions = await getLevelOptions()
@@ -44,25 +53,18 @@ function CreateRequest() {
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
-  
-  const [subject, setSubject] = React.useState('')
-  const [level, setLevel] = React.useState('')
-  const [description, setDescription] = React.useState('')
 
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
 
   const onSubmit = (event) => {
-    event.preventDefault();
     dispatch(setLoadingCreateRequest(true))
 
     console.log('submit');
-    console.log('form values:', subject, level, description);
+    console.log('event ', event);
 
     const body = {
-      subject,
-      level,
-      description,
+      ...event,
     }
 
     setTimeout(() => {
@@ -73,9 +75,11 @@ function CreateRequest() {
         setColor(res ? 'success' : 'error')
         setOpen(true);
   
-        setTimeout(() => {
-          navigate('/dashboard/solicitudes-sugerencias')
-        }, 2000)
+        if(res){
+          setTimeout(() => {
+            navigate('/dashboard/solicitudes-sugerencias')
+          }, 2000)
+        }
       }
 
       createRequest()
@@ -94,38 +98,61 @@ function CreateRequest() {
         </Typography>
 
         <FormCard>   
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                   <Input 
+                   <Input
+                    name='subject'
                     label='Asunto'
                     placeholder='Ingrese un asunto'
-                    inputValue={subject}
-                    setInputValue={setSubject}
+                    type='text'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.subject}
                    />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='level'
                     label='Nivel'
                     placeholder='Seleccione un nivel'
-                    inputValue={level}
-                    setInputValue={setLevel}
                     isSelect
                     selectOptions={levelOptions}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.level}
                   />
                 </Grid>
               </Grid>
               
               <Grid item xs={12}>
-                <Input 
+                <Input
+                  name='description'
                   label='Descripción'
                   placeholder='Ingrese una descripción'
-                  inputValue={description}
-                  setInputValue={setDescription}
                   multiline
+                  type='text'
+                  control={control}
+                  validations={{
+                    required: {
+                      value: true,
+                      message: 'El campo es requerido'
+                    }
+                  }}
+                  error={errors.description}
                 />
               </Grid>
 

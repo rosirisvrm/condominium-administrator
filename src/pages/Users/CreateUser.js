@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -33,6 +34,17 @@ function CreateUser() {
 
   const navigate = useNavigate()
 
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      name: '',
+      identification: '',
+      address: '',
+      role: '',
+      phone: '',
+      email: '',
+    }
+  });
+
   useEffect(() => {
     const fetchRoleOptions = async () => {
       const res = await getRoleOptions()
@@ -45,30 +57,19 @@ function CreateUser() {
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
-  const [name, setName] = React.useState('')
-  const [identification, setIdentification] = React.useState('')
-  const [address, setAddress] = React.useState('')
-  const [role, setRole] = React.useState('')
-  const [phone, setPhone] = React.useState('')
-  const [email, setEmail] = React.useState('')
-
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
 
   const onSubmit = (event) => {
-    event.preventDefault();
     dispatch(setLoadingCreateUser(true))
 
     console.log('submit');
-    console.log('form values: ', name, identification, address, role, phone, email);
+    console.log('event ', event);
 
     const body = {
-      name,
-      identification,
-      address,
-      role,
-      phone,
-      email
+     ...event,
+     identification: parseInt(event.identification, 10),
+     phone: parseInt(event.phone, 10)
     }
 
     setTimeout(() => {
@@ -102,65 +103,116 @@ function CreateUser() {
         </Typography>
 
         <FormCard>   
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='name'
                     label='Nombre y Apellido'
                     placeholder='Ingrese nombre y apellido'
-                    inputValue={name}
-                    setInputValue={setName}
+                    type='text'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.name}
                   />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='identification'
                     label='Cédula de Identidad'
-                    placeholder='Ingrese la cédula de identidad '
-                    inputValue={identification}
-                    setInputValue={setIdentification}
+                    placeholder='Ingrese la cédula de identidad'
+                    type='number'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.identification}
                   />
                 </Grid>
               </Grid>
               
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='address'
                     label='Dirección'
                     placeholder='Ingrese la dirección'
-                    inputValue={address}
-                    setInputValue={setAddress}
+                    type='text'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.address}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='role'
                     label='Rol'
                     placeholder='Seleccione un rol'
-                    inputValue={role}
-                    setInputValue={setRole}
                     isSelect
                     selectOptions={roleOptions}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.role}
                   />
                 </Grid>
               </Grid>
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='phone'
                     label='Teléfono'
                     placeholder='Ingrese el número de teléfono'
-                    inputValue={phone}
-                    setInputValue={setPhone}
+                    type='text'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.phone}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='email'
                     label='Correo electrónico'
                     placeholder='Ingrese el correo electrónico'
-                    inputValue={email}
-                    setInputValue={setEmail}
+                    type='email'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      },
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: "El formato no es correcto"
+                      }
+                    }}
+                    error={errors.email}
                   />
                 </Grid>
               </Grid>

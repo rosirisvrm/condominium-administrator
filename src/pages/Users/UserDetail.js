@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from "react-hook-form";
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -32,6 +33,17 @@ function UserDetail() {
   
   const dispatch = useDispatch()
 
+  const { control, formState: { errors }, setValue } = useForm({ 
+    defaultValues: {
+      name: '',
+      identification: '',
+      address: '',
+      role: '',
+      phone: '',
+      email: '',
+    }
+  });
+
   useEffect(() => {
     const fetchUser = async () => {
       dispatch(setLoadingUser(true))
@@ -39,12 +51,22 @@ function UserDetail() {
       setTimeout(async () => {
         const res = await getUser(id)
         dispatch(setUser(res))
+        setFormValues()
         dispatch(setLoadingUser(false))
       }, 1000)
     }
 
     fetchUser()
   }, [dispatch, id])
+
+  const setFormValues = () => {
+    setValue("name", user?.name || '')
+    setValue("identification", user?.identification || '')
+    setValue("address", user?.address || '')
+    setValue("role", user?.role ? user.role.label : '')
+    setValue("phone", user?.phone || '')
+    setValue("email", user?.email || '')
+  }
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
@@ -69,52 +91,109 @@ function UserDetail() {
 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
-                    <Input 
+                    <Input
+                      name='name'
                       label='Nombre y Apellido'
-                      inputValue={user?.name || ''}
                       disabled
+                      type='text'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.name}
                     />
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <Input 
+                    <Input
+                      name='identification'
                       label='Cédula de Identidad'
-                      inputValue={user?.identification || ''}
                       disabled
+                      type='number'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.identification}
                     />
                   </Grid>
                 </Grid>
                 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
-                    <Input 
+                    <Input
+                      name='address'
                       label='Dirección'
-                      inputValue={user?.address || ''}
                       disabled
+                      type='text'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.address}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Input 
+                    <Input
+                      name='role'
                       label='Rol'
-                      inputValue={user?.role?.label || ''}
                       disabled
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.role}
                     />
                   </Grid>
                 </Grid>
 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
-                    <Input 
+                    <Input
+                      name='phone'
                       label='Teléfono'
-                      inputValue={user?.phone || ''}
                       disabled
+                      type='text'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.phone}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Input 
+                    <Input
+                      name='email'
                       label='Correo electrónico'
-                      inputValue={user?.email || ''}
                       disabled
+                      type='email'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        },
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                          message: "El formato no es correcto"
+                        }
+                      }}
+                      error={errors.email}
                     />
                   </Grid>
                 </Grid>

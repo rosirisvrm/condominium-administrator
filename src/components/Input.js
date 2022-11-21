@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { Controller } from "react-hook-form";
 // @mui
 import { OutlinedInput, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
-
 
 // ----------------------------------------------------------------------
 
@@ -15,29 +15,9 @@ const LabelStyle = styled('span')(() => ({
     marginBottom: 8,
 }));
 
-const InputStyle = styled(OutlinedInput)(({ theme }) => ({
-    '&.Mui-focused': { border: `2px solid ${theme.palette.primary.main}` },
-    '& fieldset': {
-        borderWidth: `1px !important`,
-        borderColor: `${theme.palette.grey[500_32]} !important`,
-    }
-}));
-
-const SelectStyle = styled(Select)(({ theme }) => ({
-    '&.Mui-focused': { border: `2px solid ${theme.palette.primary.main}` },
-    '&:hover': {
-        borderWidth: `1px !important`,
-        borderColor: `${theme.palette.grey[500_32]} !important`,
-    },
-    '& fieldset': {
-        borderWidth: `1px !important`,
-        borderColor: `${theme.palette.grey[500_32]} !important`,
-    },
-}));
-
 const HelperTextStyle = styled(FormHelperText)(() => ({
-    textAlign: 'end',
     marginRight: 0,
+    marginLeft: 0,
 }))
 
 // ----------------------------------------------------------------------
@@ -45,29 +25,33 @@ const HelperTextStyle = styled(FormHelperText)(() => ({
 Input.propTypes = {
     label: PropTypes.string,
     placeholder: PropTypes.string,
-    inputValue: PropTypes.any,
-    setInputValue: PropTypes.func,
     isSelect: PropTypes.bool,
     selectOptions: PropTypes.array,
     multiline: PropTypes.bool,
     rows: PropTypes.number,
     disabled: PropTypes.bool,
     helperText: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
+    name: PropTypes.string,
+    control: PropTypes.object,
+    error: PropTypes.object,
+    validations: PropTypes.object,
 }
 
 function Input({ 
     label = '', 
-    placeholder = '', 
-    inputValue, 
-    setInputValue, 
+    placeholder = '',
     isSelect = false, 
     selectOptions = [],
     multiline = false,
     rows = 4,
     disabled = false,
     helperText = '',
-    type = 'text'
+    type = 'text',
+    name = '',
+    control = null,
+    error = null,
+    validations = null,
 }){
 
     const theme = useTheme()
@@ -76,41 +60,69 @@ function Input({
         fontStyle: 'normal',
         color: theme.palette.grey[500]
     }
-  
-    const onChange = (event) => {
-      setInputValue(event.target.value)
-      console.log(event.target.value);
-    }
+
+    let isError = false;
+    
+    if(error?.type) { 
+        isError = true;
+    } 
 
     return(
-    <FormControlStyle>
+    <FormControlStyle error={isError}>
+
         {label && <LabelStyle>{label}</LabelStyle>}
+
         {!isSelect ? 
-            <InputStyle
-                value={inputValue}
-                onChange={onChange}
-                placeholder={placeholder}
-                multiline={multiline}
-                rows={rows}
-                disabled={disabled}
-                type={type}
-            /> :
-            <SelectStyle
-                value={inputValue}
-                onChange={onChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                disabled={disabled}
-            >
-                <MenuItem disabled value="">
-                    <em style={emStyle}>{placeholder}</em>
-                </MenuItem>
-                {selectOptions.map((item, index) => (
-                    <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                ))}
-            </SelectStyle>
+            <Controller
+                name={name}
+                control={control}
+                rules={validations}
+                render={({ field: { onChange, value } }) => (
+                    <OutlinedInput
+                        onChange={onChange} 
+                        value={value}
+                        placeholder={placeholder}
+                        multiline={multiline}
+                        rows={rows}
+                        disabled={disabled}
+                        type={type}
+                    /> 
+                )}
+            /> 
+            :
+            <Controller
+                name={name}
+                control={control}
+                rules={validations}
+                render={({ field: { onChange, value } }) => (
+                    <Select
+                        onChange={onChange} 
+                        value={value}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        disabled={disabled}
+                    >
+                        <MenuItem disabled value="">
+                            <em style={emStyle}>{placeholder}</em>
+                        </MenuItem>
+                        {selectOptions.map((item, index) => (
+                            <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
+                        ))}
+                    </Select>
+                )}
+            />
         }
-        {helperText && <HelperTextStyle>{helperText}</HelperTextStyle>}
+
+        {helperText &&
+            <HelperTextStyle styles={{ textAlign: 'end' }}>
+                {helperText}
+            </HelperTextStyle>
+        }
+        {error && 
+            <HelperTextStyle styles={{ textAlign: 'start' }}>
+                {error.message}
+            </HelperTextStyle>
+        }
     </FormControlStyle>
     );
 }
