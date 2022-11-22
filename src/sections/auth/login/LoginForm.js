@@ -49,7 +49,6 @@ export default function LoginForm() {
 
   const {
     handleSubmit,
-    // formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async () => {
@@ -73,8 +72,6 @@ export default function LoginForm() {
   };
 
   console.log('user auth', auth);
-
-  if(auth) return(<Navigate to='/dashboard/home' />)
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

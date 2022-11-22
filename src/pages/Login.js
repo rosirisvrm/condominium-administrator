@@ -1,6 +1,8 @@
 // @mui
 import { styled } from '@mui/material/styles';
 import { Container, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
@@ -39,7 +41,11 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 function Login() {
 
+  const auth = useSelector(state => state.auth.user);
+
   const mdUp = useResponsive('up', 'md');
+
+  if(auth) return(<Navigate to='/dashboard/home' />)
 
   return (
     <Page title="Login">
