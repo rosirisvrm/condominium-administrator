@@ -6,7 +6,10 @@ export const login = (data) => {
     return {
         name: 'Rosiris',
         lastname: 'Romero',
-        role: 1,
+        role: {
+            value: 2,
+            label: 'Administrador'
+        },
         email: 'rosirisvrm@gmail.com',
         phone: 1254126,
         address: 'Pzo'

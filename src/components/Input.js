@@ -114,12 +114,12 @@ function Input({
         }
 
         {helperText &&
-            <HelperTextStyle styles={{ textAlign: 'end' }}>
+            <HelperTextStyle style={{ textAlign: 'end' }}>
                 {helperText}
             </HelperTextStyle>
         }
         {error && 
-            <HelperTextStyle styles={{ textAlign: 'start' }}>
+            <HelperTextStyle style={{ textAlign: 'start' }}>
                 {error.message}
             </HelperTextStyle>
         }

@@ -33,7 +33,7 @@ function UserDetail() {
   
   const dispatch = useDispatch()
 
-  const { control, formState: { errors }, setValue } = useForm({ 
+  const { control, setValue } = useForm({ 
     defaultValues: {
       name: '',
       identification: '',
@@ -97,13 +97,6 @@ function UserDetail() {
                       disabled
                       type='text'
                       control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido'
-                        }
-                      }}
-                      error={errors.name}
                     />
                   </Grid>
 
@@ -114,13 +107,6 @@ function UserDetail() {
                       disabled
                       type='number'
                       control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido'
-                        }
-                      }}
-                      error={errors.identification}
                     />
                   </Grid>
                 </Grid>
@@ -133,13 +119,6 @@ function UserDetail() {
                       disabled
                       type='text'
                       control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido'
-                        }
-                      }}
-                      error={errors.address}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -147,14 +126,8 @@ function UserDetail() {
                       name='role'
                       label='Rol'
                       disabled
+                      type='text'
                       control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido'
-                        }
-                      }}
-                      error={errors.role}
                     />
                   </Grid>
                 </Grid>
@@ -167,13 +140,6 @@ function UserDetail() {
                       disabled
                       type='text'
                       control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido'
-                        }
-                      }}
-                      error={errors.phone}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -183,17 +149,6 @@ function UserDetail() {
                       disabled
                       type='email'
                       control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido'
-                        },
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                          message: "El formato no es correcto"
-                        }
-                      }}
-                      error={errors.email}
                     />
                   </Grid>
                 </Grid>

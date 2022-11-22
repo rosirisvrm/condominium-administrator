@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from "react-hook-form";
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -29,6 +30,7 @@ function RequestDetail() {
 
   const { id } = useParams()
 
+  const user = useSelector(state => state.auth.user)
   const request = useSelector(state => state.requests.request)
   const loadingRequest = useSelector(state => state.requests.loadingRequest)
   const loadingEditRequest = useSelector(state => state.requests.loadingEditRequest)
@@ -38,6 +40,16 @@ function RequestDetail() {
 
   const navigate = useNavigate()
 
+  const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({ 
+    defaultValues: {
+      subject: '',
+      level: '',
+      description: '',
+      status: '',
+      newComment: '',
+    }
+  });
+
   useEffect(() => {
     const fetchRequest = async () => {
       dispatch(setLoadingRequest(true))
@@ -45,45 +57,51 @@ function RequestDetail() {
       setTimeout(async () => {
         const res = await getRequest(id)
         dispatch(setRequest(res))
-        setFormValues(res)
+        setFormValues()
         dispatch(setLoadingRequest(false))
       }, 1000)
     }
 
     const fetchStatusOptions = async () => {
       const res = await getStatusOptions()
-      dispatch(setStatusOptions (res))
+      dispatch(setStatusOptions(res))
     }
 
     fetchRequest()
     fetchStatusOptions()
   }, [dispatch, id])
 
+  const setFormValues = () => {
+    setValue('subject', request?.subject || '')
+    setValue('level', request?.level ? request.level.label : '')
+    setValue('description', request?.description || '')
+    setValue('status', request?.status ? request.status.value : '')
+    setValue('user', request?.user || '')
+    setValue('userAddress', request?.userAddress || '')
+
+    if(request?.comments.length > 0){
+      request.comments.forEach((comment, index)  => {
+        setValue(`comment ${index}`, comment?.content || '')
+      })
+    }
+  }
+
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
-  const [status, setStatus] = React.useState(0)
-  const [newComment, setNewComment] = React.useState('')
-
   const [loadingComment, setLoadingComment] = React.useState(false)
-  
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
-
-  const setFormValues = (request) =>{
-    setStatus(request?.status ? request.status.value : '')
-  }
   
   const onSubmit = (event) => {
-    event.preventDefault();
     dispatch(setLoadingEditRequest(true))
 
     console.log('submit');
-    console.log('form values: ', status);
-    console.log(request);
+    console.log('event ', event);
+    console.log('request', request);
 
     const body = {
-      status
+      ...event,
     }
 
     setTimeout(() => {
@@ -106,10 +124,17 @@ function RequestDetail() {
   }
 
   const sendComment = () => {
-    console.log('post comment');
-    setLoadingComment(false)
-    setOpen(true);
-    setColor('success')
+    setLoadingComment(true)
+    console.log('send comment');
+
+    const newComment = getValues('newComment');
+    console.log('newComment ', newComment);
+
+    setTimeout(() => {
+      setLoadingComment(false)
+      setOpen(true);
+      setColor('success')
+    }, 2000)
   }
 
   let spacing = 2;
@@ -127,62 +152,83 @@ function RequestDetail() {
         {loadingRequest ? 
         <Loader /> :
         <FormCard>   
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
 
+              {/* If admin */}
+              {(user.role.value === 2) && 
+                <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='user'
+                      label='Usuario'
+                      type='text'
+                      disabled
+                      control={control}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='userAddress'
+                      label='Dirección'
+                      type='text'
+                      disabled
+                      control={control}
+                    />
+                  </Grid>
+                </Grid>
+              }
+
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                   <Input 
-                    label='Usuario'
-                    inputValue={request?.user || ''}
-                    disabled
-                   />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <Input 
-                    label='Dirección'
-                    inputValue={request?.userAddress || ''}
-                    disabled
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container item spacing={spacing}>
-                <Grid item xs={12} sm={6}>
-                   <Input 
+                   <Input
+                    name='subject'
                     label='Asunto'
-                    inputValue={request?.subject || ''}
                     disabled
+                    type='text'
+                    control={control}
                    />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='level'
                     label='Nivel'
-                    inputValue={request?.level ? request.level.label : ''}
                     disabled
+                    text='text'
+                    control={control}
                   />
                 </Grid>
               </Grid>
               
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='description'
                     label='Descripción'
-                    inputValue={request?.description || ''}
+                    disabled
+                    type='text'
                     multiline
                     rows={3}
-                    disabled
+                    control={control}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Input 
+                  <Input
+                    name='status'
                     label='Status'
-                    inputValue={status}
-                    setInputValue={setStatus}
+                    disabled={user.role.value === 0}
                     isSelect
                     selectOptions={statusOptions}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.status}
                   />
                 </Grid>
               </Grid>
@@ -190,25 +236,30 @@ function RequestDetail() {
               <Grid container item spacing={1}>
                 {request?.comments.map((item, index) => (
                   <Grid item xs={12} key={index}>
-                    <Input 
-                      label={index === 0 && 'Comentarios'}
-                      inputValue={item.content}
+                    <Input
+                      name={`comment ${index}`}
+                      label={(index === 0) && 'Comentarios'}
                       multiline
                       rows={2}
                       disabled
                       helperText={`${item.user} ${item.date} ${item.time}`}
+                      type='text'
+                      control={control}
+                      error={errors[`comment ${index}`]}
                     />
                   </Grid>
                 ))}
 
                 <Grid item xs={12}>
                   <Input
-                    label={(request?.comments.length === 0 )&& 'Comentarios'}
+                    name='newComment'
+                    label={(request?.comments.length === 0) && 'Comentarios'}
                     placeholder='Ingrese un comentario'
-                    inputValue={newComment}
-                    setInputValue={setNewComment}
                     multiline
                     rows={2}
+                    type='text'
+                    control={control}
+                    error={errors.newComment}
                   />
                 </Grid>
 

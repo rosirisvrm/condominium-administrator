@@ -25,6 +25,7 @@ export const getUser = (id) => ({
 export const getRoleOptions = () => ([
     { label: 'Propietario', value: 0 },
     { label: 'Junta de Condominio', value: 1 },
+    { label: 'Administrador', value: 2 },
 ]);
 
 export const postUser = (body) => {
