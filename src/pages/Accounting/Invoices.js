@@ -1,56 +1,50 @@
 import { React, useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // material
 import {
   Stack,
-  Button,
   Checkbox,
   TableRow,
   TableCell,
   Container,
   Typography,
+  IconButton
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import Iconify from '../../components/Iconify';
 //
-import { fDate } from '../../utils/formatTime';
-import { getExpenses } from '../../services/accounting';
-import { setExpenses, setLoadingExpensesList } from '../../slices/accountingSlice'
+import { getInvoices } from '../../services/accounting';
+import { setInvoices, setLoadingInvoicesList } from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
-function Expenses() {
+function Invoices() {
 
-  const expensesList = useSelector(state => state.accounting.expensesList)
-  const loadingExpensesList = useSelector(state => state.accounting.loadingExpensesList)
+  const invoicesList = useSelector(state => state.accounting.invoicesList)
+  const loadingInvoiceList = useSelector(state => state.accounting.loadingInvoiceList)
   
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const fetchExpenses = async () => {
-      dispatch(setLoadingExpensesList(true))
+    const fetchIncome = async () => {
+      dispatch(setLoadingInvoicesList(true))
 
       setTimeout(async () => {
-        const res = await getExpenses()
-        dispatch(setExpenses(res))
-        dispatch(setLoadingExpensesList(false))
+        const res = await getInvoices()
+        dispatch(setInvoices(res))
+        dispatch(setLoadingInvoicesList(false))
       }, 1000)
     }
 
-    fetchExpenses()
+    fetchIncome()
   }, [dispatch])
 
   const tableHead = [
-    { id: 'subject', label: 'Asunto', alignRight: false },
-    { id: 'amount', label: 'Monto (USD)', alignRight: false },
-    { id: 'reference', label: 'Reference', alignRight: false },
-    { id: 'date', label: 'Fecha', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
-    { id: '' },
+    { id: 'subject', label: 'Asunto de Pago', alignRight: false },
+    { id: 'invoiceNumber', label: 'Número de Factura', alignRight: false },
+    { id: 'id', label: 'Descargar Factura' },
   ];
 
   const [selected, setSelected] = useState([]);
@@ -70,32 +64,25 @@ function Expenses() {
     setSelected(newSelected);
   };
 
-  const deleteItem = (id) => {
-    console.log('eliminando item', id);
-  }
-
   return (
-    <Page title="Egresos">
+    <Page title="Facturas y Recibos">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Egresos
+            Facturas y Recibos
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/contabilidad/crear-pago" startIcon={<Iconify icon="eva:plus-fill" />}>
-            Crear
-          </Button>
         </Stack>
 
         <CustomTable 
           tableHead={tableHead} 
-          elementList={expensesList} 
+          elementList={invoicesList} 
           selected={selected} 
           setSelected={setSelected}
-          loading={loadingExpensesList}
+          loading={loadingInvoiceList}
           searchParam='subject'
         >
           {row => {
-            const { id, subject, amount, reference, date, status } = row;
+            const { id, subject, invoiceNumber } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
@@ -115,20 +102,12 @@ function Expenses() {
                     {subject}
                   </Typography>
                 </TableCell>
-                <TableCell align="left">{amount}</TableCell>
-                <TableCell align="left">{reference}</TableCell>
-                <TableCell align="left">{fDate(date)}</TableCell>
-                <TableCell align="left">{status?.label || ''}</TableCell>
-                <TableCell align="right">
-                  <UserMoreMenu 
-                    actions={['delete', 'edit', 'detail']} 
-                    idItem={id}
-                    deleteItem={deleteItem} 
-                    actionsRedirect={{
-                      edit: `/dashboard/contabilidad/editar-pago/${id}` ,
-                      detail: `/dashboard/contabilidad/detalle-pago/${id}`,
-                    }} 
-                  />
+                <TableCell align="left">{invoiceNumber}</TableCell>
+                {/* <TableCell align="left">{status?.label || ''}</TableCell> */}
+                <TableCell align="left">
+                  <IconButton onClick={() => console.log('descargando factura')}>
+                    <Iconify icon='bi:calculator-fill' width={20} height={20} />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             );
@@ -140,4 +119,4 @@ function Expenses() {
   );
 }
 
-export { Expenses };
+export { Invoices };

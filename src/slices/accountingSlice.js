@@ -4,9 +4,11 @@ const initialState = {
     expensesList: [],
     incomeList: [],
     paymentsList: [],
+    invoicesList: [],
     loadingExpensesList: false,
     loadingIncomeList: false,
     loadingPaymentsList: false,
+    loadingInvoicesList: false,
     payment: null,
     loadingPayment: false,
     loadingCreatePayment: false,
@@ -27,6 +29,9 @@ export const accountingSlice = createSlice({
         setPayments: (state, action) => {
           state.paymentsList = action.payload;
         },
+        setInvoices: (state, action) => {
+            state.invoicesList = action.payload;
+        },
         setLoadingExpensesList: (state, action) => {
             state.loadingExpensesList = action.payload;
         },
@@ -35,6 +40,9 @@ export const accountingSlice = createSlice({
         },
         setLoadingPaymentsList: (state, action) => {
           state.loadingPaymentsList = action.payload;
+        },
+        setLoadingInvoicesList: (state, action) => {
+            state.loadingInvoicesList = action.payload;
         },
         setPayment: (state, action) => {
             state.payment = action.payload;
@@ -58,9 +66,11 @@ export const {
     setExpenses,
     setIncome,
     setPayments,
+    setInvoices,
     setLoadingExpensesList,
     setLoadingIncomeList,
     setLoadingPaymentsList,
+    setLoadingInvoicesList,
     setPayment,
     setLoadingPayment,
     setLoadingCreatePayment,

@@ -26,8 +26,7 @@ import { setPayments, setLoadingPaymentsList } from '../../slices/accountingSlic
 function Payments() {
 
   const paymentsList = useSelector(state => state.accounting.paymentsList)
-  console.log('paymentsList ', paymentsList);
-  const loadingPaymentsList = useSelector(state => state.users.loadingPaymentsList)
+  const loadingPaymentsList = useSelector(state => state.accounting.loadingPaymentsList)
   
   const dispatch = useDispatch()
 
@@ -82,7 +81,7 @@ function Payments() {
           <Typography variant="h4" gutterBottom>
             Pagos
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/usuarios/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/contabilidad/crear-pago" startIcon={<Iconify icon="eva:plus-fill" />}>
             Crear
           </Button>
         </Stack>

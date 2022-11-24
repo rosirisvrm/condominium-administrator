@@ -1,45 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { sample } from 'lodash';
-import { number } from 'yup';
-import mockUsers from '../_mock/user'
 
 //  http request here 
-export const getExpenses = () => {
-  return [...Array(24)].map((_, index) => ({
-    id: faker.datatype.uuid(),
-    amount: 100,
-    refrence: faker.datatype.number(),
-    status: {
-      value: 0,
-      label: 'Pendiente'
-    },
-    date: faker.date.past(),
-    user: {
-      id: faker.datatype.uuid(),
-      name: faker.name.findName(), 
-    }
-  }));
-};
-
-export const getIncome = () => {
-  return [...Array(24)].map((_, index) => ({
-    id: faker.datatype.uuid(),
-    amount: 100,
-    refrence: faker.datatype.number(),
-    status: {
-      value: 0,
-      label: 'Pendiente'
-    },
-    date: faker.date.past(),
-    user: {
-      id: faker.datatype.uuid(),
-      name: faker.name.findName(), 
-    }
-  }));
-};
-
-export const getPayments = () => {
-  return [...Array(24)].map((_, index) => ({
+export const getExpenses = () => ([...Array(24)].map((_, index) => ({
     id: faker.datatype.uuid(),
     subject: `Asunto de pago ${index}`,
     amount: 100,
@@ -51,10 +13,65 @@ export const getPayments = () => {
     date: faker.date.past(),
     user: {
       id: faker.datatype.uuid(),
-      name: faker.name.findName(), 
+      name: faker.name.findName(),
+      address: faker.address.buildingNumber(),
     }
-  }));
-};
+  }))
+);
+
+export const getIncome = () => ([...Array(24)].map((_, index) => ({
+    id: faker.datatype.uuid(),
+    subject: `Asunto de pago ${index}`,
+    amount: 100,
+    reference: faker.datatype.number(),
+    status: {
+      value: 0,
+      label: 'Pendiente'
+    },
+    date: faker.date.past(),
+    // User data 
+    userId: faker.datatype.uuid(),
+    name: faker.name.findName(),
+    address: faker.address.buildingNumber(),
+  }))
+);
+
+export const getPayments = () => ([...Array(24)].map((_, index) => ({
+    id: faker.datatype.uuid(),
+    subject: `Asunto de pago ${index}`,
+    amount: 100,
+    reference: faker.datatype.number(),
+    status: {
+      value: 0,
+      label: 'Pendiente'
+    },
+    date: faker.date.past(),
+    user: {
+      id: faker.datatype.uuid(),
+      name: faker.name.findName(),
+      address: faker.address.buildingNumber(),
+    }
+  }))
+);
+
+export const getInvoices = () => ([...Array(24)].map((_, index) => ({
+  id: faker.datatype.uuid(),
+  subject: `Asunto de pago ${index}`,
+  amount: 100,
+  reference: faker.datatype.number(),
+  status: {
+    value: 0,
+    label: 'Pendiente'
+  },
+  date: faker.date.past(),
+  user: {
+    id: faker.datatype.uuid(),
+    name: faker.name.findName(),
+    address: faker.address.buildingNumber(),
+  },
+  invoiceNumber: faker.datatype.number(),
+}))
+);
 
 export const getPaid = (id) => ({
     id,

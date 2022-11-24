@@ -12,7 +12,7 @@ import Blog from './pages/Blog';
 import { Page404 } from './pages/Page404';
 import { Landing } from './pages/Landing';
 import { DashboardApp } from './pages/DashboardApp';
-import { Income, Expenses, Payments, CreatePay, PayDetail } from './pages/Accounting';
+import { Income, Expenses, Payments, Invoices, CreatePay, PayDetail } from './pages/Accounting';
 import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
 // import { Groups } from './pages/Groups';
@@ -87,12 +87,12 @@ export default function Router() {
               path: 'facturas', 
               element: (
                 <AuthRoute>
-                  <Income />
+                  <Invoices />
                 </AuthRoute>
               )
             },
             { 
-              path: 'enviar-pago', 
+              path: 'crear-pago', 
               element: (
                 <AuthRoute>
                   <CreatePay />
