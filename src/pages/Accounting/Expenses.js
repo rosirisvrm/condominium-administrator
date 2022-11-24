@@ -5,7 +5,7 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-function Egresos() {
+function Expenses() {
   return (
     <Page title="Egresos">
       <Container maxWidth="xl">
@@ -18,4 +18,4 @@ function Egresos() {
   );
 }
 
-export { Egresos };
+export { Expenses };

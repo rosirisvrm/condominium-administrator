@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useSelector,useDispatch } from 'react-redux';
-import { sentenceCase } from 'change-case';
+import { React, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // material
 import {
   Stack,
@@ -14,42 +13,43 @@ import {
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
 //
-import { getRequests } from '../../services/requests';
-import { setRequests, setLoadingRequestsList } from '../../slices/requestsSlice';
+import { fDate } from '../../utils/formatTime';
+import { getPayments } from '../../services/accounting';
+import { setPayments, setLoadingPaymentsList } from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
-function Requests() {
+function Payments() {
 
-  const requests = useSelector(state => state.requests.requestsList)
-  const loadingRequestsList = useSelector(state => state.requests.loadingRequestsList)
+  const paymentsList = useSelector(state => state.accounting.paymentsList)
+  console.log('paymentsList ', paymentsList);
+  const loadingPaymentsList = useSelector(state => state.users.loadingPaymentsList)
   
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      dispatch(setLoadingRequestsList(true))
+    const fetchPayments = async () => {
+      dispatch(setLoadingPaymentsList(true))
 
       setTimeout(async () => {
-        const res = await getRequests()
-        dispatch(setRequests(res))
-        dispatch(setLoadingRequestsList(false))
+        const res = await getPayments()
+        dispatch(setPayments(res))
+        dispatch(setLoadingPaymentsList(false))
       }, 1000)
     }
 
-    fetchRequests()
+    fetchPayments()
   }, [dispatch])
 
   const tableHead = [
-    { id: 'name', label: 'Nombre', alignRight: false },
-    { id: 'address', label: 'Dirección', alignRight: false },
     { id: 'subject', label: 'Asunto', alignRight: false },
-    { id: 'level', label: 'Nivel', alignRight: false },
+    { id: 'amount', label: 'Monto (USD)', alignRight: false },
+    { id: 'reference', label: 'Reference', alignRight: false },
+    { id: 'date', label: 'Fecha', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '' },
   ];
@@ -72,44 +72,32 @@ function Requests() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item ', id)
+    console.log('eliminando item', id);
   }
 
   return (
-    <Page title="Solicitudes y Sugerencias">
+    <Page title="Pagos">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Solicitudes y Sugerencias
+            Pagos
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/solicitudes-sugerencias/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/usuarios/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
             Crear
           </Button>
         </Stack>
 
-        <CustomTable
+        <CustomTable 
           tableHead={tableHead} 
-          elementList={requests} 
+          elementList={paymentsList} 
           selected={selected} 
           setSelected={setSelected}
-          loading={loadingRequestsList}
-          searchParam='name'
+          loading={loadingPaymentsList}
+          searchParam='subject'
         >
           {row => {
-            const { id, name, address, subject, level, status } = row;
-            const isItemSelected = selected.indexOf(name) !== -1;
-            let color;
-
-            if(status === 'Pendiente'){
-              color = 'warning'
-
-            }else if(status === 'Aprobada'){
-              color = 'success'
-
-            }else if(status === 'Rechazada'){
-              color = 'error'
-
-            }
+            const { id, subject, amount, reference, date, status } = row;
+            const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
               <TableRow
@@ -121,40 +109,36 @@ function Requests() {
                 aria-checked={isItemSelected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>
-                    {name}
+                    {subject}
                   </Typography>
                 </TableCell>
-                <TableCell align="left">{address}</TableCell>
-                <TableCell align="left">{subject}</TableCell>
-                <TableCell align="left">{level}</TableCell>
-                <TableCell align="left">
-                  <Label variant="ghost" color={color}>
-                    {sentenceCase(status)}
-                  </Label>
-                </TableCell>
-
+                <TableCell align="left">{amount}</TableCell>
+                <TableCell align="left">{reference}</TableCell>
+                <TableCell align="left">{fDate(date)}</TableCell>
+                <TableCell align="left">{status?.label || ''}</TableCell>
                 <TableCell align="right">
                   <UserMoreMenu 
-                    actions={['delete', 'edit', 'detail']}
+                    actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem}
+                    deleteItem={deleteItem} 
                     actionsRedirect={{
-                      edit: `/dashboard/solicitudes-sugerencias/editar/${id}`,
-                      detail: `/dashboard/solicitudes-sugerencias/detalle/${id}`,
-                    }}
+                      edit: `/dashboard/contabilidad/editar-pago/${id}` ,
+                      detail: `/dashboard/contabilidad/detalle-pago/${id}`,
+                    }} 
                   />
                 </TableCell>
               </TableRow>
             );
           }}
         </CustomTable>
+
       </Container>
     </Page>
   );
 }
 
-export { Requests };
+export { Payments };

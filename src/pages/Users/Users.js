@@ -91,6 +91,7 @@ function Users() {
           selected={selected} 
           setSelected={setSelected}
           loading={loadingUsersList}
+          searchParam='name'
         >
           {row => {
             const { id, name, address, email, phone, role } = row;

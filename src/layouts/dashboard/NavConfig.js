@@ -26,10 +26,14 @@ const navConfig = [
         title: 'Ingresos',
         path: '/dashboard/contabilidad/ingresos',
       },
-      // {
-      //   title: 'Facturas y Recibos',
-      //   path: '/dashboard/contabilidad/facturas',
-      // }
+      {
+        title: 'Pagos',
+        path: '/dashboard/contabilidad/pagos',
+      },
+      {
+        title: 'Facturas y Recibos',
+        path: '/dashboard/contabilidad/facturas',
+      }
     ]
   },
   {

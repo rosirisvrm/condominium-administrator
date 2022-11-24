@@ -12,7 +12,7 @@ import Blog from './pages/Blog';
 import { Page404 } from './pages/Page404';
 import { Landing } from './pages/Landing';
 import { DashboardApp } from './pages/DashboardApp';
-import { Ingresos, Egresos, CreatePay, PayDetail } from './pages/Accounting';
+import { Income, Expenses, Payments, CreatePay, PayDetail } from './pages/Accounting';
 import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
 // import { Groups } from './pages/Groups';
@@ -63,7 +63,7 @@ export default function Router() {
               path: 'egresos', 
               element: (
                 <AuthRoute>
-                  <Egresos />
+                  <Expenses />
                 </AuthRoute>
               )
             },
@@ -71,7 +71,23 @@ export default function Router() {
               path: 'ingresos', 
               element: (
                 <AuthRoute>
-                  <Ingresos />
+                  <Income />
+                </AuthRoute>
+              )
+            },
+            { 
+              path: 'pagos', 
+              element: (
+                <AuthRoute>
+                  <Payments />
+                </AuthRoute>
+              )
+            },
+            { 
+              path: 'facturas', 
+              element: (
+                <AuthRoute>
+                  <Income />
                 </AuthRoute>
               )
             },
@@ -84,7 +100,15 @@ export default function Router() {
               )
             },
             { 
-              path: 'detalle-pago', 
+              path: 'editar-pago/:id', 
+              element: (
+                <AuthRoute>
+                  <PayDetail />
+                </AuthRoute>
+              )
+            },
+            { 
+              path: 'detalle-pago/:id', 
               element: (
                 <AuthRoute>
                   <PayDetail />

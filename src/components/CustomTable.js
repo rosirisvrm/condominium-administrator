@@ -29,6 +29,7 @@ CustomTable.propTypes = {
     selected: PropTypes.array,
     setSelected: PropTypes.func,
     loading: PropTypes.bool,
+    searchParam: PropTypes.string,
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -47,7 +48,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function applySortFilter(array, comparator, query) {
+function applySortFilter(array, comparator, query, searchParam) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -55,12 +56,12 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_item) => _item[searchParam].toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-function CustomTable({ tableHead, elementList = [], children, selected, setSelected, loading }) {
+function CustomTable({ tableHead, elementList = [], children, selected, setSelected, loading, searchParam }) {
 
   // const loading = useSelector(state => state.loading)
 
@@ -106,7 +107,7 @@ function CustomTable({ tableHead, elementList = [], children, selected, setSelec
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - elementList.length) : 0;
 
-  const filteredElements = applySortFilter(elementList, getComparator(order, orderBy), filterName);
+  const filteredElements = applySortFilter(elementList, getComparator(order, orderBy), filterName, searchParam);
 
   const isDataNotFound = filteredElements.length === 0;
 
@@ -130,8 +131,6 @@ function CustomTable({ tableHead, elementList = [], children, selected, setSelec
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {/* props.searchedTodos.map(todo => renderFunc(todo)) */}
-
                   {filteredElements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => renderFunc(row))}
 
                   {emptyRows > 0 && (

@@ -5,7 +5,7 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-function Ingresos() {
+function Income() {
   return (
     <Page title="Ingresos">
       <Container maxWidth="xl">
@@ -18,4 +18,4 @@ function Ingresos() {
   );
 }
 
-export { Ingresos };
+export { Income };
