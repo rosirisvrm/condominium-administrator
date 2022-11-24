@@ -25,8 +25,6 @@ export default function LoginForm() {
 
   const dispatch = useDispatch();
 
-  const auth = useSelector(state => state.auth.user);
-
   const loadingLogin = useSelector(state => state.auth.loadingLogin);
 
   const [showPassword, setShowPassword] = useState(false);

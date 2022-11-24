@@ -15,7 +15,8 @@ export const login = (data) => {
         },
         email: 'rosirisvrm@gmail.com',
         phone: 1254126,
-        address: 'Pzo'
+        address: 'Pzo',
+        photoURL: '/static/mock-images/avatars/avatar_default.jpg',
     }
 };
 

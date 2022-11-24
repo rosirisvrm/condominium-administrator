@@ -1,13 +1,11 @@
 import { useRef, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
 // components
 import MenuPopover from '../../components/MenuPopover';
-// mocks_
-import account from '../../_mock/account';
 // 
 import { logout } from '../../services/auth'
 import { setAuth, setLoadingLogout } from '../../slices/authSlice';
@@ -37,6 +35,8 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
 
+  const auth = useSelector(state => state.auth.user)
+
   const [open, setOpen] = useState(null);
 
   const navigate = useNavigate();
@@ -48,6 +48,10 @@ export default function AccountPopover() {
   };
 
   const handleClose = () => {
+    setOpen(null);
+  };
+
+  const handleLogout = () => {
     dispatch(setLoadingLogout(true))
 
     setTimeout(() => {
@@ -88,7 +92,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={auth?.photoURL} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -107,10 +111,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {auth?.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {auth?.email}
           </Typography>
         </Box>
 
@@ -126,7 +130,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Cerrar sesión
         </MenuItem>
       </MenuPopover>
