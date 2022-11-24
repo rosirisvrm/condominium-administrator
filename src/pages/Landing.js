@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Container, Typography, Button, Box } from '@mui/material';
@@ -74,9 +75,13 @@ const ImageStyle = styled(Box)(({ theme }) => ({
 
 function Landing() {
 
+  const auth = useSelector(state => state.auth.user);
+
   const smUp = useResponsive('up', 'sm');
 
   const mdUp = useResponsive('up', 'md');
+
+  if(auth) return(<Navigate to='/dashboard/home' />)
 
   return (
     <Page title="Condominium Administrator">

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // form
 import { useForm } from 'react-hook-form';
@@ -70,8 +70,6 @@ export default function LoginForm() {
       authRequest()
     }, 2000)
   };
-
-  console.log('user auth', auth);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

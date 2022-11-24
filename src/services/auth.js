@@ -1,8 +1,11 @@
 //  http request here 
 export const login = (data) => {
     console.log('haciendo login');
-    console.log('data: ', data);
 
+    console.log('data ', data);
+
+    // TO DO http request
+    
     return {
         name: 'Rosiris',
         lastname: 'Romero',
@@ -19,7 +22,9 @@ export const login = (data) => {
 export const logout = () => {
     console.log('haciendo logout');
 
-    return null;
+    // TO DO http request
+
+    return true;
 };
 
 

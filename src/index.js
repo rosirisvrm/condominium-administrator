@@ -5,8 +5,16 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
-import { legacy_createStore as createStore } from 'redux';
+import { 
+  legacy_createStore as createStore,
+  applyMiddleware,
+  compose,
+} from 'redux';
 import { Provider } from 'react-redux';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { PersistGate } from 'redux-persist/integration/react';
+import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 
 //
@@ -18,18 +26,30 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const store = createStore(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+const composeAlt = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const composedEnhancers = composeAlt(applyMiddleware(thunk))
+
+const store = createStore(persistedReducer, composedEnhancers)
+
+const persistor = persistStore(store)
 
 root.render(
   <Provider store={store}>
-    <HelmetProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </HelmetProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <HelmetProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </HelmetProvider>
+    </PersistGate>
   </Provider>
 );
 
