@@ -73,6 +73,10 @@ function Users() {
     console.log('eliminando item', id);
   }
 
+  const download = () => {
+    console.log('descargando');
+  }
+
   return (
     <Page title="Usuarios">
       <Container>
@@ -92,6 +96,7 @@ function Users() {
           setSelected={setSelected}
           loading={loadingUsersList}
           searchParam='name'
+          download={download}
         >
           {row => {
             const { id, name, address, email, phone, role } = row;

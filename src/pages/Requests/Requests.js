@@ -75,6 +75,10 @@ function Requests() {
     console.log('eliminando item ', id)
   }
 
+  const download = () => {
+    console.log('descargando');
+  }
+
   return (
     <Page title="Solicitudes y Sugerencias">
       <Container>
@@ -94,6 +98,7 @@ function Requests() {
           setSelected={setSelected}
           loading={loadingRequestsList}
           searchParam='name'
+          download={download}
         >
           {row => {
             const { id, name, address, subject, level, status } = row;

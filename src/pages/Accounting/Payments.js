@@ -74,6 +74,11 @@ function Payments() {
     console.log('eliminando item', id);
   }
 
+  const download = () => {
+    console.log('descargando');
+  }
+
+
   return (
     <Page title="Pagos">
       <Container>
@@ -93,6 +98,7 @@ function Payments() {
           setSelected={setSelected}
           loading={loadingPaymentsList}
           searchParam='subject'
+          download={download}
         >
           {row => {
             const { id, subject, amount, reference, date, status } = row;

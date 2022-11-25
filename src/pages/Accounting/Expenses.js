@@ -74,6 +74,10 @@ function Expenses() {
     console.log('eliminando item', id);
   }
 
+  const download = () => {
+    console.log('descargando');
+  }
+
   return (
     <Page title="Egresos">
       <Container>
@@ -93,6 +97,7 @@ function Expenses() {
           setSelected={setSelected}
           loading={loadingExpensesList}
           searchParam='subject'
+          download={download}
         >
           {row => {
             const { id, subject, amount, reference, date, status } = row;

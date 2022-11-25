@@ -71,6 +71,10 @@ function Income() {
     console.log('eliminando item', id);
   }
 
+  const download = () => {
+    console.log('descargando');
+  }
+
   return (
     <Page title="Ingresos">
       <Container>
@@ -87,6 +91,7 @@ function Income() {
           setSelected={setSelected}
           loading={loadingIncomeList}
           searchParam='subject'
+          download={download}
         >
           {row => {
             const { id, name, address, subject, amount, reference, status } = row;

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { filter } from 'lodash';
 import PropTypes from 'prop-types';
-// import { useSelector } from 'react-redux';
 // material
 import {
   Card,
@@ -11,11 +10,15 @@ import {
   TableCell,
   TableContainer,
   TablePagination,
+  IconButton,
+  Stack
 } from '@mui/material';
 // components
 import Scrollbar from './Scrollbar';
 import SearchNotFound from './SearchNotFound';
+import Iconify from './Iconify'
 import { Loader } from './Loader'
+import { OutlinedButton } from './OutlinedButton'
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 
 // ----------------------------------------------------------------------
@@ -30,6 +33,7 @@ CustomTable.propTypes = {
     setSelected: PropTypes.func,
     loading: PropTypes.bool,
     searchParam: PropTypes.string,
+    download: PropTypes.func,
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -61,9 +65,16 @@ function applySortFilter(array, comparator, query, searchParam) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function CustomTable({ tableHead, elementList = [], children, selected, setSelected, loading, searchParam }) {
-
-  // const loading = useSelector(state => state.loading)
+function CustomTable({ 
+  tableHead, 
+  elementList = [],
+  children, 
+  selected, 
+  setSelected, 
+  loading, 
+  searchParam,
+  download
+}) {
 
   const renderFunc = children
 
@@ -153,15 +164,29 @@ function CustomTable({ tableHead, elementList = [], children, selected, setSelec
             </TableContainer>
           </Scrollbar>
 
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={elementList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <Stack direction="row" alignItems="center" justifyContent="space-between" m={2}>
+            <OutlinedButton 
+              size='small' 
+              onClick={download} 
+              customPadding='3px 12px'
+            >
+              <IconButton color="primary" style={{ padding: '3px 8px 3px 0px' }}>
+                <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
+              </IconButton>
+              Exportar
+            </OutlinedButton>
+
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={elementList.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Stack>
+       
         </Card>
       }
     </>
