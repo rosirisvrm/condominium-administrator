@@ -52,6 +52,7 @@ function Input({
     control = null,
     error = null,
     validations = null,
+    ...other
 }){
 
     const theme = useTheme()
@@ -86,6 +87,7 @@ function Input({
                         rows={rows}
                         disabled={disabled}
                         type={type}
+                        {...other}
                     /> 
                 )}
             /> 
@@ -101,6 +103,7 @@ function Input({
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
                         disabled={disabled}
+                        {...other}
                     >
                         <MenuItem disabled value="">
                             <em style={emStyle}>{placeholder}</em>

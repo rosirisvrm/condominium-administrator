@@ -3,9 +3,11 @@ import { usersReducer } from "../slices/usersSlice";
 import { requestsReducer } from "../slices/requestsSlice";
 import { authReducer } from "../slices/authSlice";
 import { accountingReducer } from "../slices/accountingSlice";
+import { customSettingsReducer } from "src/slices/customSettings";
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    customSettings: customSettingsReducer,
     accounting: accountingReducer,
     users: usersReducer,
     requests: requestsReducer,

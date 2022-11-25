@@ -21,7 +21,7 @@ const LoadingButtonStyle = styled(LoadingButton)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 OutlinedButton.propTypes = {
-    children: PropTypes.string,
+    children: PropTypes.any,
     isRouterLink: PropTypes.bool,
     path: PropTypes.string,
     type: PropTypes.string,

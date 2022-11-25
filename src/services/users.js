@@ -9,7 +9,7 @@ export const getUsers = () => mockUsers;
 export const getUser = (id) => ({
     id: number(id),
     name: faker.name.findName(),
-    identification: 23456789,
+    identification: faker.datatype.number(),
     address: faker.address.buildingNumber() ,
     phone: faker.phone.number('+48 91 ### ## ##'),
     email: 'user@example.com',

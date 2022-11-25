@@ -13,7 +13,8 @@ const initialState = {
     loadingPayment: false,
     loadingCreatePayment: false,
     loadingEditPayment: false,
-    // roleOptions: []
+    receiverTypeOptions: [],
+    receiverOptions: [],
 }
 
 export const accountingSlice = createSlice({
@@ -56,9 +57,12 @@ export const accountingSlice = createSlice({
         setLoadingEditPayment: (state, action) => {
             state.loadingEditPayment = action.payload;
         },
-        // setRoleOptions: (state, action) => {
-        //     state.roleOptions = action.payload
-        // }
+        setReceiverTypeOptions: (state, action) => {
+            state.receiverTypeOptions = action.payload
+        },
+        setReceiverOptions: (state, action) => {
+            state.receiverOptions = action.payload
+        }
     }
 })
 
@@ -75,7 +79,8 @@ export const {
     setLoadingPayment,
     setLoadingCreatePayment,
     setLoadingEditPayment,
-    // setRoleOptions
+    setReceiverTypeOptions,
+    setReceiverOptions
 } = accountingSlice.actions;
 
 export const accountingReducer = accountingSlice.reducer;

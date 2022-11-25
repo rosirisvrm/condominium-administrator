@@ -88,11 +88,24 @@ export const getPaid = (id) => ({
     }
 });
 
-// export const getRoleOptions = () => ([
-//     { label: 'Propietario', value: 0 },
-//     { label: 'Junta de Condominio', value: 1 },
-//     { label: 'Administrador', value: 2 },
-// ]);
+export const getReceiverTypeOptions = () => ([
+    { label: 'Empleado', value: 0 },
+    { label: 'Proveedor', value: 1 },
+]);
+
+export const getReceiverOptions = (type) => {
+  //  http request here 
+    console.log('type ', type);
+  
+    return ([...Array(5)].map(() => ({
+      id: faker.datatype.uuid(),
+      name: faker.name.findName(),
+      identification: faker.datatype.number(),
+      address: faker.address.buildingNumber() ,
+      phone: faker.phone.number('+48 91 ### ## ##'),
+      email: 'user@example.com',
+    })))
+};
 
 export const postPayment = (body) => {
     console.log('creando');

@@ -64,6 +64,10 @@ function Invoices() {
     setSelected(newSelected);
   };
 
+  const downloadInvoice = () => {
+    console.log('descargando factura')
+  }
+
   return (
     <Page title="Facturas y Recibos">
       <Container>
@@ -80,6 +84,7 @@ function Invoices() {
           setSelected={setSelected}
           loading={loadingInvoiceList}
           searchParam='subject'
+          download={downloadInvoice}
         >
           {row => {
             const { id, subject, invoiceNumber } = row;
@@ -105,8 +110,8 @@ function Invoices() {
                 <TableCell align="left">{invoiceNumber}</TableCell>
                 {/* <TableCell align="left">{status?.label || ''}</TableCell> */}
                 <TableCell align="left">
-                  <IconButton onClick={() => console.log('descargando factura')}>
-                    <Iconify icon='bi:calculator-fill' width={20} height={20} />
+                  <IconButton onClick={downloadInvoice}>
+                    <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
                   </IconButton>
                 </TableCell>
               </TableRow>
