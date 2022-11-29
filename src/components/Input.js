@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from "react-hook-form";
 // @mui
-import { OutlinedInput, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
+import { OutlinedInput, FormControl, Select, MenuItem, FormHelperText, TextField } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+//
+import useResponsive from '../hooks/useResponsive';
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +40,7 @@ Input.propTypes = {
     control: PropTypes.object,
     error: PropTypes.object,
     validations: PropTypes.object,
+    isDate: PropTypes.bool
 }
 
 function Input({ 
@@ -52,6 +57,7 @@ function Input({
     control = null,
     error = null,
     validations = null,
+    isDate = false,
     ...other
 }){
 
@@ -66,67 +72,103 @@ function Input({
     
     if(error?.type) { 
         isError = true;
-    } 
+    }
+
+    const smUp = useResponsive('up', 'sm');
+    const mdUp = useResponsive('up', 'md');
 
     return(
-    <FormControlStyle error={isError}>
+        <FormControlStyle error={isError}>
 
-        {label && <LabelStyle>{label}</LabelStyle>}
+            {label && <LabelStyle>{label}</LabelStyle>}
 
-        {!isSelect ? 
-            <Controller
-                name={name}
-                control={control}
-                rules={validations}
-                render={({ field: { onChange, value } }) => (
-                    <OutlinedInput
-                        onChange={onChange} 
-                        value={value}
-                        placeholder={placeholder}
-                        multiline={multiline}
-                        rows={rows}
-                        disabled={disabled}
-                        type={type}
-                        {...other}
-                    /> 
-                )}
-            /> 
-            :
-            <Controller
-                name={name}
-                control={control}
-                rules={validations}
-                render={({ field: { onChange, value } }) => (
-                    <Select
-                        onChange={onChange} 
-                        value={value}
-                        displayEmpty
-                        inputProps={{ 'aria-label': 'Without label' }}
-                        disabled={disabled}
-                        {...other}
-                    >
-                        <MenuItem disabled value="">
-                            <em style={emStyle}>{placeholder}</em>
-                        </MenuItem>
-                        {selectOptions.map((item, index) => (
-                            <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                        ))}
-                    </Select>
-                )}
-            />
-        }
+            {(!isSelect && !isDate) && 
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={validations}
+                    render={({ field: { onChange, value } }) => (
+                        <OutlinedInput
+                            onChange={onChange} 
+                            value={value}
+                            placeholder={placeholder}
+                            multiline={multiline}
+                            rows={rows}
+                            disabled={disabled}
+                            type={type}
+                            {...other}
+                        /> 
+                    )}
+                />
+            }
 
-        {helperText &&
-            <HelperTextStyle style={{ textAlign: 'end' }}>
-                {helperText}
-            </HelperTextStyle>
-        }
-        {error && 
-            <HelperTextStyle style={{ textAlign: 'start' }}>
-                {error.message}
-            </HelperTextStyle>
-        }
-    </FormControlStyle>
+            {isSelect &&
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={validations}
+                    render={({ field: { onChange, value } }) => (
+                        <Select
+                            onChange={onChange} 
+                            value={value}
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            disabled={disabled}
+                            {...other}
+                        >
+                            <MenuItem disabled value="">
+                                <em style={emStyle}>{placeholder}</em>
+                            </MenuItem>
+                            {selectOptions.map((item, index) => (
+                                <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
+                            ))}
+                        </Select>
+                    )}
+                />
+            }
+
+            {isDate &&
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={validations}
+                    render={({ field: { onChange, value } }) => (
+                        <>
+                            {!smUp ? 
+                                <MobileDatePicker
+                                    inputFormat="MM/dd/yyyy"
+                                    onChange={onChange} 
+                                    value={value}
+                                    renderInput={(params) => (
+                                        <TextField {...params} sx={{ width:  '100%' }} />
+                                    )}
+                                />
+                                :
+                                <DesktopDatePicker
+                                    inputFormat="MM/dd/yyyy"
+                                    onChange={onChange} 
+                                    value={value}
+                                    renderInput={(params) => (
+                                        <TextField {...params} sx={{ width:  '100%' }} />
+                                    )}
+                                />
+                            }
+                        </>
+                    )}
+                />
+            }
+
+            {helperText &&
+                <HelperTextStyle style={{ textAlign: 'end' }}>
+                    {helperText}
+                </HelperTextStyle>
+            }
+            {error && 
+                <HelperTextStyle style={{ textAlign: 'start' }}>
+                    {error.message}
+                </HelperTextStyle>
+            }
+        </FormControlStyle>
     );
 }
 

@@ -98,12 +98,15 @@ export const getReceiverOptions = () => {
     // console.log('type ', type);
   
     return ([...Array(5)].map(() => ({
+      label: faker.name.findName(),
+      value: faker.datatype.uuid(),
       id: faker.datatype.uuid(),
       name: faker.name.findName(),
       identification: faker.datatype.number(),
       address: faker.address.buildingNumber() ,
       phone: faker.phone.number('+48 91 ### ## ##'),
       email: 'user@example.com',
+      paymentMethod: 'Transferencia Banco Banesco'
     })))
 };
 

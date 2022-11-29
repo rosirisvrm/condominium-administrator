@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, InputAdornment, TextField } from '@mui/material';
+import { Container, Typography, Grid, InputAdornment, IconButton, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 // components
 import Page from '../../components/Page';
 import { FormCard } from '../../components/FormCard';
@@ -17,16 +16,13 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import useResponsive from '../../hooks/useResponsive';
 import { getReceiverTypeOptions, getReceiverOptions, postPayment } from '../../services/accounting';
 import { setReceiverTypeOptions, setReceiverOptions, setLoadingCreatePayment } from '../../slices/accountingSlice';
+import Iconify from '../../components/Iconify'
 
 // ----------------------------------------------------------------------
 
 const GridStyle = styled(Grid)(({ theme }) => ({
   padding: `${theme.spacing(0)} !important`
 }))
-
-const LabelStyle = styled('span')(() => ({
-  marginBottom: 8,
-}));
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +46,7 @@ function CreatePayment() {
       receiverPaymentMethod: '',
       amount: '',
       reference: '',
-      date: '',
+      date: new Date(),
       description: '',
     }
   });
@@ -95,11 +91,11 @@ function CreatePayment() {
         setColor(res ? 'success' : 'error')
         setOpen(true);
 
-        if(res){
-          setTimeout(() => {
-            navigate('/dashboard/pagos')
-          }, 2000)
-        }
+        // if(res){
+        //   setTimeout(() => {
+        //     navigate('/dashboard/contabilidad/pagos')
+        //   }, 2000)
+        // }
       }
 
       createPayment()
@@ -109,8 +105,6 @@ function CreatePayment() {
   let spacing = 2;
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
-
-  const [value, setValue] = React.useState(new Date());
 
   return (
     <Page title="Enviar Pago">
@@ -169,12 +163,6 @@ function CreatePayment() {
                     isSelect
                     selectOptions={receiverOptions}
                     control={control}
-                    validations={{
-                      required: {
-                        value: true,
-                        message: 'El campo es requerido'
-                      }
-                    }}
                     error={errors.receiver}
                   />
                 </Grid>
@@ -241,18 +229,20 @@ function CreatePayment() {
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-                
-                  <DesktopDatePicker
-                    inputFormat="MM/dd/yyyy"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
+                  <Input
+                    name='date'
+                    label='Fecha de la Transacción'
+                    placeholder='Selecciona una fecha'
+                    isDate
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      },
                     }}
-                    renderInput={(params) => <TextField {...params}   sx={{
-                      width:  '100%'
-                    }} />}
+                    error={errors.date}
                   />
-
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Input
@@ -270,6 +260,15 @@ function CreatePayment() {
                     error={errors.description}
                   />
                 </Grid>
+              </Grid>
+
+              <Grid container item>
+                <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
+                  <IconButton aria-label="upload picture" component="label">
+                    <input hidden accept="image/*" type="file" />
+                    <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
+                  </IconButton>
+                </Box>
               </Grid>
 
               <Grid
