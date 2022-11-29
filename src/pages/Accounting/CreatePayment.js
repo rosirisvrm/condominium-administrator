@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, InputAdornment, IconButton, Box } from '@mui/material';
+import { Container, Typography, Grid, InputAdornment } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
@@ -16,7 +16,6 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import useResponsive from '../../hooks/useResponsive';
 import { getReceiverTypeOptions, getReceiverOptions, postPayment } from '../../services/accounting';
 import { setReceiverTypeOptions, setReceiverOptions, setLoadingCreatePayment } from '../../slices/accountingSlice';
-import Iconify from '../../components/Iconify'
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +47,7 @@ function CreatePayment() {
       reference: '',
       date: new Date(),
       description: '',
+      file: '',
     }
   });
 
@@ -262,13 +262,20 @@ function CreatePayment() {
                 </Grid>
               </Grid>
 
-              <Grid container item>
-                <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-                  <IconButton aria-label="upload picture" component="label">
-                    <input hidden accept="image/*" type="file" />
-                    <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
-                  </IconButton>
-                </Box>
+              <Grid item xs={12} container direction="column">
+                <Input
+                  name='file'
+                  label='Comprobante'
+                  isFileUpload
+                  control={control}
+                  validations={{
+                    required: {
+                      value: true,
+                      message: 'El campo es requerido'
+                    },
+                  }}
+                  error={errors.file}
+                />
               </Grid>
 
               <Grid

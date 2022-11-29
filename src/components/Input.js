@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from "react-hook-form";
 // @mui
-import { OutlinedInput, FormControl, Select, MenuItem, FormHelperText, TextField } from '@mui/material';
+import { OutlinedInput, FormControl, Select, MenuItem, FormHelperText, TextField, Box, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 //
 import useResponsive from '../hooks/useResponsive';
+import Iconify from './Iconify'
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,17 @@ const HelperTextStyle = styled(FormHelperText)(() => ({
     marginRight: 0,
     marginLeft: 0,
 }))
+
+const BoxStyle = styled(Box)(({ theme }) => ({
+    padding: theme.spacing(2.5), 
+    border: '1px dashed grey',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: '8px',
+    cursor: 'pointer'
+}));
+  
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +52,8 @@ Input.propTypes = {
     control: PropTypes.object,
     error: PropTypes.object,
     validations: PropTypes.object,
-    isDate: PropTypes.bool
+    isDate: PropTypes.bool,
+    isFileUpload: PropTypes.bool,
 }
 
 function Input({ 
@@ -58,6 +71,7 @@ function Input({
     error = null,
     validations = null,
     isDate = false,
+    isFileUpload = false,
     ...other
 }){
 
@@ -82,7 +96,7 @@ function Input({
 
             {label && <LabelStyle>{label}</LabelStyle>}
 
-            {(!isSelect && !isDate) && 
+            {(!isSelect && !isDate && !isFileUpload) && 
                 <Controller
                     name={name}
                     control={control}
@@ -155,6 +169,30 @@ function Input({
                             }
                         </>
                     )}
+                />
+            }
+
+            {isFileUpload &&
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={validations}
+                    render={({ field }) => {
+                        console.log('field ', field);
+                        return(
+                        <BoxStyle component='label'>
+                            <IconButton aria-label="upload picture" component='label'>
+                                <input 
+                                    hidden 
+                                    accept="image/*" 
+                                    type="file" 
+                                    onChange={field.onChange} 
+                                    value={field.value}
+                                />
+                                <Iconify icon='material-symbols:upload-file-rounded' width={40} height={40} />
+                            </IconButton>
+                        </BoxStyle>
+                    )}}
                 />
             }
 
