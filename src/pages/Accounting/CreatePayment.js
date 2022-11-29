@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, InputAdornment, OutlinedInput } from '@mui/material';
+import { Container, Typography, Grid, InputAdornment, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 // components
 import Page from '../../components/Page';
 import { FormCard } from '../../components/FormCard';
@@ -23,6 +23,10 @@ import { setReceiverTypeOptions, setReceiverOptions, setLoadingCreatePayment } f
 const GridStyle = styled(Grid)(({ theme }) => ({
   padding: `${theme.spacing(0)} !important`
 }))
+
+const LabelStyle = styled('span')(() => ({
+  marginBottom: 8,
+}));
 
 // ----------------------------------------------------------------------
 
@@ -106,7 +110,7 @@ function CreatePayment() {
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
 
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState(new Date());
 
   return (
     <Page title="Enviar Pago">
@@ -237,18 +241,17 @@ function CreatePayment() {
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
-            
                 
-                  <DatePicker
-                    label="Basic example"
+                  <DesktopDatePicker
+                    inputFormat="MM/dd/yyyy"
                     value={value}
                     onChange={(newValue) => {
                       setValue(newValue);
                     }}
-                    renderInput={(params) => <OutlinedInput {...params} />}
+                    renderInput={(params) => <TextField {...params}   sx={{
+                      width:  '100%'
+                    }} />}
                   />
-                
-
 
                 </Grid>
                 <Grid item xs={12} sm={6}>

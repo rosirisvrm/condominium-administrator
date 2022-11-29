@@ -93,9 +93,9 @@ export const getReceiverTypeOptions = () => ([
     { label: 'Proveedor', value: 1 },
 ]);
 
-export const getReceiverOptions = (type) => {
+export const getReceiverOptions = () => {
   //  http request here 
-    console.log('type ', type);
+    // console.log('type ', type);
   
     return ([...Array(5)].map(() => ({
       id: faker.datatype.uuid(),
