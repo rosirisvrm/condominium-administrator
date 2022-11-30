@@ -15,7 +15,9 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import useResponsive from '../../hooks/useResponsive';
 import { getReceiverTypeOptions, getReceiverOptions, postPayment } from '../../services/accounting';
+import { getPaymentMethodOptions } from '../../services/customSettings';
 import { setReceiverTypeOptions, setReceiverOptions, setLoadingCreatePayment } from '../../slices/accountingSlice';
+import { setPaymentMethodOptions } from '../../slices/customSettings';
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +29,10 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 
 function CreatePayment() {
 
+  const user = useSelector(state => state.auth.user)
   const receiverTypeOptions = useSelector(state => state.accounting.receiverTypeOptions)
   const receiverOptions = useSelector(state => state.accounting.receiverOptions)
+  const paymentMethodOptions = useSelector(state => state.customSettings.paymentMethodOptions)
   const loadingCreatePayment = useSelector(state => state.accounting.loadingCreatePayment)
 
   const coin = useSelector(state => state.customSettings.coin)
@@ -42,7 +46,7 @@ function CreatePayment() {
       subject: '',
       receiverType: '',
       receiver: '',
-      receiverPaymentMethod: '',
+      paymentMethod: '',
       amount: '',
       reference: '',
       date: new Date(),
@@ -52,15 +56,26 @@ function CreatePayment() {
   });
 
   useEffect(() => {
-    const fetchReceiverTypeOptions = async () => {
-      const res = await getReceiverTypeOptions()
-      dispatch(setReceiverTypeOptions(res))
+    // If admin
+    if(user.role.value === 2){
+      const fetchReceiverTypeOptions = async () => {
+        const res = await getReceiverTypeOptions()
+        dispatch(setReceiverTypeOptions(res))
+      }
+  
+      fetchReceiverTypeOptions()
+  
+      dispatch(setReceiverOptions([]))
+
+    }else{
+      const fetchPaymentMethodOptions = async () => {
+        const res = await getPaymentMethodOptions()
+        dispatch(setPaymentMethodOptions(res))
+      }
+  
+      fetchPaymentMethodOptions()
     }
-
-    fetchReceiverTypeOptions()
-
-    dispatch(setReceiverOptions([]))
-  }, [dispatch])
+  }, [dispatch, user])
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
@@ -68,6 +83,7 @@ function CreatePayment() {
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
   const [fileName, setFileName] = React.useState('')
+  const [file, setFile] = React.useState(null)
 
   const onSubmit = (event) => {
     dispatch(setLoadingCreatePayment(true))
@@ -76,7 +92,8 @@ function CreatePayment() {
     console.log('event ', event);
 
     const body = {
-     ...event
+     ...event,
+     file,
     }
 
     setTimeout(() => {
@@ -100,7 +117,7 @@ function CreatePayment() {
 
   const handlerSelectReceiverType = (event) => {
     setValue("receiver", '')
-    setValue("receiverPaymentMethod", '')
+    setValue("paymentMethod", '')
 
     const fetchReceiverOptions = async () => {
       const res = await getReceiverOptions(event)
@@ -113,12 +130,13 @@ function CreatePayment() {
   const handlerSelectReceiver = (event) => {
     const selected = receiverOptions.find(item => parseInt(item.value, 10) === parseInt(event, 10))
 
-    setValue("receiverPaymentMethod", selected?.paymentMethod || '')
-    clearErrors('receiverPaymentMethod');
+    setValue("paymentMethod", selected?.paymentMethod || '')
+    clearErrors('paymentMethod');
   }
 
   const handleFileUpload = (files) => {
     setFileName(files[0]?.name || '')
+    setFile(files[0])
   }
 
   let spacing = 2;
@@ -136,82 +154,123 @@ function CreatePayment() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
 
-              <Grid container item spacing={spacing}>
-                <Grid item xs={12} sm={6}>
-                  <Input
-                    name='subject'
-                    label='Asunto'
-                    placeholder='Ingrese el asunto'
-                    type='text'
-                    control={control}
-                    validations={{
-                      required: {
-                        value: true,
-                        message: 'El campo es requerido'
-                      }
-                    }}
-                    error={errors.subject}
-                  />
+              {/* If admin */}
+              {(user.role.value === 2) && <>
+                <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='subject'
+                      label='Asunto'
+                      placeholder='Ingrese el asunto'
+                      type='text'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.subject}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='receiverType'
+                      label='Tipo de Destinatario (Empleado/Proveedor)'
+                      placeholder='Seleccione el tipo de destinatario'
+                      isSelect
+                      selectOptions={receiverTypeOptions}
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.receiverType}
+                      callback={handlerSelectReceiverType}
+                    />
+                  </Grid>
                 </Grid>
+                
+                <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='receiver'
+                      label='Destinatario'
+                      placeholder='Seleccione el destinatario'
+                      isSelect
+                      selectOptions={receiverOptions}
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.receiver}
+                      disabled={receiverOptions.length === 0}
+                      callback={handlerSelectReceiver}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='paymentMethod'
+                      label='Método de Pago'
+                      placeholder='Método de pago del destinatario'
+                      type='text'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.paymentMethod}
+                      disabled
+                    />
+                  </Grid>
+                </Grid>
+              </>}
 
-                <Grid item xs={12} sm={6}>
-                  <Input
-                    name='receiverType'
-                    label='Tipo de Destinatario (Empleado/Proveedor)'
-                    placeholder='Seleccione el tipo de destinatario'
-                    isSelect
-                    selectOptions={receiverTypeOptions}
-                    control={control}
-                    validations={{
-                      required: {
-                        value: true,
-                        message: 'El campo es requerido'
-                      }
-                    }}
-                    error={errors.receiverType}
-                    callback={handlerSelectReceiverType}
-                  />
+              {/* If not admin */}
+              {(user.role.value !== 2) &&
+                <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='subject'
+                      label='Asunto'
+                      placeholder='Ingrese el asunto'
+                      type='text'
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.subject}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                      name='paymentMethod'
+                      label='Método de Pago'
+                      placeholder='Seleccione el método de pago'
+                      isSelect
+                      selectOptions={paymentMethodOptions}
+                      control={control}
+                      validations={{
+                        required: {
+                          value: true,
+                          message: 'El campo es requerido'
+                        }
+                      }}
+                      error={errors.paymentMethod}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-              
-              <Grid container item spacing={spacing}>
-                <Grid item xs={12} sm={6}>
-                  <Input
-                    name='receiver'
-                    label='Destinatario'
-                    placeholder='Seleccione el destinatario'
-                    isSelect
-                    selectOptions={receiverOptions}
-                    control={control}
-                    validations={{
-                      required: {
-                        value: true,
-                        message: 'El campo es requerido'
-                      }
-                    }}
-                    error={errors.receiver}
-                    disabled={receiverOptions.length === 0}
-                    callback={handlerSelectReceiver}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Input
-                    name='receiverPaymentMethod'
-                    label='Método de Pago'
-                    placeholder='Método de pago del destinatario'
-                    type='text'
-                    control={control}
-                    validations={{
-                      required: {
-                        value: true,
-                        message: 'El campo es requerido'
-                      }
-                    }}
-                    error={errors.receiverPaymentMethod}
-                    disabled
-                  />
-                </Grid>
-              </Grid>
+              }
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
