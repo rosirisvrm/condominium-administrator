@@ -73,10 +73,11 @@ export const getInvoices = () => ([...Array(24)].map((_, index) => ({
 }))
 );
 
-export const getPaid = (id) => ({
+export const getPayment = (id) => ({
     id,
-    amount: 100,
-    refrence: faker.datatype.number(),
+    subject: 'Whiteboard Templates By Industry Leaders',
+    amount: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
+    reference: faker.datatype.number(),
     status: {
       value: 0,
       label: 'Pendiente'
@@ -85,7 +86,22 @@ export const getPaid = (id) => ({
     user: {
       id: faker.datatype.uuid(),
       name: faker.name.findName(), 
-    }
+    },
+    receiverType: { label: 'Empleado', value: 0 },
+    receiver: {
+      label: faker.name.findName(),
+      value: faker.datatype.uuid(),
+      id: faker.datatype.uuid(),
+      name: faker.name.findName(),
+      identification: faker.datatype.number(),
+      address: faker.address.buildingNumber() ,
+      phone: faker.phone.number('+48 91 ### ## ##'),
+      email: 'user@example.com',
+      paymentMethod: 'Transferencia Banco Banesco'
+    },
+    paymentMethod: { label: 'Transferencia Banco Banesco', value: 0 },
+    file: `/static/mock-images/products/product_${0}.jpg`,
+    description: 'How to Animate a SVG with border-image',
 });
 
 export const getReceiverTypeOptions = () => ([
