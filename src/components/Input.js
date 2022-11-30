@@ -27,7 +27,7 @@ const HelperTextStyle = styled(FormHelperText)(() => ({
 
 const BoxStyle = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2.5), 
-    border: '1px dashed grey',
+    border: `1px dashed ${theme.palette.grey[400]}`,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -54,6 +54,7 @@ Input.propTypes = {
     validations: PropTypes.object,
     isDate: PropTypes.bool,
     isFileUpload: PropTypes.bool,
+    callback: PropTypes.func,
 }
 
 function Input({ 
@@ -72,6 +73,7 @@ function Input({
     validations = null,
     isDate = false,
     isFileUpload = false,
+    callback = null,
     ...other
 }){
 
@@ -89,7 +91,6 @@ function Input({
     }
 
     const smUp = useResponsive('up', 'sm');
-    const mdUp = useResponsive('up', 'md');
 
     return(
         <FormControlStyle error={isError}>
@@ -103,7 +104,7 @@ function Input({
                     rules={validations}
                     render={({ field: { onChange, value } }) => (
                         <OutlinedInput
-                            onChange={onChange} 
+                            onChange={onChange}
                             value={value}
                             placeholder={placeholder}
                             multiline={multiline}
@@ -123,7 +124,12 @@ function Input({
                     rules={validations}
                     render={({ field: { onChange, value } }) => (
                         <Select
-                            onChange={onChange} 
+                            onChange={(event) => {
+                                if(callback){
+                                    callback(event.target.value)
+                                }
+                                onChange(event)
+                            }}
                             value={value}
                             displayEmpty
                             inputProps={{ 'aria-label': 'Without label' }}
@@ -154,7 +160,7 @@ function Input({
                                     onChange={onChange} 
                                     value={value}
                                     renderInput={(params) => (
-                                        <TextField {...params} sx={{ width:  '100%' }} />
+                                        <TextField {...params} sx={{ width:  '100%' }} error={isError} />
                                     )}
                                 />
                                 :
@@ -163,7 +169,7 @@ function Input({
                                     onChange={onChange} 
                                     value={value}
                                     renderInput={(params) => (
-                                        <TextField {...params} sx={{ width:  '100%' }} />
+                                        <TextField {...params} sx={{ width:  '100%' }} error={isError} />
                                     )}
                                 />
                             }
@@ -177,22 +183,27 @@ function Input({
                     name={name}
                     control={control}
                     rules={validations}
-                    render={({ field }) => {
-                        console.log('field ', field);
-                        return(
-                        <BoxStyle component='label'>
+                    render={({ field: { onChange, value } }) => (
+                        <BoxStyle component='label' sx={{ 
+                            borderColor: isError ? theme.palette.error.main : theme.palette.grey[400] 
+                        }}>
                             <IconButton aria-label="upload picture" component='label'>
                                 <input 
                                     hidden 
                                     accept="image/*" 
                                     type="file" 
-                                    onChange={field.onChange} 
-                                    value={field.value}
+                                    onChange={(event) => {
+                                        if(callback){
+                                            callback(event.target.files)
+                                        }
+                                        onChange(event)
+                                    }}
+                                    value={value}
                                 />
                                 <Iconify icon='material-symbols:upload-file-rounded' width={40} height={40} />
                             </IconButton>
                         </BoxStyle>
-                    )}}
+                    )}
                 />
             }
 

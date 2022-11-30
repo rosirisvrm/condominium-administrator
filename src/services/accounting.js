@@ -93,10 +93,26 @@ export const getReceiverTypeOptions = () => ([
     { label: 'Proveedor', value: 1 },
 ]);
 
-export const getReceiverOptions = () => {
+export const getReceiverOptions = (type) => {
   //  http request here 
-    // console.log('type ', type);
-  
+  // console.log('receiver type', type);
+
+    // Employees
+    if(type === 0){
+      return ([...Array(5)].map(() => ({
+        label: faker.name.findName(),
+        value: faker.datatype.uuid(),
+        id: faker.datatype.uuid(),
+        name: faker.name.findName(),
+        identification: faker.datatype.number(),
+        address: faker.address.buildingNumber() ,
+        phone: faker.phone.number('+48 91 ### ## ##'),
+        email: 'user@example.com',
+        paymentMethod: 'Transferencia Banco Banesco'
+      })))
+    }
+
+    // Providers
     return ([...Array(5)].map(() => ({
       label: faker.name.findName(),
       value: faker.datatype.uuid(),

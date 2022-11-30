@@ -37,7 +37,7 @@ function CreatePayment() {
 
   const navigate = useNavigate()
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm({
     defaultValues: {
       subject: '',
       receiverType: '',
@@ -59,12 +59,7 @@ function CreatePayment() {
 
     fetchReceiverTypeOptions()
 
-    const fetchReceiverOptions = async () => {
-      const res = await getReceiverOptions()
-      dispatch(setReceiverOptions(res))
-    }
-
-    fetchReceiverOptions()
+    dispatch(setReceiverOptions([]))
   }, [dispatch])
 
   const smUp = useResponsive('up', 'sm');
@@ -72,6 +67,7 @@ function CreatePayment() {
 
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
+  const [fileName, setFileName] = React.useState('')
 
   const onSubmit = (event) => {
     dispatch(setLoadingCreatePayment(true))
@@ -91,15 +87,38 @@ function CreatePayment() {
         setColor(res ? 'success' : 'error')
         setOpen(true);
 
-        // if(res){
-        //   setTimeout(() => {
-        //     navigate('/dashboard/contabilidad/pagos')
-        //   }, 2000)
-        // }
+        if(res){
+          setTimeout(() => {
+            navigate('/dashboard/contabilidad/pagos')
+          }, 2000)
+        }
       }
 
       createPayment()
     }, 2000)
+  }
+
+  const handlerSelectReceiverType = (event) => {
+    setValue("receiver", '')
+    setValue("receiverPaymentMethod", '')
+
+    const fetchReceiverOptions = async () => {
+      const res = await getReceiverOptions(event)
+      dispatch(setReceiverOptions(res))
+    }
+
+    fetchReceiverOptions()
+  }
+
+  const handlerSelectReceiver = (event) => {
+    const selected = receiverOptions.find(item => parseInt(item.value, 10) === parseInt(event, 10))
+
+    setValue("receiverPaymentMethod", selected?.paymentMethod || '')
+    clearErrors('receiverPaymentMethod');
+  }
+
+  const handleFileUpload = (files) => {
+    setFileName(files[0]?.name || '')
   }
 
   let spacing = 2;
@@ -150,6 +169,7 @@ function CreatePayment() {
                       }
                     }}
                     error={errors.receiverType}
+                    callback={handlerSelectReceiverType}
                   />
                 </Grid>
               </Grid>
@@ -163,7 +183,15 @@ function CreatePayment() {
                     isSelect
                     selectOptions={receiverOptions}
                     control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
                     error={errors.receiver}
+                    disabled={receiverOptions.length === 0}
+                    callback={handlerSelectReceiver}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -180,7 +208,8 @@ function CreatePayment() {
                       }
                     }}
                     error={errors.receiverPaymentMethod}
-                    />
+                    disabled
+                  />
                 </Grid>
               </Grid>
 
@@ -275,6 +304,8 @@ function CreatePayment() {
                     },
                   }}
                   error={errors.file}
+                  callback={handleFileUpload}
+                  helperText={fileName}
                 />
               </Grid>
 
