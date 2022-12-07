@@ -1,9 +1,14 @@
 //  http request here 
 
 export const getCoinOptions = () => ([
-    { label: 'USD', value: 0 },
-    { label: 'VES', value: 1 },
+    { label: 'USD', value: 0, symbol: '$', description: 'Dólar americano' },
+    { label: 'VES', value: 1, symbol: 'bs', description: 'Bolívar venezolano' },
 ]);
+
+export const getRate = () => ({
+    label: 'Tasa Oficial BCV',
+    value: 10.00,
+});
 
 export const getPaymentMethodOptions = () => ([
     { label: 'Transferencia Banco Banesco', value: 0 },

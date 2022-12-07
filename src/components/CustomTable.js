@@ -10,18 +10,14 @@ import {
   TableCell,
   TableContainer,
   TablePagination,
-  IconButton,
   Stack
 } from '@mui/material';
 // components
 import Scrollbar from './Scrollbar';
 import SearchNotFound from './SearchNotFound';
-import Iconify from './Iconify'
 import { Loader } from './Loader'
-import { OutlinedButton } from './OutlinedButton'
+import { DownloadButton } from './DownloadButton'
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-
-// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -165,16 +161,7 @@ function CustomTable({
           </Scrollbar>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" m={2}>
-            <OutlinedButton 
-              size='small' 
-              onClick={download} 
-              customPadding='3px 12px'
-            >
-              <IconButton color="primary" style={{ padding: '3px 8px 3px 0px' }}>
-                <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
-              </IconButton>
-              Exportar
-            </OutlinedButton>
+            <DownloadButton text='Exportar' onClick={download} />
 
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}

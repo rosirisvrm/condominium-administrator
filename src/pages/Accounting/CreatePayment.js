@@ -12,6 +12,7 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+// import { RateCoinIndicator } from '../../components/RateCoinIndicator';
 //
 import useResponsive from '../../hooks/useResponsive';
 import { getReceiverTypeOptions, getReceiverOptions, postPayment } from '../../services/accounting';
@@ -139,6 +140,10 @@ function CreatePayment() {
     setFile(files[0])
   }
 
+  // const handleChangeCoin = (coin) => {
+  //   console.log('recibiendo coin', coin);
+  // }
+
   let spacing = 2;
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
@@ -149,6 +154,12 @@ function CreatePayment() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Enviar Pago
         </Typography>
+        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4">
+            Enviar Pago
+          </Typography>
+          <RateCoinIndicator />
+        </Stack> */}
 
         <FormCard>   
           <form onSubmit={handleSubmit(onSubmit)}>

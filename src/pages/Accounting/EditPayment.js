@@ -14,6 +14,8 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import { Loader } from '../../components/Loader';
+import { DownloadButton } from '../../components/DownloadButton';
+// import { RateCoinIndicator } from '../../components/RateCoinIndicator';
 import useResponsive from '../../hooks/useResponsive';
 // services
 import { 
@@ -47,7 +49,6 @@ function EditPayment() {
 
   const user = useSelector(state => state.auth.user)
   const payment = useSelector(state => state.accounting.payment)
-  console.log('payment ', payment);
   const loadingPayment = useSelector(state => state.accounting.loadingPayment)
   const receiverTypeOptions = useSelector(state => state.accounting.receiverTypeOptions)
   const receiverOptions = useSelector(state => state.accounting.receiverOptions)
@@ -84,7 +85,7 @@ function EditPayment() {
   
       fetchReceiverTypeOptions()
   
-      dispatch(setReceiverOptions([]))
+      // dispatch(setReceiverOptions([]))
 
     }else{
       const fetchPaymentMethodOptions = async () => {
@@ -107,18 +108,31 @@ function EditPayment() {
     }
 
     fetchPayment()
-  }, [dispatch, user])
+  }, [dispatch, user, id])
 
   const setFormValues = (payment) => {
     setValue("subject", payment?.subject || '')
-    setValue("receiverType", payment?.receiverType ? payment.receiverType.value : '')
-    setValue("receiver", payment?.receiver ? payment.receiver.value : '')
-    setValue("paymentMethod", payment?.paymentMethod ? payment.paymentMethod.label : '')
+    setValue("receiverType", payment?.receiverType ? payment.receiverType?.value : '')
     setValue("amount", payment?.amount || '')
     setValue("reference", payment?.reference || '')
     setValue("date", payment?.date || '')
     setValue("description", payment?.description || '')
+
+    // TO DO: Set file
     // setValue("file", payment?.file || '')
+    // setFile(payment?.file || '')
+    setFileName(payment?.file || '')
+
+    handlerSelectReceiverType(payment?.receiverType?.value)
+
+    setValue("receiver", payment?.receiver ? payment.receiver?.value : '')
+    // If admin
+    if(user.role.value === 2){
+      setValue("paymentMethod", payment?.receiver?.paymentMethod || '')
+    // If not admin 
+    }else{
+      setValue("paymentMethod", payment?.paymentMethod ? payment.paymentMethod?.value : '')
+    }
   }
 
   const smUp = useResponsive('up', 'sm');
@@ -143,7 +157,7 @@ function EditPayment() {
 
     setTimeout(() => {
       const editPayment = async () => {
-        const res = await putPayment(body)
+        const res = await putPayment(id, body)
   
         dispatch(setLoadingEditPayment(false))
         setColor(res ? 'success' : 'error')
@@ -165,8 +179,10 @@ function EditPayment() {
     setValue("paymentMethod", '')
 
     const fetchReceiverOptions = async () => {
-      const res = await getReceiverOptions(event)
-      dispatch(setReceiverOptions(res))
+      setTimeout(async () => {
+        const res = await getReceiverOptions(event)
+        dispatch(setReceiverOptions(res))
+      }, 2000)
     }
 
     fetchReceiverOptions()
@@ -183,6 +199,10 @@ function EditPayment() {
     setFileName(files[0]?.name || '')
     setFile(files[0])
   }
+
+  const downloadFile = () => {
+    console.log('descarga de archivo');
+  };
 
   let spacing = 2;
   if(smUp) spacing = 6;
@@ -413,6 +433,12 @@ function EditPayment() {
                     callback={handleFileUpload}
                     helperText={fileName}
                   />
+                </Grid>
+
+                <Grid item xs={12} container direction="row" justifyContent="flex-end">
+                  {(!file && fileName) && 
+                    <DownloadButton onClick={downloadFile} />
+                  }
                 </Grid>
 
                 <Grid
