@@ -73,10 +73,11 @@ export const getInvoices = () => ([...Array(24)].map((_, index) => ({
 }))
 );
 
-export const getPaid = (id) => ({
+export const getPayment = (id) => ({
     id,
-    amount: 100,
-    refrence: faker.datatype.number(),
+    subject: 'Whiteboard Templates By Industry Leaders',
+    amount: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
+    reference: faker.datatype.number(),
     status: {
       value: 0,
       label: 'Pendiente'
@@ -85,7 +86,22 @@ export const getPaid = (id) => ({
     user: {
       id: faker.datatype.uuid(),
       name: faker.name.findName(), 
-    }
+    },
+    receiverType: { label: 'Empleado', value: 0 },
+    receiver: {
+      label: 'Antony',
+      value: 1,
+      id: 1,
+      name: faker.name.findName(),
+      identification: faker.datatype.number(),
+      address: faker.address.buildingNumber() ,
+      phone: faker.phone.number('+48 91 ### ## ##'),
+      email: 'user@example.com',
+      paymentMethod: 'Pago Móvil Banco Banesco'
+    },
+    paymentMethod: { label: 'Efectivo', value: 4 },
+    file: `/static/mock-images/products/product_${0}.jpg`,
+    description: 'How to Animate a SVG with border-image',
 });
 
 export const getReceiverTypeOptions = () => ([
@@ -99,7 +115,8 @@ export const getReceiverOptions = (type) => {
 
     // Employees
     if(type === 0){
-      return ([...Array(5)].map(() => ({
+
+      const res = [...Array(5)].map(() => ({
         label: faker.name.findName(),
         value: faker.datatype.uuid(),
         id: faker.datatype.uuid(),
@@ -109,11 +126,25 @@ export const getReceiverOptions = (type) => {
         phone: faker.phone.number('+48 91 ### ## ##'),
         email: 'user@example.com',
         paymentMethod: 'Transferencia Banco Banesco'
-      })))
+      }))
+
+      res.push({
+        label: 'Antony',
+        value: 1,
+        id: 1,
+        name: faker.name.findName(),
+        identification: faker.datatype.number(),
+        address: faker.address.buildingNumber() ,
+        phone: faker.phone.number('+48 91 ### ## ##'),
+        email: 'user@example.com',
+        paymentMethod: 'Transferencia Banco Banesco'
+      })
+
+      return res;
     }
 
     // Providers
-    return ([...Array(5)].map(() => ({
+    const res = [...Array(5)].map(() => ({
       label: faker.name.findName(),
       value: faker.datatype.uuid(),
       id: faker.datatype.uuid(),
@@ -123,7 +154,21 @@ export const getReceiverOptions = (type) => {
       phone: faker.phone.number('+48 91 ### ## ##'),
       email: 'user@example.com',
       paymentMethod: 'Transferencia Banco Banesco'
-    })))
+    }))
+
+    res.push({
+      label: 'Antony',
+      value: 1,
+      id: 1,
+      name: faker.name.findName(),
+      identification: faker.datatype.number(),
+      address: faker.address.buildingNumber() ,
+      phone: faker.phone.number('+48 91 ### ## ##'),
+      email: 'user@example.com',
+      paymentMethod: 'Transferencia Banco Banesco'
+    })
+
+    return res;
 };
 
 export const postPayment = (body) => {

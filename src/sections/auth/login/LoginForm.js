@@ -10,7 +10,7 @@ import { Link, Stack, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 //
 import { login } from '../../../services/auth'
 import { setAuth, setLoadingLogin } from '../../../slices/authSlice';
@@ -37,7 +37,7 @@ export default function LoginForm() {
   const defaultValues = {
     email: '',
     password: '',
-    remember: true,
+    // remember: true,
   };
 
   const methods = useForm({
@@ -91,7 +91,7 @@ export default function LoginForm() {
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <RHFCheckbox name="remember" label="Recordar" />
+        {/* <RHFCheckbox name="remember" label="Recordar" /> */}
         <Link variant="subtitle2" underline="hover" style={{ cursor: 'pointer' }}>
           ¿Olvidó su contraseña?
         </Link>

@@ -4,9 +4,12 @@ const initialState = {
     coin: {
         value: 0,
         label: 'USD',
-        description: 'Dólar Américano',
+        description: 'Dólar Americano',
         symbol: '$'
     },
+    coinOptions: [],
+    rate: null,
+    paymentMethodOptions: [],
 }
 
 export const customSettingsSlice = createSlice({
@@ -16,11 +19,23 @@ export const customSettingsSlice = createSlice({
         setCoin: (state, action) => {
             state.coin = action.payload;
         },
+        setCoinOptions: (state, action) => {
+            state.coinOptions = action.payload;
+        },
+        setRate: (state, action) => {
+            state.rate = action.payload;
+        },
+        setPaymentMethodOptions: (state, action) => {
+            state.paymentMethodOptions = action.payload;
+        },
     }
 })
 
 export const { 
     setCoin,
+    setCoinOptions,
+    setRate,
+    setPaymentMethodOptions,
 } = customSettingsSlice.actions;
 
 export const customSettingsReducer = customSettingsSlice.reducer;
