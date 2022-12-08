@@ -162,6 +162,7 @@ function Input({
                                     renderInput={(params) => (
                                         <TextField {...params} sx={{ width:  '100%' }} error={isError} />
                                     )}
+                                    disabled={disabled}
                                 />
                                 :
                                 <DesktopDatePicker
@@ -171,6 +172,7 @@ function Input({
                                     renderInput={(params) => (
                                         <TextField {...params} sx={{ width:  '100%' }} error={isError} />
                                     )}
+                                    disabled={disabled}
                                 />
                             }
                         </>

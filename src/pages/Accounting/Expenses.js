@@ -131,7 +131,7 @@ function Expenses() {
                     deleteItem={deleteItem} 
                     actionsRedirect={{
                       edit: `/dashboard/contabilidad/editar-pago/${id}` ,
-                      detail: `/dashboard/contabilidad/detalle-pago/${id}`,
+                      detail: `/dashboard/contabilidad/detalle-egreso/${id}`,
                     }} 
                   />
                 </TableCell>
