@@ -12,10 +12,9 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
-// components
+//
 import { Loader } from '../../components/Loader';
 import { DownloadButton } from '../../components/DownloadButton';
-// hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
 import { putPayment, getPayment, getStatusOptions } from '../../services/accounting';
@@ -42,7 +41,9 @@ const BoxStyle = styled(Box)(() => ({
 
 // ----------------------------------------------------------------------
 
-function PayDetail() {
+// This view is only for Admin
+
+function ExpensesPaymentDetail() {
 
   const { id } = useParams()
 
@@ -52,8 +53,6 @@ function PayDetail() {
   const loadingEditPayment = useSelector(state => state.accounting.loadingEditPayment)
   const statusOptions = useSelector(state => state.accounting.statusOptions)
 
-  // const coin = useSelector(state => state.customSettings.coin)
-
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -61,27 +60,28 @@ function PayDetail() {
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       subject: '',
+      receiverType: '',
+      receiver: '',
       paymentMethod: '',
       amount: '',
       reference: '',
       date: new Date(),
       description: '',
       file: '',
+      status: '',
       rate: '',
-      name: '',
-      address: ''
     }
   });
 
   useEffect(() => {
     // If admin
     if(user.role.value === 2){
-      const fetchStatusOptions = async () => {
-          const res = await getStatusOptions()
-          dispatch(setStatusOptions(res))
-      }
-      
-      fetchStatusOptions()
+        const fetchStatusOptions = async () => {
+            const res = await getStatusOptions()
+            dispatch(setStatusOptions(res))
+        }
+        
+        fetchStatusOptions()
     }
 
     const fetchPayment = async () => {
@@ -96,23 +96,23 @@ function PayDetail() {
     }
 
     fetchPayment()
-  }, [dispatch, user])
+  }, [dispatch, id, user])
 
   const setFormValues = (payment) => {
     setValue("subject", payment?.subject || '')
-    setValue("paymentMethod", payment?.paymentMethod ? payment.paymentMethod?.label : '')
+    setValue("receiverType", payment?.receiverType ? payment.receiverType?.label : '')
+    setValue("receiver", payment?.receiver ? payment.receiver?.label : '')
+    setValue("paymentMethod", payment?.receiver?.paymentMethod || '')
     setValue("amount", payment?.amount || '')
     setValue("reference", payment?.reference || '')
     setValue("date", payment?.date || '')
     setValue("description", payment?.description || '')
     if(user.role.value === 2){
-      setValue("status", payment?.status ?  payment.status?.value : '')
+        setValue("status", payment?.status ?  payment.status?.value : '')
     }else{
-      setValue("status", payment?.status ?  payment.status?.label : '')
+        setValue("status", payment?.status ?  payment.status?.label : '')
     }
     setValue("rate", payment?.rate || '')
-    setValue("name", payment?.user ? payment.user?.name : '')
-    setValue("address", payment?.user ? payment.user?.address : '')
 
     // TO DO: Set file
     setValue("file", payment?.file || '')
@@ -142,7 +142,7 @@ function PayDetail() {
 
     setTimeout(() => {
       const editPayment = async () => {
-        const res = await putPayment(body)
+        const res = await putPayment(id, body)
   
         dispatch(setLoadingEditPayment(false))
         setColor(res ? 'success' : 'error')
@@ -167,8 +167,13 @@ function PayDetail() {
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
 
+  // If not admin
+  if(user.role.value !== 2){
+    navigate('/dashboard/contabilidad/pagos')
+  }
+
   return (
-    <Page title="Detalle de Pago">
+    <Page title="Editar Pago">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Detalle de Pago
@@ -180,50 +185,47 @@ function PayDetail() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
 
-                {/* If admin */}
-                {(user.role.value === 2) &&
-                  <Grid container item spacing={spacing}>
-                    <Grid item xs={12} sm={6}>
-                      <Input
-                        name='name'
-                        label='Nombre'
-                        type='text'
-                        control={control}
-                        disabled
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Input
-                        name='address'
-                        label='Dirección'
-                        type='text'
-                        control={control}
-                        disabled
-                      />
-                    </Grid>
-                  </Grid>
-                }
-
                 <Grid container item spacing={spacing}>
-                  <Grid item xs={12} sm={6}>
-                    <Input
-                      name='subject'
-                      label='Asunto'
-                      type='text'
-                      control={control}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Input
-                      name='paymentMethod'
-                      label='Método de Pago'
-                      type='text'
-                      control={control}
-                      disabled
-                    />
-                  </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Input
+                            name='subject'
+                            label='Asunto'
+                            type='text'
+                            control={control}
+                            disabled
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Input
+                            name='receiverType'
+                            label='Tipo de Destinatario (Empleado/Proveedor)'
+                            disabled
+                            type='text'
+                            control={control}
+                        />
+                    </Grid>
                 </Grid>
+                
+                <Grid container item spacing={spacing}>
+                    <Grid item xs={12} sm={6}>
+                        <Input
+                            name='receiver'
+                            label='Destinatario'
+                            type='text'
+                            control={control}
+                            disabled
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Input
+                            name='paymentMethod'
+                            label='Método de Pago'
+                            type='text'
+                            control={control}
+                            disabled
+                        />
+                    </Grid>
+                </Grid>         
 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
@@ -256,7 +258,7 @@ function PayDetail() {
 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
-                  <Input
+                    <Input
                       name='date'
                       label='Fecha de la Transacción'
                       isDate
@@ -278,11 +280,11 @@ function PayDetail() {
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
                     <Input
-                      name='rate'
-                      label='Tasa del Dólar'
-                      type='number'
-                      control={control}
-                      disabled
+                        name='rate'
+                        label='Tasa del Dólar'
+                        type='number'
+                        control={control}
+                        disabled
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} container direction='column'>
@@ -299,24 +301,14 @@ function PayDetail() {
 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
-                    {/* If admin */}
-                    {user.role.value === 2 ?
-                      <Input
-                        name='status'
-                        label='Status'
-                        isSelect
-                        selectOptions={statusOptions}
-                        control={control}
-                      />
-                    :
-                      <Input
-                        name='status'
-                        label='Status'
-                        type='text'
-                        disabled
-                        control={control}
-                      />
-                    }
+                    <Input
+                      name='status'
+                      label='Status'
+                      isSelect
+                      selectOptions={statusOptions}
+                      disabled={user.role.value !== 2}
+                      control={control}
+                    />
                   </Grid>
                 </Grid>
 
@@ -362,4 +354,4 @@ function PayDetail() {
   );
 }
 
-export { PayDetail };
+export { ExpensesPaymentDetail };

@@ -5,3 +5,4 @@ export { Invoices } from './Invoices';
 export { CreatePayment } from './CreatePayment';
 export { EditPayment } from './EditPayment';
 export { PayDetail } from './PayDetail';
+export { ExpensesPaymentDetail } from './ExpensesPaymentDetail';

@@ -121,7 +121,7 @@ function Income() {
                 <TableCell align="left">{status?.label || ''}</TableCell>
                 <TableCell align="right">
                   <UserMoreMenu 
-                    actions={['delete', 'detail']} 
+                    actions={['detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 
                     actionsRedirect={{

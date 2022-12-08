@@ -8,7 +8,7 @@ const initialState = {
         symbol: '$'
     },
     coinOptions: [],
-    rate: null,
+    rate: 13.42,
     paymentMethodOptions: [],
 }
 

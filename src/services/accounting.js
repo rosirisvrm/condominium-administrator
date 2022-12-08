@@ -85,7 +85,8 @@ export const getPayment = (id) => ({
     date: faker.date.past(),
     user: {
       id: faker.datatype.uuid(),
-      name: faker.name.findName(), 
+      name: faker.name.findName(),
+      address: faker.address.buildingNumber(),
     },
     receiverType: { label: 'Empleado', value: 0 },
     receiver: {
@@ -102,6 +103,7 @@ export const getPayment = (id) => ({
     paymentMethod: { label: 'Efectivo', value: 4 },
     file: `/static/mock-images/products/product_${0}.jpg`,
     description: 'How to Animate a SVG with border-image',
+    rate: 13.66,
 });
 
 export const getReceiverTypeOptions = () => ([
@@ -170,6 +172,12 @@ export const getReceiverOptions = (type) => {
 
     return res;
 };
+
+export const getStatusOptions = () => ([
+  { label: 'Pendiente', value: 0 },
+  { label: 'Aprobado', value: 1 },
+  { label: 'Rechazado', value: 2 },
+]);
 
 export const postPayment = (body) => {
     console.log('creando');
