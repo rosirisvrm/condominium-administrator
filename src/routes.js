@@ -32,7 +32,7 @@ import { Providers } from './pages/Providers';
 import { News } from './pages/News';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
-import { Surveys } from './pages/Surveys';
+import { Surveys, CreateSurvey } from './pages/Surveys';
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
 import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
 import { ExternalCommunication } from './pages/ExternalCommunication';
@@ -135,6 +135,8 @@ export default function Router() {
           ] 
         },
         
+// ----------------------------------------------------------------------
+
         // Users
         { 
           path: 'usuarios', 
@@ -169,6 +171,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Roles
         { 
           path: 'roles', 
@@ -178,6 +182,8 @@ export default function Router() {
             </AuthRoute>
           )
         },
+
+// ----------------------------------------------------------------------
 
         // Permisssions
         { 
@@ -189,6 +195,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Employees
         { 
           path: 'empleados', 
@@ -198,6 +206,8 @@ export default function Router() {
             </AuthRoute>
           )
         },
+
+// ----------------------------------------------------------------------
 
         // Providers
         { 
@@ -209,6 +219,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // News
         { 
           path: 'noticias', 
@@ -218,6 +230,8 @@ export default function Router() {
             </AuthRoute>
           ) 
         },
+
+// ----------------------------------------------------------------------
 
         // Notifications
         { 
@@ -229,6 +243,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Events
         { 
           path: 'eventos', 
@@ -239,6 +255,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Polls
         { 
           path: 'encuestas', 
@@ -248,6 +266,16 @@ export default function Router() {
             </AuthRoute>
           )
         },
+        { 
+          path: 'encuestas/crear', 
+          element: (
+            <AuthRoute>
+              <CreateSurvey /> 
+            </AuthRoute>
+          )
+        },
+
+// ----------------------------------------------------------------------
 
         // Visits
         { 
