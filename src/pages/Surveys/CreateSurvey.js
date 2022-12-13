@@ -88,6 +88,7 @@ StepperButtons.propTypes = {
   handleBack: PropTypes.func,
   handleNext: PropTypes.func,
   activeStep: PropTypes.number,
+  steps: PropTypes.number,
   smUp: PropTypes.bool,
 }
 
@@ -102,7 +103,16 @@ function CreateSurvey() {
 
   const navigate = useNavigate()
 
-  const { control, handleSubmit, formState: { errors }, setValue, getValues, watch, setError, clearErrors } = useForm({
+  const { 
+    control, 
+    handleSubmit, 
+    formState: { errors }, 
+    setValue, 
+    getValues, 
+    watch, 
+    setError, 
+    clearErrors 
+  } = useForm({
     defaultValues: {
       title: '',
       description: '',
@@ -110,7 +120,8 @@ function CreateSurvey() {
       finalDate: new Date(),
       file: '',
       question: '',
-      questionDescription: ''
+      questionDescription: '',
+      option: ''
     }
   });
 
@@ -220,13 +231,14 @@ function CreateSurvey() {
   };
 
   const [questions, setQuestions] = React.useState([])
+  const [options, setOptions] = React.useState([])
 
   const addQuestion = () => {
-
     const newQuestions = [... questions, {
       question: getValues('question'),
       questionDescription: getValues('questionDescription'),
-      type: checked ? { label: 'Cerrada' , value: 1 } : { label: 'Abierta', value: 0 }
+      type: checked ? { label: 'Cerrada' , value: 1 } : { label: 'Abierta', value: 0 },
+      options,
     }]
 
     setQuestions(newQuestions)
@@ -234,16 +246,37 @@ function CreateSurvey() {
     setValue("question", '')
     setValue("questionDescription", '')
     setValidationMessage('')
+
+    setOptions([])
   }
 
   const deleteQuestion = (index) => {
-    console.log('eliminando pregunta')
 
     const newQuestions = [... questions]
 
     newQuestions.splice(index, 1)
 
     setQuestions(newQuestions)
+  }
+
+  const addOption = () => {
+    
+    const newOptions = [... options, {
+      option: getValues('option'),
+    }]
+
+    setOptions(newOptions)
+
+    setValue("option", '')
+  }
+
+  const deleteOption = (index) => {
+
+    const newOptions = [... options]
+
+    newOptions.splice(index, 1)
+
+    setOptions(newOptions)
   }
 
   const headers = ['Pregunta', 'Tipo', ''];
@@ -367,48 +400,110 @@ function CreateSurvey() {
                   />
                 </Grid>
 
-                <FormControlLabel sx={{ pt: 2, pl: 2 }} label="Pregunta cerrada" control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={handleChange}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                  />
-                }/>
+                <Grid item xs={12}>
+                  <FormControlLabel label="Pregunta cerrada" control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={handleChange}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  }/>
+                </Grid>
+
+                {checked && 
+                  <>
+                    <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
+                      Añadir opciones
+                    </Typography>
+
+                    <Grid container item spacing={3}>
+                      <Grid item xs={12} sm={4}>
+                        <Input
+                          name='option'
+                          label='Opción'
+                          placeholder='Ingrese la opción'
+                          type='text'
+                          control={control}
+                          error={errors.option}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4} container direction="row" justifyContent="center" alignItems="flex-end">
+                        <OutlinedButton size='small' onClick={addOption} disabled={(!watch("option"))}>
+                          Añadir opción
+                        </OutlinedButton>
+                      </Grid>
+                    </Grid>
+
+                    {options.length > 0 &&
+                      <>
+                        <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
+                          Opciones añadidas
+                        </Typography>
+                        
+                        {options.map((option, index) => (
+                          <Grid container item spacing={3} key={index}>
+                            <Grid item xs={6} sm={4}>
+                              <Typography variant="span">{option.option}</Typography>
+                            </Grid>
+                            <Grid item xs={6} sm={4} container direction="row" justifyContent="center">
+                              <IconButton onClick={() => deleteOption(index)} sx={{ p: 0 }}>
+                                <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                              </IconButton>
+                            </Grid>  
+                          </Grid>  
+                        ))}
+                      </>
+                    }
+
+                  </>
+                }
 
                 <Grid container item direction="row" justifyContent="flex-end" alignItems="flex-end">
-                  <OutlinedButton size='small' onClick={addQuestion} disabled={(!watch("question"))}>
+                  <OutlinedButton 
+                    size='small' 
+                    onClick={addQuestion} 
+                    disabled={(
+                      (!checked && !watch("question")) || 
+                      (checked && !watch("question")) ||
+                      (checked && options.length < 2)
+                    )}
+                  >
                     Añadir pregunta
                   </OutlinedButton>
                 </Grid>
 
-                <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
-                  Preguntas añadidas
-                </Typography>
+                {questions.length > 0 && 
+                  <>
+                    <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
+                      Preguntas añadidas
+                    </Typography>
 
-                <TableContainer component={Paper} sx={{ pl: 2 }}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        {headers.map((header, index) => (
-                          <TableCell key={index}>{header}</TableCell>  
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {questions.map((row, index) => (
-                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                          <TableCell component="th" scope="row">{row.question}</TableCell>
-                          <TableCell>{row.type.label}</TableCell>
-                          <TableCell>
-                            <IconButton onClick={() => deleteQuestion(index)} sx={{ p: 0 }}>
-                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    <TableContainer component={Paper}>
+                      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                          <TableRow>
+                            {headers.map((header, index) => (
+                              <TableCell key={index}>{header}</TableCell>  
+                            ))}
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {questions.map((row, index) => (
+                            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                              <TableCell component="th" scope="row">{row.question}</TableCell>
+                              <TableCell>{row.type.label}</TableCell>
+                              <TableCell>
+                                <IconButton onClick={() => deleteQuestion(index)} sx={{ p: 0 }}>
+                                  <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                                </IconButton>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </>
+                }
 
                 {validationMessage && 
                   <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
