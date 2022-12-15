@@ -14,15 +14,12 @@ import {
   StepLabel, 
   Checkbox, 
   FormControlLabel,
-  IconButton
+  IconButton,
+  TextField,
+  Autocomplete,
+  TableCell,
+  TableRow
 } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
@@ -32,12 +29,17 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+import { BasicTable } from '../../components/BasicTable';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getRoleOptions, postUser } from '../../services/users';
-import { setRoleOptions, setLoadingCreateUser } from '../../slices/usersSlice';
+// import { getRoleOptions, postUser } from '../../services/users';
+// import { setRoleOptions, setLoadingCreateUser } from '../../slices/usersSlice';
 
 // ----------------------------------------------------------------------
+
+const LabelStyle = styled('span')(() => ({
+  marginBottom: 8,
+}));
 
 const StepperButtonsContainer = styled(Box)(({ theme }) => ({
   display: 'flex', 
@@ -121,18 +123,18 @@ function CreateSurvey() {
       file: '',
       question: '',
       questionDescription: '',
-      option: ''
+      option: '',
     }
   });
 
-  useEffect(() => {
-    const fetchRoleOptions = async () => {
-      const res = await getRoleOptions()
-      dispatch(setRoleOptions(res))
-    }
+  // useEffect(() => {
+  //   const fetchRoleOptions = async () => {
+  //     const res = await getRoleOptions()
+  //     dispatch(setRoleOptions(res))
+  //   }
 
-    fetchRoleOptions()
-  }, [dispatch])
+  //   fetchRoleOptions()
+  // }, [dispatch])
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
@@ -184,31 +186,31 @@ function CreateSurvey() {
 
   const handleNext = () => {
 
-    let isValid = true;
+    const isValid = true;
 
-    if(activeStep === 0){
-      if(!getValues('title')){
-        setError("title", { type: 'required', message: 'El campo es requerido' });
-        isValid = false
-      }else{
-        clearErrors('title');
-      }
-      if(!getValues('description')){
-        setError("description", { type: 'required', message: 'El campo es requerido' });
-        isValid = false
-      }else{
-        clearErrors('description');
-      }
-    }
+    // if(activeStep === 0){
+    //   if(!getValues('title')){
+    //     setError("title", { type: 'required', message: 'El campo es requerido' });
+    //     isValid = false
+    //   }else{
+    //     clearErrors('title');
+    //   }
+    //   if(!getValues('description')){
+    //     setError("description", { type: 'required', message: 'El campo es requerido' });
+    //     isValid = false
+    //   }else{
+    //     clearErrors('description');
+    //   }
+    // }
 
-    if(activeStep === 1){
-      if(questions.length === 0){
-        setValidationMessage('No ha añadido ninguna pregunta, por favor añadir')
-        isValid = false
-      }else{
-        setValidationMessage('')
-      }
-    }
+    // if(activeStep === 1){
+    //   if(questions.length === 0){
+    //     setValidationMessage('No ha añadido ninguna pregunta, por favor añadir')
+    //     isValid = false
+    //   }else{
+    //     setValidationMessage('')
+    //   }
+    // }
 
     if(isValid){
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -226,12 +228,23 @@ function CreateSurvey() {
 
   const [checked, setChecked] = React.useState(false);
 
-  const handleChange = (event) => {
+  const handleChangeChecked = (event) => {
     setChecked(event.target.checked);
+  };
+
+  const [checkedRole, setCheckedRole] = React.useState(false);
+
+  const handleChangeCheckedRole = (event) => {
+    setCheckedRole(event.target.checked);
+
+    setUsers([])
+    setRoles([])
   };
 
   const [questions, setQuestions] = React.useState([])
   const [options, setOptions] = React.useState([])
+  const [users, setUsers] = React.useState([])
+  const [roles, setRoles] = React.useState([])
 
   const addQuestion = () => {
     const newQuestions = [... questions, {
@@ -279,7 +292,59 @@ function CreateSurvey() {
     setOptions(newOptions)
   }
 
-  const headers = ['Pregunta', 'Tipo', ''];
+  const addUser = () => {
+    const newUsers = [... users, autocomplete]
+
+    setUsers(newUsers)
+    setAutocomplete(null)
+  }
+
+  const deleteUser = (index) => {
+
+    const newUsers = [... users]
+
+    newUsers.splice(index, 1)
+
+    setUsers(newUsers)
+  }
+
+  const addRole = () => {
+    const newRoles = [... roles, autocomplete]
+
+    setRoles(newRoles)
+    setAutocomplete(null)
+  }
+
+  const deleteRole = (index) => {
+
+    const newRoles = [... roles]
+
+    newRoles.splice(index, 1)
+
+    setRoles(newRoles)
+  }
+
+  const headersQuestions = ['Pregunta', 'Tipo', ''];
+
+  const headersUsers = ['Usuario', 'Dirección', ''];
+
+  const headersRoles = ['Rol', 'Cantidad de usuarios', ''];
+
+  const usersOptions = [
+    { label: 'Rosiris Romero', value: 0, address: 'AJ8' },
+    { label: 'Gustavo Gonzalez', value: 1, address: 'AJ8' },
+    { label: 'Roxana Romero', value: 2, address: 'AJ8' },
+    { label: 'Tibaidi Moreno', value: 3, address: 'AJ8' },
+    { label: 'Felix Romero', value: 4, address: 'AJ8' }
+  ]
+
+  const rolesOptions = [
+    { label: 'Propietario', value: 0, amount: 80 },
+    { label: 'Junta de Condominio', value: 1, amount: 3 },
+    { label: 'Administrador', value: 2, amount: 1 }
+  ]
+
+  const [autocomplete, setAutocomplete] = React.useState(null);
 
   return (
     <Page title="Crear Encuesta">
@@ -404,7 +469,7 @@ function CreateSurvey() {
                   <FormControlLabel label="Pregunta cerrada" control={
                     <Checkbox
                       checked={checked}
-                      onChange={handleChange}
+                      onChange={handleChangeChecked}
                       inputProps={{ 'aria-label': 'controlled' }}
                     />
                   }/>
@@ -478,30 +543,19 @@ function CreateSurvey() {
                       Preguntas añadidas
                     </Typography>
 
-                    <TableContainer component={Paper}>
-                      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                          <TableRow>
-                            {headers.map((header, index) => (
-                              <TableCell key={index}>{header}</TableCell>  
-                            ))}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {questions.map((row, index) => (
-                            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                              <TableCell component="th" scope="row">{row.question}</TableCell>
-                              <TableCell>{row.type.label}</TableCell>
-                              <TableCell>
-                                <IconButton onClick={() => deleteQuestion(index)} sx={{ p: 0 }}>
-                                  <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                                </IconButton>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                    <BasicTable headers={headersQuestions} elements={questions}>
+                      {(row, index) => (
+                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableCell component="th" scope="row">{row.question}</TableCell>
+                          <TableCell>{row.type.label}</TableCell>
+                          <TableCell>
+                            <IconButton onClick={() => deleteQuestion(index)} sx={{ p: 0 }}>
+                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </BasicTable>
                   </>
                 }
 
@@ -515,12 +569,112 @@ function CreateSurvey() {
             )}
 
             {activeStep === 2 && (
-              <>
-                <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                  Hola
-                </Box>
-              </>
+              <Grid container spacing={2}>
+
+                <Grid item xs={12}>
+                  <FormControlLabel label="Enviar por rol" control={
+                    <Checkbox
+                      checked={checkedRole}
+                      onChange={handleChangeCheckedRole}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  }/>
+                </Grid>
+
+                {!checkedRole ?
+                  <>
+                    <Grid container item spacing={3}>
+                      <Grid item xs={12} sm={9} container direction="column">
+                        <LabelStyle>Buscar usuarios</LabelStyle>
+                        <Autocomplete
+                          id="users-selection-autocomplete"
+                          value={autocomplete}
+                          onChange={(event, newValue) => {
+                            setAutocomplete(newValue);
+                          }}
+                          options={usersOptions}
+                          getOptionLabel={(option) => option.label}
+                          renderInput={(params) => (
+                            <TextField {...params} placeholder='Ingrese el nombre del usuario a buscar' />
+                          )}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={3} container direction="row" justifyContent="center" alignItems="flex-end">
+                        <OutlinedButton 
+                          size='small'
+                          defaultPadding
+                          onClick={addUser} 
+                          disabled={(!autocomplete)}
+                        >
+                          Añadir
+                        </OutlinedButton>
+                      </Grid>
+                    </Grid>
+
+                    <BasicTable headers={headersUsers} elements={users}>
+                      {(row, index) => (
+                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableCell component="th" scope="row">{row.label}</TableCell>
+                          <TableCell>{row.address}</TableCell>
+                          <TableCell>
+                            <IconButton onClick={() => deleteUser(index)} sx={{ p: 0 }}>
+                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </BasicTable>
+                  </> 
+                  :
+                  <>
+                    <Grid container item spacing={3}>
+
+                      <Grid item xs={12} sm={9} container direction="column">
+                        <LabelStyle>Seleccionar rol</LabelStyle>
+                        <Autocomplete
+                          id="users-selection-autocomplete"
+                          value={autocomplete}
+                          onChange={(event, newValue) => {
+                            setAutocomplete(newValue);
+                          }}
+                          options={rolesOptions}
+                          getOptionLabel={(option) => option.label}
+                          renderInput={(params) => (
+                            <TextField {...params} placeholder='Seleccione el rol' />
+                          )}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={3} container direction="row" justifyContent="center" alignItems="flex-end">
+                        <OutlinedButton 
+                          size='small'
+                          defaultPadding
+                          onClick={addRole} 
+                          disabled={(!autocomplete)}
+                        >
+                          Añadir
+                        </OutlinedButton>
+                      </Grid>
+                      
+                    </Grid>
+
+                    <BasicTable headers={headersRoles} elements={roles}>
+                      {(row, index) => (
+                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableCell component="th" scope="row">{row.label}</TableCell>
+                          <TableCell>{row.amount}</TableCell>
+                          <TableCell>
+                            <IconButton onClick={() => deleteRole(index)} sx={{ p: 0 }}>
+                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </BasicTable>
+                  </> 
+                }
+
+              </Grid>
             )}
         
             <StepperButtons
