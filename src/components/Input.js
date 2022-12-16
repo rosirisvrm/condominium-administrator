@@ -63,6 +63,7 @@ Input.propTypes = {
     isDate: PropTypes.bool,
     isFileUpload: PropTypes.bool,
     callback: PropTypes.func,
+    accept: PropTypes.string,
 }
 
 function Input({ 
@@ -82,6 +83,7 @@ function Input({
     isDate = false,
     isFileUpload = false,
     callback = null,
+    accept = "image/*",
     ...other
 }){
 
@@ -200,7 +202,7 @@ function Input({
                             <IconButton aria-label="upload picture" component='label'>
                                 <input 
                                     hidden 
-                                    accept="image/*" 
+                                    accept={accept} 
                                     type="file" 
                                     onChange={(event) => {
                                         if(callback){

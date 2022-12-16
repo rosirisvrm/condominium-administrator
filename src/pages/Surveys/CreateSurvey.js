@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
@@ -32,8 +32,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { BasicTable } from '../../components/BasicTable';
 //
 import useResponsive from '../../hooks/useResponsive';
-// import { getRoleOptions, postUser } from '../../services/users';
-// import { setRoleOptions, setLoadingCreateUser } from '../../slices/usersSlice';
+import { getRolesOptions, getUsersOptions, postSurvey } from '../../services/surveys';
+import { setRolesOptions, setUsersOptions, setLoadingCreateSurvey } from '../../slices/surveys';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ const StepperButtonsContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(8),
 }))
 
-const StepperButtons = ({ handleBack, handleNext, activeStep, steps, smUp }) => (
+const StepperButtons = ({ handleBack, handleNext, activeStep, steps, smUp, loading }) => (
   <StepperButtonsContainer>
     {activeStep === 0 ? 
       <OutlinedButton 
@@ -75,8 +75,8 @@ const StepperButtons = ({ handleBack, handleNext, activeStep, steps, smUp }) => 
     <Box sx={{ flex: '1 1 auto' }} />
 
     {activeStep === steps - 1 ? 
-      <ContainedButton type='submit' defaultPadding>
-        Finalizar
+      <ContainedButton type='submit' defaultPadding loading={loading}>
+        Crear y Finalizar
       </ContainedButton>
       :
       <ContainedButton onClick={handleNext} defaultPadding>
@@ -92,14 +92,16 @@ StepperButtons.propTypes = {
   activeStep: PropTypes.number,
   steps: PropTypes.number,
   smUp: PropTypes.bool,
+  loading: PropTypes.bool
 }
 
 // ----------------------------------------------------------------------
 
 function CreateSurvey() {
 
-  // const roleOptions = useSelector(state => state.users.roleOptions)
-  // const loadingCreateUser = useSelector(state => state.users.loadingCreateUser)
+  const rolesOptions = useSelector(state => state.surveys.rolesOptions)
+  const usersOptions = useSelector(state => state.surveys.usersOptions)
+  const loadingCreateSurvey = useSelector(state => state.surveys.loadingCreateSurvey)
 
   const dispatch = useDispatch()
 
@@ -127,14 +129,21 @@ function CreateSurvey() {
     }
   });
 
-  // useEffect(() => {
-  //   const fetchRoleOptions = async () => {
-  //     const res = await getRoleOptions()
-  //     dispatch(setRoleOptions(res))
-  //   }
+  useEffect(() => {
+    const fetchRolesOptions = async () => {
+      const res = await getRolesOptions()
+      dispatch(setRolesOptions(res))
+    }
 
-  //   fetchRoleOptions()
-  // }, [dispatch])
+    fetchRolesOptions()
+
+    const fetchUsersOptions = async () => {
+      const res = await getUsersOptions()
+      dispatch(setUsersOptions(res))
+    }
+
+    fetchUsersOptions()
+  }, [dispatch])
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
@@ -146,37 +155,51 @@ function CreateSurvey() {
   const [file, setFile] = React.useState(null)
 
   const onSubmit = (event) => {
+    console.log(event);
 
     const isValid = validateForm();
 
     if(isValid){
-      // dispatch(setLoadingCreateUser(true))
+      dispatch(setLoadingCreateSurvey(true))
 
       console.log('submit');
       console.log('event ', event);
 
-      // const body = {
-      //  ...event,
-      //  file,
-      // }
+      let body = {
+       title: event.title,
+       description: event.description,
+       initialDate: event.initialDate,
+       finalDate: event.finalDate,
+       questions,
+      }
 
-      // setTimeout(() => {
-      //   const createUserRequest = async () => {
-      //     const res = await postUser(body)
+      if(file){
+        body = { ...body, file }
+      }
+
+      if(users.length > 0){
+        body = { ...body, users }
+      }else if(roles.length > 0){
+        body = { ...body, users: roles }
+      }
+
+      setTimeout(() => {
+        const createSurvey = async () => {
+          const res = await postSurvey(body)
     
-      //     dispatch(setLoadingCreateUser(false))
-      //     setColor(res ? 'success' : 'error')
-      //     setOpen(true);
+          dispatch(setLoadingCreateSurvey(false))
+          setColor(res ? 'success' : 'error')
+          setOpen(true);
 
-      //     if(res){
-      //       setTimeout(() => {
-      //         navigate('/dashboard/encuestas')
-      //       }, 2000)
-      //     }
-      //   }
+          if(res){
+            setTimeout(() => {
+              navigate('/dashboard/encuestas')
+            }, 2000)
+          }
+        }
 
-      //   createUserRequest()
-      // }, 2000)
+        createSurvey()
+      }, 2000)
     }
   }
 
@@ -186,6 +209,9 @@ function CreateSurvey() {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [validationMessage, setValidationMessage] = React.useState('');
+  const [rolesMessage, setRolesMessage] = React.useState('');
+  const [usersMessage, setUsersMessage] = React.useState('');
+
 
   const steps = ['Información de la encuesta', 'Añadir preguntas', 'Seleccionar usuarios'];
 
@@ -219,13 +245,14 @@ function CreateSurvey() {
 
     if(activeStep === 2){
       if(!checkedRole && users.length === 0){
-        setValidationMessage('No ha añadido ningún usuario, por favor añadir')
+        setUsersMessage('No ha añadido ningún usuario, por favor añadir')
         isValid = false
       }else if(checkedRole && roles.length === 0){
-        setValidationMessage('No ha añadido usuarios por rol, por favor añadir')
+        setRolesMessage('No ha añadido usuarios por rol, por favor añadir')
         isValid = false
       } else{
-        setValidationMessage('')
+        setUsersMessage('')
+        setRolesMessage('')
       }
     }
 
@@ -280,11 +307,9 @@ function CreateSurvey() {
     }]
 
     setQuestions(newQuestions)
-
     setValue("question", '')
     setValue("questionDescription", '')
     setValidationMessage('')
-
     setOptions([])
   }
 
@@ -304,7 +329,6 @@ function CreateSurvey() {
     }]
 
     setOptions(newOptions)
-
     setValue("option", '')
   }
 
@@ -322,7 +346,7 @@ function CreateSurvey() {
 
     setUsers(newUsers)
     setAutocomplete(null)
-    setValidationMessage('')
+    setUsersMessage('')
   }
 
   const deleteUser = (index) => {
@@ -339,7 +363,7 @@ function CreateSurvey() {
 
     setRoles(newRoles)
     setAutocomplete(null)
-    setValidationMessage('')
+    setRolesMessage('')
   }
 
   const deleteRole = (index) => {
@@ -356,20 +380,6 @@ function CreateSurvey() {
   const headersUsers = ['Usuario', 'Dirección', ''];
 
   const headersRoles = ['Rol', 'Cantidad de usuarios', ''];
-
-  const usersOptions = [
-    { label: 'Rosiris Romero', value: 0, address: 'AJ8' },
-    { label: 'Gustavo Gonzalez', value: 1, address: 'AJ8' },
-    { label: 'Roxana Romero', value: 2, address: 'AJ8' },
-    { label: 'Tibaidi Moreno', value: 3, address: 'AJ8' },
-    { label: 'Felix Romero', value: 4, address: 'AJ8' }
-  ]
-
-  const rolesOptions = [
-    { label: 'Propietario', value: 0, amount: 80 },
-    { label: 'Junta de Condominio', value: 1, amount: 3 },
-    { label: 'Administrador', value: 2, amount: 1 }
-  ]
 
   const [autocomplete, setAutocomplete] = React.useState(null);
 
@@ -445,6 +455,7 @@ function CreateSurvey() {
                     name='file'
                     label='Asociar Archivo'
                     isFileUpload
+                    accept='.pdf, .doc, .docx, image/*, .xlsx'
                     control={control}
                     error={errors.file}
                     callback={handleFileUpload}
@@ -654,9 +665,9 @@ function CreateSurvey() {
                       </BasicTable>
                     }
 
-                    {validationMessage && 
+                    {usersMessage && 
                       <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
-                        {validationMessage}
+                        {usersMessage}
                       </Typography>
                     }
 
@@ -710,9 +721,9 @@ function CreateSurvey() {
                       </BasicTable>
                     }
 
-                    {validationMessage && 
+                    {rolesMessage && 
                       <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
-                        {validationMessage}
+                        {rolesMessage}
                       </Typography>
                     }
 
@@ -727,7 +738,8 @@ function CreateSurvey() {
               handleNext={handleNext} 
               activeStep={activeStep} 
               steps={steps.length} 
-              smUp={smUp} 
+              smUp={smUp}
+              loading={loadingCreateSurvey}
             />
             
           </form>
