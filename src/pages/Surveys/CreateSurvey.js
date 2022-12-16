@@ -146,33 +146,38 @@ function CreateSurvey() {
   const [file, setFile] = React.useState(null)
 
   const onSubmit = (event) => {
-    // dispatch(setLoadingCreateUser(true))
 
-    console.log('submit');
-    console.log('event ', event);
+    const isValid = validateForm();
 
-    // const body = {
-    //  ...event,
-    //  file,
-    // }
+    if(isValid){
+      // dispatch(setLoadingCreateUser(true))
 
-    // setTimeout(() => {
-    //   const createUserRequest = async () => {
-    //     const res = await postUser(body)
-  
-    //     dispatch(setLoadingCreateUser(false))
-    //     setColor(res ? 'success' : 'error')
-    //     setOpen(true);
+      console.log('submit');
+      console.log('event ', event);
 
-    //     if(res){
-    //       setTimeout(() => {
-    //         navigate('/dashboard/encuestas')
-    //       }, 2000)
-    //     }
-    //   }
+      // const body = {
+      //  ...event,
+      //  file,
+      // }
 
-    //   createUserRequest()
-    // }, 2000)
+      // setTimeout(() => {
+      //   const createUserRequest = async () => {
+      //     const res = await postUser(body)
+    
+      //     dispatch(setLoadingCreateUser(false))
+      //     setColor(res ? 'success' : 'error')
+      //     setOpen(true);
+
+      //     if(res){
+      //       setTimeout(() => {
+      //         navigate('/dashboard/encuestas')
+      //       }, 2000)
+      //     }
+      //   }
+
+      //   createUserRequest()
+      // }, 2000)
+    }
   }
 
   let spacing = 2;
@@ -184,33 +189,52 @@ function CreateSurvey() {
 
   const steps = ['Información de la encuesta', 'Añadir preguntas', 'Seleccionar usuarios'];
 
+  const validateForm = () => {
+
+    let isValid = true;
+
+    if(activeStep === 0){
+      if(!getValues('title')){
+        setError("title", { type: 'required', message: 'El campo es requerido' });
+        isValid = false
+      }else{
+        clearErrors('title');
+      }
+      if(!getValues('description')){
+        setError("description", { type: 'required', message: 'El campo es requerido' });
+        isValid = false
+      }else{
+        clearErrors('description');
+      }
+    }
+
+    if(activeStep === 1){
+      if(questions.length === 0){
+        setValidationMessage('No ha añadido ninguna pregunta, por favor añadir')
+        isValid = false
+      }else{
+        setValidationMessage('')
+      }
+    }
+
+    if(activeStep === 2){
+      if(!checkedRole && users.length === 0){
+        setValidationMessage('No ha añadido ningún usuario, por favor añadir')
+        isValid = false
+      }else if(checkedRole && roles.length === 0){
+        setValidationMessage('No ha añadido usuarios por rol, por favor añadir')
+        isValid = false
+      } else{
+        setValidationMessage('')
+      }
+    }
+
+    return isValid;
+  }
+
   const handleNext = () => {
 
-    const isValid = true;
-
-    // if(activeStep === 0){
-    //   if(!getValues('title')){
-    //     setError("title", { type: 'required', message: 'El campo es requerido' });
-    //     isValid = false
-    //   }else{
-    //     clearErrors('title');
-    //   }
-    //   if(!getValues('description')){
-    //     setError("description", { type: 'required', message: 'El campo es requerido' });
-    //     isValid = false
-    //   }else{
-    //     clearErrors('description');
-    //   }
-    // }
-
-    // if(activeStep === 1){
-    //   if(questions.length === 0){
-    //     setValidationMessage('No ha añadido ninguna pregunta, por favor añadir')
-    //     isValid = false
-    //   }else{
-    //     setValidationMessage('')
-    //   }
-    // }
+    const isValid = validateForm();
 
     if(isValid){
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -239,6 +263,7 @@ function CreateSurvey() {
 
     setUsers([])
     setRoles([])
+    setValidationMessage('')
   };
 
   const [questions, setQuestions] = React.useState([])
@@ -297,6 +322,7 @@ function CreateSurvey() {
 
     setUsers(newUsers)
     setAutocomplete(null)
+    setValidationMessage('')
   }
 
   const deleteUser = (index) => {
@@ -313,6 +339,7 @@ function CreateSurvey() {
 
     setRoles(newRoles)
     setAutocomplete(null)
+    setValidationMessage('')
   }
 
   const deleteRole = (index) => {
@@ -611,19 +638,28 @@ function CreateSurvey() {
                       </Grid>
                     </Grid>
 
-                    <BasicTable headers={headersUsers} elements={users}>
-                      {(row, index) => (
-                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                          <TableCell component="th" scope="row">{row.label}</TableCell>
-                          <TableCell>{row.address}</TableCell>
-                          <TableCell>
-                            <IconButton onClick={() => deleteUser(index)} sx={{ p: 0 }}>
-                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </BasicTable>
+                    {users.length > 0 &&
+                      <BasicTable headers={headersUsers} elements={users}>
+                        {(row, index) => (
+                          <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableCell component="th" scope="row">{row.label}</TableCell>
+                            <TableCell>{row.address}</TableCell>
+                            <TableCell>
+                              <IconButton onClick={() => deleteUser(index)} sx={{ p: 0 }}>
+                                <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </BasicTable>
+                    }
+
+                    {validationMessage && 
+                      <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
+                        {validationMessage}
+                      </Typography>
+                    }
+
                   </> 
                   :
                   <>
@@ -658,19 +694,28 @@ function CreateSurvey() {
                       
                     </Grid>
 
-                    <BasicTable headers={headersRoles} elements={roles}>
-                      {(row, index) => (
-                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                          <TableCell component="th" scope="row">{row.label}</TableCell>
-                          <TableCell>{row.amount}</TableCell>
-                          <TableCell>
-                            <IconButton onClick={() => deleteRole(index)} sx={{ p: 0 }}>
-                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </BasicTable>
+                    {roles.length > 0 && 
+                      <BasicTable headers={headersRoles} elements={roles}>
+                        {(row, index) => (
+                          <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableCell component="th" scope="row">{row.label}</TableCell>
+                            <TableCell>{row.amount}</TableCell>
+                            <TableCell>
+                              <IconButton onClick={() => deleteRole(index)} sx={{ p: 0 }}>
+                                <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </BasicTable>
+                    }
+
+                    {validationMessage && 
+                      <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
+                        {validationMessage}
+                      </Typography>
+                    }
+
                   </> 
                 }
 
