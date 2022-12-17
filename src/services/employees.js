@@ -1,6 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { sample } from 'lodash';
-import { number } from 'yup';
 
 //  http request here 
 export const getEmployees = () => [...Array(24)].map(() => ({

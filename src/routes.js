@@ -214,6 +214,14 @@ export default function Router() {
             </AuthRoute>
           ) 
         },
+        { 
+          path: 'empleados/editar/:id', 
+          element: (
+            <AuthRoute>
+              <CreateEmployee />
+            </AuthRoute>
+          )
+        },
 
 // ----------------------------------------------------------------------
 
