@@ -32,8 +32,15 @@ export const getEmployee = (id) => ({
     endDate: faker.date.future(),
     file: faker.system.filePath(),
     paymentMethod: { 
-        label: 'Efectivo',
-        value: 4,
+        paymentMethodType: { label: 'Transferencia', value: 0 },
+        bank: {
+            value: "0115",
+            label: "BANCO EXTERIOR C.A."
+        },
+        identificationType: { label: 'V', value: 0 },
+        paymentMethodIdentification: faker.random.numeric(8),
+        bankAcount: faker.random.numeric(20),
+        paymentMethodPhone: faker.phone.number('+58 412 ### ####'),
     },
 });
 

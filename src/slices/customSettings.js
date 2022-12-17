@@ -10,6 +10,9 @@ const initialState = {
     coinOptions: [],
     rate: 13.42,
     paymentMethodOptions: [],
+    paymentMethodTypeOptions: [],
+    bankOptions: [],
+    identificationTypeOptions: []
 }
 
 export const customSettingsSlice = createSlice({
@@ -28,6 +31,15 @@ export const customSettingsSlice = createSlice({
         setPaymentMethodOptions: (state, action) => {
             state.paymentMethodOptions = action.payload;
         },
+        setPaymentMethodTypeOptions: (state, action) => {
+            state.paymentMethodTypeOptions = action.payload;
+        },
+        setBankOptions: (state, action) => {
+            state.bankOptions = action.payload;
+        },
+        setIdentificationTypeOptions: (state, action) => {
+            state.identificationTypeOptions = action.payload;
+        },
     }
 })
 
@@ -36,6 +48,9 @@ export const {
     setCoinOptions,
     setRate,
     setPaymentMethodOptions,
+    setPaymentMethodTypeOptions,
+    setBankOptions,
+    setIdentificationTypeOptions
 } = customSettingsSlice.actions;
 
 export const customSettingsReducer = customSettingsSlice.reducer;
