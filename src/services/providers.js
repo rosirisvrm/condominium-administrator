@@ -1,9 +1,10 @@
 import { faker } from '@faker-js/faker';
 
 //  http request here 
-export const getEmployees = () => [...Array(24)].map(() => ({
+export const getProviders = () => [...Array(24)].map(() => ({
     id: faker.datatype.uuid(),
-    name: faker.name.findName(),
+    companyName: faker.company.companyName(),
+    product: faker.commerce.productName(),
     identification: faker.random.numeric(8),
     address: faker.address.cityName() + faker.address.streetAddress(),
     phone: faker.phone.number('+58 412 ### ####'),
@@ -19,7 +20,7 @@ export const getEmployees = () => [...Array(24)].map(() => ({
     },
 }));
 
-export const getEmployee = (id) => ({
+export const getProvider = (id) => ({
     id,
     name: faker.name.findName(),
     identification: faker.random.numeric(8),
@@ -44,14 +45,14 @@ export const getEmployee = (id) => ({
     },
 });
 
-export const postEmployee = (body) => {
+export const postProvider = (body) => {
     console.log('creando');
     console.log('body: ', body);
 
     return true;
 }
 
-export const putEmployee = (id, body) => {
+export const putProvider = (id, body) => {
     console.log('editando');
     console.log('id: ', id);
     console.log('body: ', body);
