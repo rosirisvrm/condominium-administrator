@@ -27,7 +27,7 @@ import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 // import { Groups } from './pages/Groups';
 // import { Permissions } from './pages/Permissions';
 
-import { Employees, CreateEmployee } from './pages/Employees';
+import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
 import { Providers } from './pages/Providers';
 import { News } from './pages/News';
 import { Notifications } from './pages/Notifications';
@@ -219,6 +219,14 @@ export default function Router() {
           element: (
             <AuthRoute>
               <CreateEmployee />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'empleados/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <EmployeeDetail />
             </AuthRoute>
           )
         },
