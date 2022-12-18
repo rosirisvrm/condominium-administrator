@@ -83,7 +83,7 @@ function Providers() {
           <Typography variant="h4" gutterBottom>
             Proveedores
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/porveedores/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/proveedores/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
             Crear
           </Button>
         </Stack>

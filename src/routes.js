@@ -28,7 +28,7 @@ import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 // import { Permissions } from './pages/Permissions';
 
 import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
-import { Providers } from './pages/Providers';
+import { Providers, CreateProvider } from './pages/Providers';
 import { News } from './pages/News';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
@@ -241,6 +241,14 @@ export default function Router() {
               <Providers />
             </AuthRoute>
           )
+        },
+        { 
+          path: 'proveedores/crear', 
+          element: (
+            <AuthRoute>
+              <CreateProvider />
+            </AuthRoute>
+          ) 
         },
 
 // ----------------------------------------------------------------------
