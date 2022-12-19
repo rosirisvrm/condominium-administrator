@@ -27,12 +27,12 @@ import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 // import { Groups } from './pages/Groups';
 // import { Permissions } from './pages/Permissions';
 
-import { Employees } from './pages/Employees';
-import { Providers } from './pages/Providers';
+import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
+import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
 import { News } from './pages/News';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
-import { Surveys } from './pages/Surveys';
+import { Surveys, CreateSurvey } from './pages/Surveys';
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
 import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
 import { ExternalCommunication } from './pages/ExternalCommunication';
@@ -135,6 +135,8 @@ export default function Router() {
           ] 
         },
         
+// ----------------------------------------------------------------------
+
         // Users
         { 
           path: 'usuarios', 
@@ -169,6 +171,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Roles
         { 
           path: 'roles', 
@@ -178,6 +182,8 @@ export default function Router() {
             </AuthRoute>
           )
         },
+
+// ----------------------------------------------------------------------
 
         // Permisssions
         { 
@@ -189,6 +195,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Employees
         { 
           path: 'empleados', 
@@ -198,6 +206,32 @@ export default function Router() {
             </AuthRoute>
           )
         },
+        { 
+          path: 'empleados/crear', 
+          element: (
+            <AuthRoute>
+              <CreateEmployee />
+            </AuthRoute>
+          ) 
+        },
+        { 
+          path: 'empleados/editar/:id', 
+          element: (
+            <AuthRoute>
+              <CreateEmployee />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'empleados/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <EmployeeDetail />
+            </AuthRoute>
+          )
+        },
+
+// ----------------------------------------------------------------------
 
         // Providers
         { 
@@ -208,6 +242,32 @@ export default function Router() {
             </AuthRoute>
           )
         },
+        { 
+          path: 'proveedores/crear', 
+          element: (
+            <AuthRoute>
+              <CreateProvider />
+            </AuthRoute>
+          ) 
+        },
+        { 
+          path: 'proveedores/editar/:id', 
+          element: (
+            <AuthRoute>
+              <CreateProvider />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'proveedores/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <ProviderDetail />
+            </AuthRoute>
+          )
+        },
+
+// ----------------------------------------------------------------------
 
         // News
         { 
@@ -219,6 +279,8 @@ export default function Router() {
           ) 
         },
 
+// ----------------------------------------------------------------------
+
         // Notifications
         { 
           path: 'notificaciones', 
@@ -228,6 +290,8 @@ export default function Router() {
             </AuthRoute>
           )
         },
+
+// ----------------------------------------------------------------------
 
         // Events
         { 
@@ -239,6 +303,8 @@ export default function Router() {
           )
         },
 
+// ----------------------------------------------------------------------
+
         // Polls
         { 
           path: 'encuestas', 
@@ -248,6 +314,16 @@ export default function Router() {
             </AuthRoute>
           )
         },
+        { 
+          path: 'encuestas/crear', 
+          element: (
+            <AuthRoute>
+              <CreateSurvey /> 
+            </AuthRoute>
+          )
+        },
+
+// ----------------------------------------------------------------------
 
         // Visits
         { 

@@ -35,7 +35,7 @@ OutlinedButton.propTypes = {
     loading: PropTypes.bool
 }
 
-function OutlinedButton({ 
+function OutlinedButton({
     children, 
     isRouterLink, 
     path, 
@@ -47,7 +47,8 @@ function OutlinedButton({
     defaultPadding,
     customPadding,
     onClick,
-    loading
+    loading,
+    ...other
 }){
     
     const theme = useTheme()
@@ -69,6 +70,7 @@ function OutlinedButton({
                         marginRight,
                         padding
                     }}
+                    {...other}
                 >
                     {children}
                 </ButtonStyle>
@@ -84,6 +86,7 @@ function OutlinedButton({
                         marginRight,
                         padding
                     }}
+                    {...other}
                 >
                     {children}
                 </ButtonStyle>
@@ -98,6 +101,7 @@ function OutlinedButton({
                         marginRight,
                         padding
                     }}
+                    {...other}
                 >
                     {children}
                 </LoadingButtonStyle>
