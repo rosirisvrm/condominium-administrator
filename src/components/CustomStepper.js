@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 // @mui
 import { Stepper, Step, StepLabel, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -20,15 +20,6 @@ const StepperButtonsContainer = styled(Box)(({ theme }) => ({
     paddingLeft: theme.spacing(2),
     marginTop: theme.spacing(8),
 }))
-
-StepperButtons.propTypes = {
-    handleBack: PropTypes.func,
-    handleNext: PropTypes.func,
-    activeStep: PropTypes.number,
-    steps: PropTypes.number,
-    smUp: PropTypes.bool,
-    loading: PropTypes.bool
-}
  
 const StepperButtons = ({ handleBack, handleNext, activeStep, steps, smUp, loading }) => (
     <StepperButtonsContainer>
@@ -64,6 +55,15 @@ const StepperButtons = ({ handleBack, handleNext, activeStep, steps, smUp, loadi
         }
     </StepperButtonsContainer>
 )
+
+StepperButtons.propTypes = {
+    handleBack: PropTypes.func,
+    handleNext: PropTypes.func,
+    activeStep: PropTypes.number,
+    steps: PropTypes.number,
+    smUp: PropTypes.bool,
+    loading: PropTypes.bool
+}
 
 // ----------------------------------------------------------------------
 

@@ -36,6 +36,12 @@ const LabelStyle = styled('span')(() => ({
   marginBottom: 8,
 }));
 
+const TableErrorMessage = styled('span')(({ theme }) => ({
+  paddingTop: theme.spacing(2), 
+  paddingLeft: theme.spacing(2), 
+  color: theme.palette.error.main
+}));
+
 // ----------------------------------------------------------------------
 
 function CreateSurvey() {
@@ -231,6 +237,7 @@ function CreateSurvey() {
     setUsers([])
     setRoles([])
     setValidationMessage('')
+    setAutocomplete(null)
   };
 
   const [questions, setQuestions] = React.useState([])
@@ -521,7 +528,13 @@ function CreateSurvey() {
                         Preguntas añadidas
                       </Typography>
 
-                      <BasicTable headers={headersQuestions} elements={questions}>
+                      <BasicTable 
+                        headers={headersQuestions} 
+                        elements={questions}
+                        caption={`La encuesta tendrá un total de 
+                          ${questions.length} ${questions.length === 1 ? 'pregunta' : 'preguntas'}
+                        `}
+                      >
                         {(row, index) => (
                           <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                             <TableCell component="th" scope="row">{row.question}</TableCell>
@@ -537,11 +550,7 @@ function CreateSurvey() {
                     </>
                   }
 
-                  {validationMessage && 
-                    <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
-                      {validationMessage}
-                    </Typography>
-                  }
+                  {validationMessage && <TableErrorMessage>{validationMessage}</TableErrorMessage>}
                   
                 </Grid>
               )}
@@ -590,7 +599,13 @@ function CreateSurvey() {
                       </Grid>
 
                       {users.length > 0 &&
-                        <BasicTable headers={headersUsers} elements={users}>
+                        <BasicTable 
+                          headers={headersUsers} 
+                          elements={users} 
+                          caption={`La encuesta será enviada a un total de 
+                            ${users.length} ${users.length === 1 ? 'usuario' : 'usuarios'}
+                          `}
+                        >
                           {(row, index) => (
                             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                               <TableCell component="th" scope="row">{row.label}</TableCell>
@@ -602,15 +617,10 @@ function CreateSurvey() {
                               </TableCell>
                             </TableRow>
                           )}
-                        </BasicTable>
+                        </BasicTable>                      
                       }
 
-                      {usersMessage && 
-                        <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
-                          {usersMessage}
-                        </Typography>
-                      }
-
+                      {usersMessage && <TableErrorMessage>{usersMessage}</TableErrorMessage>}
                     </> 
                     :
                     <>
@@ -646,7 +656,10 @@ function CreateSurvey() {
                       </Grid>
 
                       {roles.length > 0 && 
-                        <BasicTable headers={headersRoles} elements={roles}>
+                        <BasicTable 
+                          headers={headersRoles} 
+                          elements={roles}
+                        >
                           {(row, index) => (
                             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                               <TableCell component="th" scope="row">{row.label}</TableCell>
@@ -661,12 +674,7 @@ function CreateSurvey() {
                         </BasicTable>
                       }
 
-                      {rolesMessage && 
-                        <Typography variant="span" sx={{ pt: 2, pl: 2, color: 'red' }}>
-                          {rolesMessage}
-                        </Typography>
-                      }
-
+                      {rolesMessage && <TableErrorMessage>{rolesMessage}</TableErrorMessage>}
                     </> 
                   }
 
