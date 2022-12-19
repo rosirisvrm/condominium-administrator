@@ -15,9 +15,9 @@ import { DownloadButton } from '../../components/DownloadButton';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
-import { getEmployee } from '../../services/employees';
+import { getProvider } from '../../services/providers';
 // slices
-import { setLoadingEmployee, setEmployee } from '../../slices/employees';
+import { setLoadingProvider, setProvider } from '../../slices/providers';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 
 const LabelStyle = styled('span')(() => ({
     marginBottom: 8,
-}));
+  }));
   
 const BoxStyle = styled(Box)(() => ({
     display: 'flex',
@@ -39,26 +39,24 @@ const BoxStyle = styled(Box)(() => ({
 
 // ----------------------------------------------------------------------
 
-function EmployeeDetail() {
+function ProviderDetail() {
 
   const { id } = useParams()
 
-  const employee = useSelector(state => state.employees.employee)
-  const loadingEmployee = useSelector(state => state.employees.loadingEmployee)
+  const provider = useSelector(state => state.providers.provider)
+  const loadingProvider = useSelector(state => state.providers.loadingProvider)
 
   const dispatch = useDispatch()
 
   const { control, setValue, watch } = useForm({
     defaultValues: {
-      name: '',
-      identification: '',
+      companyName: '',
+      companyDescription: '',
+      product: '',
+      productDescription: '',
       address: '',
-      position: '',
       phone: '',
       email: '',
-      description: '',
-      startDate: new Date(),
-      endDate: new Date(),
       file: '',
       paymentMethodType: '',
       bank: '',
@@ -71,19 +69,20 @@ function EmployeeDetail() {
 
   useEffect(() => {
     if(id){
-        const fetchEmployee = async () => {
-            dispatch(setLoadingEmployee(true))
+        const fetchProvider = async () => {
+            dispatch(setLoadingProvider(true))
             
             setTimeout(async ()=> {
-                const res = await getEmployee(id)
-                dispatch(setEmployee(res))
+                const res = await getProvider(id)
+                dispatch(setProvider(res))
                 setFormValues()
-                dispatch(setLoadingEmployee(false))
+                dispatch(setLoadingProvider(false))
             }, 1000)
         }
 
-        fetchEmployee()
+        fetchProvider()
     }
+
   }, [dispatch, id])
 
   const smUp = useResponsive('up', 'sm');
@@ -93,71 +92,91 @@ function EmployeeDetail() {
 //   const [file, setFile] = React.useState(null)
 
   const setFormValues = () => {
-    setValue("name", employee?.name || '')
-    setValue("identification", employee?.identification || '')
-    setValue("address", employee?.address || '')
-    setValue("position", employee?.position || '')
-    setValue("phone", employee?.phone || '')
-    setValue("email", employee?.email || '')
-    setValue("description", employee?.description || '')
-    setValue("startDate", employee?.startDate || '')
-    setValue("endDate", employee?.endDate || '')
+    setValue("companyName", provider?.companyName || '')
+    setValue("companyDescription", provider?.companyDescription || '')
+    setValue("product", provider?.product || '')
+    setValue("productDescription", provider?.productDescription || '')
+    setValue("address", provider?.address || '')
+    setValue("phone", provider?.phone || '')
+    setValue("email", provider?.email || '')
 
-    setValue("paymentMethodType", employee?.paymentMethod ? employee.paymentMethod?.paymentMethodType?.label : '')
-    setValue("bank", employee?.paymentMethod ? employee.paymentMethod?.bank?.label : '')
-    setValue("identificationType", employee?.paymentMethod ? employee.paymentMethod?.identificationType?.label : '')
-    setValue("paymentMethodIdentification", employee?.paymentMethod?.paymentMethodIdentification || '')
-    setValue("bankAcount", employee?.paymentMethod?.bankAcount || '')
-    setValue("paymentMethodPhone", employee?.paymentMethod?.paymentMethodPhone || '')
+    setValue("paymentMethodType", provider?.paymentMethod ? provider.paymentMethod?.paymentMethodType?.label : '')
+    setValue("bank", provider?.paymentMethod ? provider.paymentMethod?.bank?.label : '')
+    setValue("identificationType", provider?.paymentMethod ? provider.paymentMethod?.identificationType?.label : '')
+    setValue("paymentMethodIdentification", provider?.paymentMethod?.paymentMethodIdentification || '')
+    setValue("bankAcount", provider?.paymentMethod?.bankAcount || '')
+    setValue("paymentMethodPhone", provider?.paymentMethod?.paymentMethodPhone || '')
 
     // Falta setear file
-    setFileName(employee?.file)
+    setFileName(provider?.file)
   }
-
-  const downloadFile = () => {
-    console.log('descarga de archivo');
-  };
 
   let spacing = 2;
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
 
+  const downloadFile = () => {
+    console.log('descarga de archivo');
+  };
+
   return (
-    <Page title='Detalle de Empleado'>
+    <Page title='Detalle de Proveedor'>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Detalle de Empleado
+          Detalle de Proveedor
         </Typography>
 
-        {(id && loadingEmployee) ?
+        {(id && loadingProvider) ?
             <Loader /> :
             <FormCard>   
                 <form>
                     <Grid container spacing={2}>
 
                         <Typography variant="h6" sx={{ pt: 2, pl: 2, my: 2 }}>
-                            Información personal
+                            Información de la Compañía
                         </Typography>
 
                         <Grid container item spacing={spacing}>
                             <Grid item xs={12} sm={6}>
-                            <Input
-                                name='name'
-                                label='Nombre y Apellido'
-                                disabled
-                                type='text'
-                                control={control}
-                            />
+                                <Input
+                                    name='companyName'
+                                    label='Nombre de la Compañía'
+                                    disabled
+                                    type='text'
+                                    control={control}
+                                />
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
-                            <Input
-                                name='identification'
-                                label='Documento de Identidad'
-                                disabled
-                                type='number'
-                                control={control}
-                            />
+                                <Input
+                                    name='companyDescription'
+                                    label='Descripción de la Compañía'
+                                    disabled
+                                    type='text'
+                                    control={control}
+                                />
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item spacing={spacing}>
+                            <Grid item xs={12} sm={6}>
+                                <Input
+                                    name='product'
+                                    label='Producto'
+                                    disabled
+                                    type='text'
+                                    control={control}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} sm={6}>
+                                <Input
+                                    name='productDescription'
+                                    label='Descripción del Producto'
+                                    disabled
+                                    type='text'
+                                    control={control}
+                                />
                             </Grid>
                         </Grid>
 
@@ -182,63 +201,16 @@ function EmployeeDetail() {
                             </Grid>
                         </Grid>
                         
-                        <Grid item xs={12}>
-                            <Input
-                                name='address'
-                                label='Dirección'
-                                disabled
-                                type='text'
-                                control={control}
-                            />
-                        </Grid>
-
-                        <Typography variant="h6" sx={{ pt: 2, pl: 2, my: 2 }}>
-                            Contrato
-                        </Typography>
-
-                        <Grid item xs={12}>
-                            <Input
-                                name='position'
-                                label='Cargo'
-                                disabled
-                                type='text'
-                                control={control}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Input
-                                name='description'
-                                label='Descripción de cargo'
-                                disabled
-                                multiline
-                                type='text'
-                                control={control}
-                            />
-                        </Grid>
-
                         <Grid container item spacing={spacing}>
                             <Grid item xs={12} sm={6}>
                                 <Input
-                                    name='startDate'
-                                    label='Fecha de inicio de contrato'
+                                    name='address'
+                                    label='Dirección'
                                     disabled
-                                    isDate
+                                    type='text'
                                     control={control}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Input
-                                    name='endDate'
-                                    label='Fecha de fin de contrato'
-                                    disabled
-                                    isDate
-                                    control={control}
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <Grid container item spacing={spacing}>
                             <Grid item xs={12} sm={6} container direction='column'>
                                 <LabelStyle>
                                     Archivo
@@ -335,14 +307,14 @@ function EmployeeDetail() {
                             mt={8}
                         >
                             <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
-                            <OutlinedButton 
-                                isRouterLink 
-                                path="/dashboard/empleados"
-                                defaultPadding
-                                defaultMarginRight={smUp}
-                            >
-                                Volver
-                            </OutlinedButton>
+                                <OutlinedButton 
+                                    isRouterLink 
+                                    path="/dashboard/proveedores"
+                                    defaultPadding
+                                    defaultMarginRight={smUp}
+                                >
+                                    Volver
+                                </OutlinedButton>
                             </GridStyle>
                         </Grid>
 
@@ -356,4 +328,4 @@ function EmployeeDetail() {
   );
 }
 
-export { EmployeeDetail };
+export { ProviderDetail };

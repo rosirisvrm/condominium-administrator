@@ -289,23 +289,21 @@ function CreateEmployee() {
                         </Grid>
                     </Grid>
                     
-                    <Grid container item spacing={spacing}>
-                        <Grid item xs={12} sm={6}>
-                            <Input
-                                name='address'
-                                label='Dirección'
-                                placeholder='Ingrese la dirección'
-                                type='text'
-                                control={control}
-                                validations={{
-                                    required: {
-                                        value: true,
-                                        message: 'El campo es requerido'
-                                    }
-                                }}
-                                error={errors.address}
-                            />
-                        </Grid>
+                    <Grid item xs={12}>
+                        <Input
+                            name='address'
+                            label='Dirección'
+                            placeholder='Ingrese la dirección'
+                            type='text'
+                            control={control}
+                            validations={{
+                                required: {
+                                    value: true,
+                                    message: 'El campo es requerido'
+                                }
+                            }}
+                            error={errors.address}
+                        />
                     </Grid>
 
                     <Typography variant="h6" sx={{ pt: 2, pl: 2, my: 2 }}>
@@ -435,7 +433,7 @@ function CreateEmployee() {
                         <Grid item xs={12} sm={6}>
                         <Input
                             name='identificationType'
-                            label='Tipo de Método de Pago'
+                            label='Tipo de Documento de Identidad'
                             placeholder='Seleccione el tipo de documento de identidad'
                             isSelect
                             selectOptions={identificationTypeOptions}

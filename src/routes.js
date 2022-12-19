@@ -28,7 +28,7 @@ import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 // import { Permissions } from './pages/Permissions';
 
 import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
-import { Providers, CreateProvider } from './pages/Providers';
+import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
 import { News } from './pages/News';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
@@ -249,6 +249,22 @@ export default function Router() {
               <CreateProvider />
             </AuthRoute>
           ) 
+        },
+        { 
+          path: 'proveedores/editar/:id', 
+          element: (
+            <AuthRoute>
+              <CreateProvider />
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'proveedores/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <ProviderDetail />
+            </AuthRoute>
+          )
         },
 
 // ----------------------------------------------------------------------
