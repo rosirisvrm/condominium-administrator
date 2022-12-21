@@ -1,8 +1,20 @@
 import { faker } from '@faker-js/faker';
-import mockRequests from '../_mock/request'
+import { sample } from 'lodash';
 
 //  http request here 
-export const getRequests = () => mockRequests;
+export const getRequests = () => [...Array(24)].map((_, index) => ({
+    id: faker.datatype.uuid(),
+    avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
+    name: faker.name.findName(),
+    address: faker.address.buildingNumber(),
+    subject: faker.lorem.sentence(3),
+    level: sample(['Alta', 'Media', 'Baja']),
+    status: sample([
+      'Pendiente',
+      'Aprobada',
+      'Rechazada',
+    ]),
+}));
 
 export const getLevelOptions = () => ([
     { label: 'Alta', value: 0 },

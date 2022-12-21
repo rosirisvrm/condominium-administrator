@@ -1,19 +1,54 @@
-import { faker } from '@faker-js/faker';
 // @mui
-// import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // components
 import Page from '../components/Page';
 // sections
-import {
-  AppNewsUpdate,
-  AppOrderTimeline,
-} from '../sections/@dashboard/app';
+import { AppNewsUpdate, AppOrderTimeline } from '../sections/@dashboard/app';
+// services
+import { getNewsList } from '../services/news';
+import { getPayments } from '../services/accounting';
+// actions 
+import { setNewsList, setLoadingNewsList } from '../slices/news';
+import { setPayments, setLoadingPaymentsList } from '../slices/accountingSlice';
 
 // ----------------------------------------------------------------------
 
 function DashboardApp() {
-  // const theme = useTheme();
+
+  const news = useSelector(state => state.news.newsList)
+  const loadingNewsList = useSelector(state => state.news.loadingNewsList)
+  const payments = useSelector(state => state.accounting.paymentsList)
+  const loadingPaymentsList = useSelector(state => state.accounting.loadingPaymentsList)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      dispatch(setLoadingNewsList(true))
+
+      setTimeout(() => {
+        const res = getNewsList({ perPage: 5 })
+        dispatch(setNewsList(res))
+        dispatch(setLoadingNewsList(false))
+      }, 2000)
+    }
+
+    fetchNews()
+
+    const fetchPayments = async () => {
+      dispatch(setLoadingPaymentsList(true))
+
+      setTimeout(() => {
+        const res = getPayments({ perPage: 5 })
+        dispatch(setPayments(res))
+        dispatch(setLoadingPaymentsList(false))
+      }, 2000)
+    }
+
+    fetchPayments()
+  }, [dispatch])
 
   return (
     <Page>
@@ -27,31 +62,20 @@ function DashboardApp() {
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="Nuevas Noticias"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
-                image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
+              list={news}
+              path='/dashboard/noticias'
+              textButton='Ver todas'
+              loading={loadingNewsList}
             />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Pagos Recientes"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: [
-                  '1983, orders, $4220',
-                  '12 Invoices have been paid',
-                  'Order #37745 from September',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
-                ][index],
-                type: `order${index + 1}`,
-                time: faker.date.past(),
-              }))}
+              list={payments}
+              path='/dashboard/contabilidad/pagos'
+              textButton='Ver todos'
+              loading={loadingPaymentsList}
             />
           </Grid>
           

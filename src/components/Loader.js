@@ -1,21 +1,43 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // material
-import { Card, CircularProgress } from '@mui/material';
+import { Card, CircularProgress, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-  const CardStyle = styled(Card)(() => ({
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    height: '500px'
-  }));
+const CardStyle = styled(Card)(() => ({
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center', 
+  height: '500px'
+}));
 
-function Loader(){
+const SmallContainer = styled(Box)(() => ({
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: 300
+}));
+
+Loader.propTypes = {
+  small: PropTypes.bool
+};
+
+function Loader({ small = false }){
+
+  if(small){
     return (
-        <CardStyle>
-            <CircularProgress />
-        </CardStyle> 
+      <SmallContainer>
+        <CircularProgress /> 
+      </SmallContainer> 
     );
+  }
+
+  return (  
+    <CardStyle>
+      <CircularProgress />
+    </CardStyle>
+  );
 }
 
 export { Loader };
