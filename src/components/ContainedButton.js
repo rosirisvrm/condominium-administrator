@@ -44,7 +44,8 @@ function ContainedButton({
     defaultPadding,
     customPadding,
     onClick,
-    loading
+    loading,
+    ... other
 }) {
 
     const theme = useTheme()
@@ -63,6 +64,7 @@ function ContainedButton({
                     sx={{
                         padding
                     }}
+                    {...other}
                 >
                     {children}    
                 </ButtonStyle>
@@ -77,6 +79,7 @@ function ContainedButton({
                     sx={{
                         padding
                     }}
+                    {...other}
                 >
                     {children}    
                 </ButtonStyle>
@@ -90,6 +93,7 @@ function ContainedButton({
                     sx={{
                         padding
                     }}
+                    {...other}
                 >
                     {children}
                 </LoadingButtonStyle>

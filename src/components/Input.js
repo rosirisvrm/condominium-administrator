@@ -195,7 +195,7 @@ function Input({
                     name={name}
                     control={control}
                     rules={validations}
-                    render={({ field: { onChange, value } }) => (
+                    render={({ field: { onChange } }) => (
                         <BoxStyle component='label' sx={{ 
                             borderColor: isError ? theme.palette.error.main : theme.palette.grey[400] 
                         }}>
@@ -210,7 +210,6 @@ function Input({
                                         }
                                         onChange(event)
                                     }}
-                                    value={value}
                                 />
                                 <Iconify icon='material-symbols:upload-file-rounded' width={40} height={40} />
                             </IconButton>

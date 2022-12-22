@@ -68,7 +68,7 @@ OrderItem.propTypes = {
 };
 
 function OrderItem({ item, isLast }) {
-  console.log('item ', item);
+  
   return (
     <TimelineItem>
       <TimelineSeparator>

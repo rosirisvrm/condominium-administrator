@@ -42,7 +42,7 @@ export const getIncome = () => ([...Array(24)].map(() => ({
   }))
 );
 
-export const getPayments = ({ perPage = 24 }) => ([...Array(perPage)].map(() => ({
+export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map(() => ({
   id: faker.datatype.uuid(),
   subject: faker.lorem.sentence(4),
   amount: faker.finance.amount(),

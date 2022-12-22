@@ -29,7 +29,7 @@ import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
 import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
 import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
-import { News } from './pages/News';
+import { News, CreateNews } from './pages/News';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
 import { Surveys, CreateSurvey, SurveyDetail } from './pages/Surveys';
@@ -276,6 +276,14 @@ export default function Router() {
           element: (
             <AuthRoute>
               <News />
+            </AuthRoute>
+          ) 
+        },
+        { 
+          path: 'noticias/crear', 
+          element: (
+            <AuthRoute>
+              <CreateNews />
             </AuthRoute>
           ) 
         },
