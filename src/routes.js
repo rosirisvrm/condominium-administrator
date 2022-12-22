@@ -29,16 +29,17 @@ import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
 import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
 import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
-import { News } from './pages/News';
+import { News, CreateNews } from './pages/News';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
-import { Surveys, CreateSurvey } from './pages/Surveys';
+import { Surveys, CreateSurvey, SurveyDetail } from './pages/Surveys';
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
 import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
 import { ExternalCommunication } from './pages/ExternalCommunication';
 import { CustomizeSite } from './pages/CustomizeSite';
 import { Profile } from './pages/Profile';
 import { Settings } from './pages/Settings';
+import { PaymentMethods } from './pages/PaymentMethods';
 
 // ----------------------------------------------------------------------
 
@@ -278,6 +279,14 @@ export default function Router() {
             </AuthRoute>
           ) 
         },
+        { 
+          path: 'noticias/crear', 
+          element: (
+            <AuthRoute>
+              <CreateNews />
+            </AuthRoute>
+          ) 
+        },
 
 // ----------------------------------------------------------------------
 
@@ -319,6 +328,14 @@ export default function Router() {
           element: (
             <AuthRoute>
               <CreateSurvey /> 
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'encuestas/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <SurveyDetail /> 
             </AuthRoute>
           )
         },
@@ -425,13 +442,23 @@ export default function Router() {
 
         // Settings
         { 
-          path: 'ajustes', 
+          path: 'informacion-general', 
           element: (
             <AuthRoute>
               <Settings />
             </AuthRoute>
           )
         },
+
+        // Payment Methods
+        { 
+        path: 'metodos-de-pago', 
+        element: (
+          <AuthRoute>
+            <PaymentMethods />
+          </AuthRoute>
+        )
+      },
       ],
     },
     {

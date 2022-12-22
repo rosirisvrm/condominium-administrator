@@ -14,19 +14,19 @@ import { setAuth, setLoadingLogout } from '../../slices/authSlice';
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
-    icon: 'eva:home-fill',
-    linkTo: '/',
+    label: 'Información General',
+    icon: 'eva:settings-2-fill',
+    linkTo: '/dashboard/informacion-general',
+  },
+  {
+    label: 'Métodos de Pago',
+    icon: 'eva:settings-2-fill',
+    linkTo: '/dashboard/metodos-de-pago',
   },
   {
     label: 'Perfil',
     icon: 'eva:person-fill',
     linkTo: '/dashboard/perfil',
-  },
-  {
-    label: 'Ajustes',
-    icon: 'eva:settings-2-fill',
-    linkTo: '/dashboard/ajustes',
   },
 ];
 

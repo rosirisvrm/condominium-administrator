@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import { useParams } from 'react-router-dom';
 // @mui
 import { 
   Container, 
@@ -22,13 +22,11 @@ import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
-import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { BasicTable } from '../../components/BasicTable';
-import { CustomStepper } from '../../components/CustomStepper';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { getRolesOptions, getUsersOptions, postSurvey } from '../../services/surveys';
-import { setRolesOptions, setUsersOptions, setLoadingCreateSurvey } from '../../slices/surveys';
+// import { getRolesOptions, getUsersOptions } from '../../services/surveys';
+// import { setRolesOptions, setUsersOptions } from '../../slices/surveys';
 
 // ----------------------------------------------------------------------
 
@@ -44,26 +42,17 @@ const TableErrorMessage = styled('span')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function CreateSurvey() {
+function SurveyDetail() {
+
+  const { id } = useParams()
 
   const rolesOptions = useSelector(state => state.surveys.rolesOptions)
   const usersOptions = useSelector(state => state.surveys.usersOptions)
-  const loadingCreateSurvey = useSelector(state => state.surveys.loadingCreateSurvey)
+//   const loadingCreateSurvey = useSelector(state => state.surveys.loadingCreateSurvey)
 
   const dispatch = useDispatch()
 
-  const navigate = useNavigate()
-
-  const { 
-    control, 
-    handleSubmit, 
-    formState: { errors }, 
-    setValue, 
-    getValues, 
-    watch, 
-    setError, 
-    clearErrors 
-  } = useForm({
+  const { control, handleSubmit, formState: { errors }, watch } = useForm({
     defaultValues: {
       title: '',
       description: '',
@@ -77,151 +66,31 @@ function CreateSurvey() {
   });
 
   useEffect(() => {
-    const fetchRolesOptions = async () => {
-      const res = await getRolesOptions()
-      dispatch(setRolesOptions(res))
-    }
 
-    fetchRolesOptions()
+    // const fetchRolesOptions = async () => {
+    //   const res = await getRolesOptions()
+    //   dispatch(setRolesOptions(res))
+    // }
 
-    const fetchUsersOptions = async () => {
-      const res = await getUsersOptions()
-      dispatch(setUsersOptions(res))
-    }
+    // fetchRolesOptions()
 
-    fetchUsersOptions()
+    // const fetchUsersOptions = async () => {
+    //   const res = await getUsersOptions()
+    //   dispatch(setUsersOptions(res))
+    // }
+
+    // fetchUsersOptions()
   }, [dispatch])
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-
   const [fileName, setFileName] = React.useState('')
-  const [file, setFile] = React.useState(null)
-
-  const onSubmit = (event) => {
-    console.log(event);
-
-    const isValid = validateForm();
-
-    if(isValid){
-      dispatch(setLoadingCreateSurvey(true))
-
-      console.log('submit');
-      console.log('event ', event);
-
-      let body = {
-       title: event.title,
-       description: event.description,
-       initialDate: event.initialDate,
-       finalDate: event.finalDate,
-       questions,
-      }
-
-      if(file){
-        body = { ...body, file }
-      }
-
-      if(users.length > 0){
-        body = { ...body, users }
-      }else if(roles.length > 0){
-        body = { ...body, users: roles }
-      }
-
-      setTimeout(() => {
-        const createSurvey = async () => {
-          const res = await postSurvey(body)
-    
-          dispatch(setLoadingCreateSurvey(false))
-          setColor(res ? 'success' : 'error')
-          setOpen(true);
-
-          if(res){
-            setTimeout(() => {
-              navigate('/dashboard/encuestas')
-            }, 2000)
-          }
-        }
-
-        createSurvey()
-      }, 2000)
-    }
-  }
+//   const [file, setFile] = React.useState(null)
 
   let spacing = 2;
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
-
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [validationMessage, setValidationMessage] = React.useState('');
-  const [rolesMessage, setRolesMessage] = React.useState('');
-  const [usersMessage, setUsersMessage] = React.useState('');
-
-  const steps = ['Información de la encuesta', 'Añadir preguntas', 'Seleccionar usuarios'];
-
-  const validateForm = () => {
-
-    let isValid = true;
-
-    if(activeStep === 0){
-      if(!getValues('title')){
-        setError("title", { type: 'required', message: 'El campo es requerido' });
-        isValid = false
-      }else{
-        clearErrors('title');
-      }
-      if(!getValues('description')){
-        setError("description", { type: 'required', message: 'El campo es requerido' });
-        isValid = false
-      }else{
-        clearErrors('description');
-      }
-    }
-
-    if(activeStep === 1){
-      if(questions.length === 0){
-        setValidationMessage('No ha añadido ninguna pregunta, por favor añadir')
-        isValid = false
-      }else{
-        setValidationMessage('')
-      }
-    }
-
-    if(activeStep === 2){
-      if(!checkedRole && users.length === 0){
-        setUsersMessage('No ha añadido ningún usuario, por favor añadir')
-        isValid = false
-      }else if(checkedRole && roles.length === 0){
-        setRolesMessage('No ha añadido usuarios por rol, por favor añadir')
-        isValid = false
-      } else{
-        setUsersMessage('')
-        setRolesMessage('')
-      }
-    }
-
-    return isValid;
-  }
-
-  const handleNext = () => {
-
-    const isValid = validateForm();
-
-    if(isValid){
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    } 
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleFileUpload = (files) => {
-    setFileName(files[0]?.name || '')
-    setFile(files[0])
-  }
 
   const [checked, setChecked] = React.useState(false);
 
@@ -236,7 +105,6 @@ function CreateSurvey() {
 
     setUsers([])
     setRoles([])
-    setValidationMessage('')
     setAutocomplete(null)
   };
 
@@ -244,83 +112,6 @@ function CreateSurvey() {
   const [options, setOptions] = React.useState([])
   const [users, setUsers] = React.useState([])
   const [roles, setRoles] = React.useState([])
-
-  const addQuestion = () => {
-    const newQuestions = [... questions, {
-      question: getValues('question'),
-      questionDescription: getValues('questionDescription'),
-      type: checked ? { label: 'Cerrada' , value: 1 } : { label: 'Abierta', value: 0 },
-      options,
-    }]
-
-    setQuestions(newQuestions)
-    setValue("question", '')
-    setValue("questionDescription", '')
-    setValidationMessage('')
-    setOptions([])
-  }
-
-  const deleteQuestion = (index) => {
-
-    const newQuestions = [... questions]
-
-    newQuestions.splice(index, 1)
-
-    setQuestions(newQuestions)
-  }
-
-  const addOption = () => {
-    
-    const newOptions = [... options, {
-      option: getValues('option'),
-    }]
-
-    setOptions(newOptions)
-    setValue("option", '')
-  }
-
-  const deleteOption = (index) => {
-
-    const newOptions = [... options]
-
-    newOptions.splice(index, 1)
-
-    setOptions(newOptions)
-  }
-
-  const addUser = () => {
-    const newUsers = [... users, autocomplete]
-
-    setUsers(newUsers)
-    setAutocomplete(null)
-    setUsersMessage('')
-  }
-
-  const deleteUser = (index) => {
-
-    const newUsers = [... users]
-
-    newUsers.splice(index, 1)
-
-    setUsers(newUsers)
-  }
-
-  const addRole = () => {
-    const newRoles = [... roles, autocomplete]
-
-    setRoles(newRoles)
-    setAutocomplete(null)
-    setRolesMessage('')
-  }
-
-  const deleteRole = (index) => {
-
-    const newRoles = [... roles]
-
-    newRoles.splice(index, 1)
-
-    setRoles(newRoles)
-  }
 
   const headersQuestions = ['Pregunta', 'Tipo', ''];
 
@@ -331,24 +122,14 @@ function CreateSurvey() {
   const [autocomplete, setAutocomplete] = React.useState(null);
 
   return (
-    <Page title="Crear Encuesta">
+    <Page title="Detalle de Encuesta">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Crear Encuesta
+          Detalle de Encuesta
         </Typography>
 
         <FormCard>   
-          <form onSubmit={handleSubmit(onSubmit)}>
-
-            <CustomStepper 
-              activeStep={activeStep} 
-              steps={steps} 
-              loading={loadingCreateSurvey}
-              handleNext={handleNext}
-              handleBack={handleBack}
-            >
-
-              {activeStep === 0 && (
+              {/* {activeStep === 0 && (
                 <Grid container spacing={2}>
 
                   <Grid item xs={12}>
@@ -679,21 +460,12 @@ function CreateSurvey() {
                   }
 
                 </Grid>
-              )}
-
-            </CustomStepper>
-            
-          </form>
+              )} */}
         </FormCard>
 
-        <CustomSnackbar
-          open={open}
-          onClose={() => setOpen(false)}
-          color={color}
-        />
       </Container>
     </Page>
   );
 }
 
-export { CreateSurvey };
+export { SurveyDetail };

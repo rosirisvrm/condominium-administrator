@@ -7,6 +7,7 @@ import { customSettingsReducer } from "src/slices/customSettings";
 import { surveysReducer } from "src/slices/surveys";
 import { employeesReducer } from "src/slices/employees";
 import { providersReducer } from "src/slices/providers";
+import { newsReducer } from "src/slices/news";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     requests: requestsReducer,
     surveys: surveysReducer,
     employees: employeesReducer,
-    providers: providersReducer
+    providers: providersReducer,
+    news: newsReducer
 })
 
 export { rootReducer };

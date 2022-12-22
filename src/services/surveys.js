@@ -29,7 +29,7 @@ export const getSurvey = (id) => ({
     initialDate: faker.date.past(),
     finalDate: faker.date.past(),
     users: 30,
-    anwersAccount: 18
+    anwers: 18
 });
 
 export const getUsersOptions = () => ([

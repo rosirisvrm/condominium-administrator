@@ -5,12 +5,12 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-function Settings() {
+function PaymentMethods() {
   return (
-    <Page title="Información General">
+    <Page title="Métodos de Pago">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Información General
+          Métodos de Pago
         </Typography>
 
       </Container>
@@ -18,4 +18,4 @@ function Settings() {
   );
 }
 
-export { Settings };
+export { PaymentMethods };
