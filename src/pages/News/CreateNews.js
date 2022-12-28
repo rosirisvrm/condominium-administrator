@@ -93,7 +93,7 @@ function CreateNews() {
 
     console.log('event ', event);
     console.log('news ', news);
-    console.log('sections');
+    console.log('sections ', sections);
 
     const body = {
      ...event,
@@ -443,7 +443,7 @@ function CreateNews() {
                     accept='.pdf, .doc, .docx, image/*, .xlsx'
                     control={control}
                     callback={handleSectionFileUpload}
-                    helperText={sectionFile?.name || ''}
+                    helperText={sectionFile?.name || sectionFile}
                 />
                 </Grid>
             </Grid>

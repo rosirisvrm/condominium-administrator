@@ -14,6 +14,7 @@ import { OutlinedButton } from '../../components/OutlinedButton';
 import { Loader } from '../../components/Loader';
 import { Modal } from '../../components/Modal';
 import { BasicTable } from '../../components/BasicTable';
+import { DownloadFile } from '../../components/DownloadFile';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
@@ -51,6 +52,9 @@ function NewsDetail() {
     }
   });
 
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
   useEffect(() => {
     if(id){
         const fetchNews = async () => {
@@ -67,8 +71,6 @@ function NewsDetail() {
         fetchNews()
     }
   }, [dispatch, id])
-
-  const smUp = useResponsive('up', 'sm');
 
   const [file, setFile] = React.useState(null)
   const [image, setImage] = React.useState(null)
@@ -106,6 +108,7 @@ function NewsDetail() {
   };
 
   const [sections, setSections] = React.useState([]);
+  const [sectionId, setSectionId] = React.useState([]);
 
   const headers = ['Subtítulo', 'Imagen/Archivo', ''];
 
@@ -114,11 +117,28 @@ function NewsDetail() {
 
     const section = sections.find((_, i) => index === i)
 
+    setSectionId(section?.id)
     setValue("sectionTitle", section?.title || '')
     setValue("sectionContent", section?.content || '')
-    setValue("sectionFile", section?.file?.name || '')
-    setSectionFile(section.file)
+    setValue("sectionFile", section?.file || '')
+    setSectionFile({ name: section?.file || '' })
   }
+
+  const downloadImage = () => {
+    console.log('descarga de imagen');
+  };
+
+  const downloadFile = () => {
+    console.log('descarga de archivo');
+  };
+
+  const downloadSectionFile = () => {
+    console.log('descarga section file ', sectionId);
+  };
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
 
   return (
     <Page title='Detalle de Noticia'>
@@ -166,13 +186,20 @@ function NewsDetail() {
                             />
                         </Grid>
 
-                        {/* <Grid item xs={12} container direction="column">
-                            
+                        <Grid container item spacing={spacing}>
+                            {image && 
+                                <Grid item xs={12} sm={6} container direction='column'>
+                                    <DownloadFile label='Imagen' download={downloadImage} />
+                                </Grid>
+                            }
+
+                            {file &&
+                                <Grid item xs={12} sm={6} container direction='column'>
+                                    <DownloadFile label='Archivo' download={downloadFile} /> 
+                                </Grid>
+                            }
                         </Grid>
 
-                        <Grid item xs={12} container direction="column">
-                            
-                        </Grid> */}
 
                         {sections.length > 0 && 
                             <>
@@ -250,9 +277,11 @@ function NewsDetail() {
                     />
                 </Grid>
 
-                {/* <Grid item xs={12} container direction="column">
-                
-                </Grid> */}
+                {sectionFile &&
+                    <Grid item xs={12} container direction="column">    
+                        <DownloadFile label='Imagen o Archivo' download={downloadSectionFile} /> 
+                    </Grid>    
+                }
             </Grid>
         </Modal>
 
