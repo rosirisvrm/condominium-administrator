@@ -14,36 +14,61 @@ export const getSurveys = () => ([...Array(24)].map(() => ({
         initialDate: faker.date.past(),
         finalDate: faker.date.past(),
         users: 30,
-        anwers: 18
+        answers: 18
 })))
 
 export const getSurvey = (id) => ({
     id,
-    title: faker.name.findName(),
-    description: faker.name.findName(),
-    status: {
-        label: 'Enviada',
-        value: 1,
-    },
-    questions: [],
+    title: faker.lorem.sentence(5),
+    description: faker.lorem.paragraph(),
     initialDate: faker.date.past(),
-    finalDate: faker.date.past(),
-    users: 30,
-    anwers: 18
+    finalDate: faker.date.future(),
+    file: faker.system.filePath(),
+    questions: [...Array(5)].map(() => ({
+        id: faker.datatype.uuid(),
+        question: faker.lorem.sentence(5),
+        questionDescription: faker.lorem.paragraph(),
+        type: { label: 'Abierta', value: 0 },
+        options: [...Array(4)].map(() => ({
+            id: faker.datatype.uuid(),
+            option: faker.lorem.sentence(1),
+        })),
+        answers: [...Array(25)].map(() => ({
+            id: faker.datatype.uuid(),
+            user: {
+                id: 1,
+                name: faker.name.findName(), 
+                address: faker.address.buildingNumber(),
+            },
+            answer: faker.lorem.sentence(1),
+        })),
+    })),
+    sendByRole: false,
+    users: [...Array(30)].map(() => ({
+        id: 1,
+        name: faker.name.findName(), 
+        address: faker.address.buildingNumber(),
+    })),
+    roles: [...Array(2)].map(() => ({
+        id: 1,
+        name: faker.name.jobType(), 
+        amount: faker.random.numeric(2),
+    })),
+    status: { label: 'Enviada', value: 1 },
 });
 
 export const getUsersOptions = () => ([
-    { label: faker.name.findName(), value: 0, address: faker.address.buildingNumber() },
-    { label: faker.name.findName(), value: 1, address: faker.address.buildingNumber() },
-    { label: faker.name.findName(), value: 2, address: faker.address.buildingNumber() },
-    { label: faker.name.findName(), value: 3, address: faker.address.buildingNumber() },
-    { label: faker.name.findName(), value: 4, address: faker.address.buildingNumber() }
+    { name: faker.name.findName(), id: 0, address: faker.address.buildingNumber() },
+    { name: faker.name.findName(), id: 1, address: faker.address.buildingNumber() },
+    { name: faker.name.findName(), id: 2, address: faker.address.buildingNumber() },
+    { name: faker.name.findName(), id: 3, address: faker.address.buildingNumber() },
+    { name: faker.name.findName(), id: 4, address: faker.address.buildingNumber() }
 ])
 
 export const getRolesOptions = () => ([
-    { label: 'Propietario', value: 0, amount: 80 },
-    { label: 'Junta de Condominio', value: 1, amount: 3 },
-    { label: 'Administrador', value: 2, amount: 1 }
+    { name: 'Propietario', id: 0, amount: 80 },
+    { name: 'Junta de Condominio', id: 1, amount: 3 },
+    { name: 'Administrador', id: 2, amount: 1 }
 ])
 
 export const getStatusOptions = () => ([

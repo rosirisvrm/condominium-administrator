@@ -382,20 +382,20 @@ function CreateNews() {
                             mt={8}
                         >
                             <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
-                            <OutlinedButton 
-                                isRouterLink 
-                                path="/dashboard/noticias"
-                                defaultPadding
-                                defaultMarginRight={smUp}
-                            >
-                                Volver
-                            </OutlinedButton>
+                                <OutlinedButton 
+                                    isRouterLink 
+                                    path="/dashboard/noticias"
+                                    defaultPadding
+                                    defaultMarginRight={smUp}
+                                >
+                                    Volver
+                                </OutlinedButton>
                             </GridStyle>
 
                             <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                            <ContainedButton type='submit' defaultPadding loading={!id ? loadingCreateNews : loadingEditNews}>
-                                {!id ? 'Agregar' : 'Actualizar'}
-                            </ContainedButton>
+                                <ContainedButton type='submit' defaultPadding loading={!id ? loadingCreateNews : loadingEditNews}>
+                                    {!id ? 'Agregar' : 'Actualizar'}
+                                </ContainedButton>
                             </GridStyle>
                         </Grid>
 
