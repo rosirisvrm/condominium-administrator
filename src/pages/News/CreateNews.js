@@ -66,7 +66,7 @@ function CreateNews() {
             setTimeout(async ()=> {
                 const res = await getNews(id)
                 dispatch(setNews(res))
-                setFormValues(res)
+                setFormValues()
                 dispatch(setLoadingNews(false))
             }, 1000)
         }
@@ -93,7 +93,7 @@ function CreateNews() {
 
     console.log('event ', event);
     console.log('news ', news);
-    console.log('sections');
+    console.log('sections ', sections);
 
     const body = {
      ...event,
@@ -128,13 +128,21 @@ function CreateNews() {
     }, 2000)
   }
 
-  const setFormValues = (news) => {
+  const setFormValues = () => {
     setValue("title", news?.title || '')
     setValue("sumary", news?.sumary || '')
     setValue("content", news?.content || '')
+    setValue("image", news?.image || '')
+    setValue("file", news?.file || '')
 
-    // Falta setear file
+
+    // Falta setear file, image
     setFile({ name: news?.file || '' })
+    setImage({ name: news?.image || '' })
+
+    if(news?.sections?.length > 0){
+        setSections(news.sections)
+    }
   }
 
   const handleFileUpload = (files) => {
@@ -347,7 +355,7 @@ function CreateNews() {
                                     {(row, index) => (
                                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell component="th" scope="row">{row?.title || ''}</TableCell>
-                                            <TableCell component="th" scope="row">{row?.file?.name || ''}</TableCell>
+                                            <TableCell component="th" scope="row">{row?.file?.name || row?.file}</TableCell>
                                             <TableCell>
                                                 <IconButton onClick={() => editSection(index)} sx={{ p: 0 }}>
                                                     <Iconify icon="eva:edit-fill" width={24} height={24} />
@@ -374,20 +382,20 @@ function CreateNews() {
                             mt={8}
                         >
                             <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
-                            <OutlinedButton 
-                                isRouterLink 
-                                path="/dashboard/noticias"
-                                defaultPadding
-                                defaultMarginRight={smUp}
-                            >
-                                Volver
-                            </OutlinedButton>
+                                <OutlinedButton 
+                                    isRouterLink 
+                                    path="/dashboard/noticias"
+                                    defaultPadding
+                                    defaultMarginRight={smUp}
+                                >
+                                    Volver
+                                </OutlinedButton>
                             </GridStyle>
 
                             <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                            <ContainedButton type='submit' defaultPadding loading={!id ? loadingCreateNews : loadingEditNews}>
-                                {!id ? 'Agregar' : 'Actualizar'}
-                            </ContainedButton>
+                                <ContainedButton type='submit' defaultPadding loading={!id ? loadingCreateNews : loadingEditNews}>
+                                    {!id ? 'Agregar' : 'Actualizar'}
+                                </ContainedButton>
                             </GridStyle>
                         </Grid>
 
@@ -435,7 +443,7 @@ function CreateNews() {
                     accept='.pdf, .doc, .docx, image/*, .xlsx'
                     control={control}
                     callback={handleSectionFileUpload}
-                    helperText={sectionFile?.name || ''}
+                    helperText={sectionFile?.name || sectionFile}
                 />
                 </Grid>
             </Grid>

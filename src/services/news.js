@@ -9,11 +9,11 @@ export const getNewsList = ({ perPage = 24 } = {}) => [...Array(perPage)].map((_
     image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
     file: faker.system.filePath(),
     postedAt: faker.date.recent(),
-    sections: [...Array(3)].map((_, index) => ({
+    sections: [...Array(3)].map(() => ({
         id: faker.datatype.uuid(),
-        subtitle: faker.lorem.sentence(5),
+        title: faker.lorem.sentence(5),
         content: faker.lorem.paragraph(),
-        image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
+        file: faker.system.filePath(),
     })),
     author: {
         id: faker.datatype.uuid(),
@@ -29,16 +29,16 @@ export const getNews = (id) => ({
     image: `/static/mock-images/covers/cover_${1}.jpg`,
     file: faker.system.filePath(),
     postedAt: faker.date.recent(),
-    sections: [...Array(3)].map((_, index) => ({
+    sections: [...Array(3)].map(() => ({
         id: faker.datatype.uuid(),
-        subtitle: faker.lorem.sentence(5),
+        title: faker.lorem.sentence(5),
         content: faker.lorem.paragraph(),
-        image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
+        file: faker.system.filePath(),
     })),
     author: {
         id: faker.datatype.uuid(),
         name: faker.name.findName(),
-    }
+    },
 });
 
 export const postNews = (body) => {

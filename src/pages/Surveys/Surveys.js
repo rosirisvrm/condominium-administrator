@@ -49,7 +49,7 @@ function Surveys() {
 
   const tableHead = [
     { id: 'title', label: 'Título', alignRight: false },
-    { id: 'anwers', label: 'Respuestas', alignRight: false },
+    { id: 'answers', label: 'Respuestas', alignRight: false },
     { id: 'initialDate', label: 'Fecha inicio', alignRight: false },
     { id: 'finalDate', label: 'Fecha fin', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
@@ -103,7 +103,7 @@ function Surveys() {
           download={download}
         >
           {row => {
-            const { id, title, anwers, initialDate, finalDate, status, users } = row;
+            const { id, title, answers, initialDate, finalDate, status, users } = row;
             const isItemSelected = selected.indexOf(title) !== -1;
             let color;
 
@@ -132,7 +132,7 @@ function Surveys() {
                     {title}
                   </Typography>
                 </TableCell>
-                <TableCell align="left">{`${anwers} / ${users}`}</TableCell>
+                <TableCell align="left">{`${answers} / ${users}`}</TableCell>
                 <TableCell align="left">{fDate(initialDate)}</TableCell>
                 <TableCell align="left">{fDate(finalDate)}</TableCell>
                 <TableCell align="left">

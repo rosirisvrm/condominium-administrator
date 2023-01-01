@@ -118,15 +118,16 @@ function CreateSurvey() {
        initialDate: event.initialDate,
        finalDate: event.finalDate,
        questions,
+       sendByRole: checkedRole,
       }
 
       if(file){
         body = { ...body, file }
       }
 
-      if(users.length > 0){
+      if(!checkedRole && users.length > 0){
         body = { ...body, users }
-      }else if(roles.length > 0){
+      }else if(checkedRole && roles.length > 0){
         body = { ...body, users: roles }
       }
 
@@ -580,7 +581,7 @@ function CreateSurvey() {
                               setAutocomplete(newValue);
                             }}
                             options={usersOptions}
-                            getOptionLabel={(option) => option.label}
+                            getOptionLabel={(option) => option.name}
                             renderInput={(params) => (
                               <TextField {...params} placeholder='Ingrese el nombre del usuario a buscar' />
                             )}
@@ -635,7 +636,7 @@ function CreateSurvey() {
                               setAutocomplete(newValue);
                             }}
                             options={rolesOptions}
-                            getOptionLabel={(option) => option.label}
+                            getOptionLabel={(option) => option.name}
                             renderInput={(params) => (
                               <TextField {...params} placeholder='Seleccione el rol' />
                             )}
