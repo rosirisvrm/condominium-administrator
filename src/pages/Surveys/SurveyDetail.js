@@ -1,39 +1,39 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useParams } from 'react-router-dom';
 // @mui
 import { 
   Container, 
   Typography, 
   Grid, 
-  // Checkbox, 
-  // FormControlLabel, 
-  // IconButton,
+  Checkbox, 
+  FormControlLabel,
+  IconButton,
   // TextField,
   // Autocomplete,
-  // TableCell,
-  // TableRow
+  TableCell,
+  TableRow
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
-// import Iconify from '../../components/Iconify';
+import Iconify from '../../components/Iconify';
+import Label from '../../components/Label';
 import { FormCard } from '../../components/FormCard';
-// import { Input } from '../../components/Input';
+import { Input } from '../../components/Input';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
-// import { BasicTable } from '../../components/BasicTable';
+import { BasicTable } from '../../components/BasicTable';
 import { Loader } from '../../components/Loader';
-import Label from '../../components/Label';
 import { DownloadButton } from '../../components/DownloadButton';
+import { Modal } from '../../components/Modal';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { fDate } from '../../utils/formatTime';
-// import { getUsersOptions } from '../../services/surveys';
-import { getSurvey } from '../../services/surveys';
-// import { setUsersOptions } from '../../slices/surveys';
-import { setSurvey, setLoadingSurvey } from '../../slices/surveys';
+import { fDate, fDateDistance } from '../../utils/formatTime';
+// 
+import { getSurvey, getUsersStatusOptions } from '../../services/surveys';
+import { setSurvey, setLoadingSurvey, setUsersStatusOptions } from '../../slices/surveys';
 
 // ----------------------------------------------------------------------
 
@@ -57,27 +57,17 @@ function SurveyDetail() {
 
   const { id } = useParams()
 
-  // const rolesOptions = useSelector(state => state.surveys.rolesOptions)
-  // const usersOptions = useSelector(state => state.surveys.usersOptions)
-
   const survey = useSelector(state => state.surveys.survey)
-  console.log('survey ', survey);
   const loadingSurvey = useSelector(state => state.surveys.loadingSurvey)
+  const usersStatusOptions = useSelector(state => state.surveys.usersStatusOptions)
 
   const dispatch = useDispatch()
 
-  // const { control, handleSubmit, formState: { errors }, watch } = useForm({
-  //   defaultValues: {
-  //     title: '',
-  //     description: '',
-  //     initialDate: new Date(),
-  //     finalDate: new Date(),
-  //     file: '',
-  //     question: '',
-  //     questionDescription: '',
-  //     option: '',
-  //   }
-  // });
+  const { control } = useForm({
+    defaultValues: {
+      usersStatus: '',
+    }
+  });
 
   useEffect(() => {
     if(id){
@@ -94,12 +84,12 @@ function SurveyDetail() {
       fetchSurvey()
     } 
 
-    // const fetchUsersOptions = async () => {
-    //   const res = await getUsersOptions()
-    //   dispatch(setUsersOptions(res))
-    // }
+    const fetchUsersStatusOptions = async () => {
+      const res = await getUsersStatusOptions()
+      dispatch(setUsersStatusOptions(res))
+    }
 
-    // fetchUsersOptions()
+    fetchUsersStatusOptions()
   }, [dispatch, id])
 
   const setStatusColor = () => {
@@ -118,8 +108,6 @@ function SurveyDetail() {
     return color;
   }
 
-  // const [file, setFile] = React.useState(null)
-
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
@@ -130,6 +118,26 @@ function SurveyDetail() {
   const downloadFile = () => {
     console.log('descarga de archivo');
   };
+
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChangeChecked = (event) => {
+    setChecked(event.target.checked);
+  };
+
+  const headersUsers = ['Usuario', 'Estado'];
+
+  // const [file, setFile] = React.useState(null)
 
   return (
     <Page title="Detalle de Encuesta">
@@ -144,7 +152,7 @@ function SurveyDetail() {
               <Grid container spacing={2}>
 
                 <Grid item container direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography variant="h6">
+                  <Typography variant="h5">
                     {survey?.title || ''}
                   </Typography>
 
@@ -160,7 +168,7 @@ function SurveyDetail() {
                 <Grid item container spacing={spacing}>
                   <Grid item container xs={12} sm={8}>
                     <Grid item xs={4}>
-                      <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
                         Día de inicio
                       </Typography>
                       <Typography variant="body2">
@@ -168,7 +176,7 @@ function SurveyDetail() {
                       </Typography>
                     </Grid>
                     <Grid item xs={4}>
-                      <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
                         Día final
                       </Typography>
                       <Typography variant="body2">
@@ -176,18 +184,103 @@ function SurveyDetail() {
                       </Typography>
                     </Grid>
                     <Grid item xs={4}>
-                      <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
                         Días restantes
                       </Typography>
                       <Typography variant="body2">
-                        Hola
+                        {(survey?.initialDate && survey?.finalDate) ? 
+                          fDateDistance(survey?.initialDate, survey?.finalDate) : ''
+                        }
                       </Typography>
                     </Grid>
                   </Grid>
                   <Grid item xs={12} sm={4} container direction="row" justifyContent={smUp ? "flex-end" : 'center'} alignItems="center">
-                    <DownloadButton onClick={downloadFile} text='Descargar' />
+                    <DownloadButton onClick={downloadFile} text='Archivo Adjunto' />
                   </Grid>
                 </Grid>
+
+                <Grid item xs={12} container direction="row">
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                    Usuarios Encuestados
+                  </Typography>
+                  <IconButton onClick={handleClickOpen} sx={{ p: 0, ml: 1 }}>
+                    <Iconify icon="charm:eye" width={24} height={24} />
+                  </IconButton>
+                </Grid>
+
+                <Grid item container spacing={spacing}>
+                  <Grid item container xs={12} sm={8}>
+                    <Grid item xs={4}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                        Respondieron
+                      </Typography>
+                      <Typography variant="body2">
+                        70
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                        Por responder
+                      </Typography>
+                      <Typography variant="body2">
+                        30
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                        Total
+                      </Typography>
+                      <Typography variant="body2">
+                        100
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} container direction="row">
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                    Preguntas
+                  </Typography>
+                  <IconButton onClick={() => console.log('abriendo detalle de usuarios')} sx={{ p: 0, ml: 1 }}>
+                    <Iconify icon="charm:eye" width={24} height={24} />
+                  </IconButton>
+                </Grid>
+
+                <Grid item container xs={12} sm={8}>
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                      Abiertas
+                    </Typography>
+                    <Typography variant="body2">
+                      7
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                      Cerradas
+                    </Typography>
+                    <Typography variant="body2">
+                      3
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                      Total
+                    </Typography>
+                    <Typography variant="body2">
+                      10
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} container direction="row">
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                    Respuestas
+                  </Typography>
+                  <IconButton onClick={() => console.log('abriendo detalle de usuarios')} sx={{ p: 0, ml: 1 }}>
+                    <Iconify icon="charm:eye" width={24} height={24} />
+                  </IconButton>
+                </Grid>                
 
                 <Grid
                   item
@@ -196,7 +289,7 @@ function SurveyDetail() {
                   direction="row"
                   justifyContent="flex-end"
                   alignItems="flex-end"
-                  mt={8}
+                  mt={5}
                 >
                   <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
                     <OutlinedButton 
@@ -224,6 +317,61 @@ function SurveyDetail() {
               </Grid>
             </FormCard>
         }
+
+        <Modal 
+          open={dialogOpen}
+          handleClose={handleClose}
+          title='Usuarios Encuestados'
+          closeButtonText='Cerrar'
+          maxWidth='md'
+          sx={{
+            p: 5
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControlLabel label="Vista gráfica" control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChangeChecked}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              }/>
+            </Grid>
+
+            <Grid item container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <Input
+                  name='usersStatus'
+                  label='Filtrar usuarios'
+                  placeholder='Seleccione un estado para filtrar'
+                  isSelect
+                  selectOptions={usersStatusOptions}
+                  control={control}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={8} container justifyContent='flex-end' alignItems='flex-end'>
+                <Typography variant="body2">
+                  Total : {survey?.users?.length || ''} usuarios
+                </Typography>
+              </Grid>
+            </Grid>
+
+            {survey?.users?.length > 0 &&
+              <Grid item xs={12}>
+                <BasicTable headers={headersUsers} elements={survey.users}>
+                  {(row, index) => (
+                    <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">{row.name}</TableCell>
+                      <TableCell>Respondió</TableCell>
+                    </TableRow>
+                  )}
+                </BasicTable>
+              </Grid>
+            }
+          </Grid>
+        </Modal>
 
       </Container>
     </Page>

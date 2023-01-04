@@ -412,6 +412,7 @@ function CreateNews() {
             closeButtonText='Cancelar'
             saveButtonText={isEditing ? 'Editar' : 'Agregar'}
             disabledSaveButton={(!watch('sectionTitle') || !watch('sectionContent'))}
+            maxWidth='md'
         >
             <Grid container spacing={2}>
                 <Grid item xs={12}>

@@ -609,7 +609,7 @@ function CreateSurvey() {
                         >
                           {(row, index) => (
                             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                              <TableCell component="th" scope="row">{row.label}</TableCell>
+                              <TableCell component="th" scope="row">{row.name}</TableCell>
                               <TableCell>{row.address}</TableCell>
                               <TableCell>
                                 <IconButton onClick={() => deleteUser(index)} sx={{ p: 0 }}>

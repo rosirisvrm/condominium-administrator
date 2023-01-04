@@ -77,6 +77,11 @@ export const getStatusOptions = () => ([
     { label: 'Terminada', value: 2 },
 ])
 
+export const getUsersStatusOptions = () => ([
+    { label: 'Respondió', value: 0 },
+    { label: 'Por responder', value: 1 },
+])
+
 export const postSurvey = (body) => {
     console.log('creando');
     console.log('body: ', body);
