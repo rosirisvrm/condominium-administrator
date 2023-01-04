@@ -161,11 +161,11 @@ function SurveyDetail() {
                   </Label>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ mb: 3 }}>
                   <p>{survey?.description || ''}</p>
                 </Grid>
 
-                <Grid item container spacing={spacing}>
+                <Grid item container spacing={spacing} sx={{ mb: 3 }}>
                   <Grid item container xs={12} sm={8}>
                     <Grid item xs={4}>
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
@@ -208,7 +208,7 @@ function SurveyDetail() {
                   </IconButton>
                 </Grid>
 
-                <Grid item container spacing={spacing}>
+                <Grid item container spacing={spacing} sx={{ mb: 3 }}>
                   <Grid item container xs={12} sm={8}>
                     <Grid item xs={4}>
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
@@ -246,7 +246,7 @@ function SurveyDetail() {
                   </IconButton>
                 </Grid>
 
-                <Grid item container xs={12} sm={8}>
+                <Grid item container xs={12} sm={8} sx={{ mb: 3 }}>
                   <Grid item xs={4}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
                       Abiertas
