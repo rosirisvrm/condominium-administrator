@@ -30,8 +30,7 @@ function Modal({
     saveButtonText,
     handleSave,
     disabledSaveButton,
-    maxWidth = 'sm',
-    ...other
+    maxWidth = 'sm'
 }){
 
   return (  
@@ -42,7 +41,7 @@ function Modal({
         maxWidth={maxWidth}
         PaperProps={{
             sx: {
-                py: 3
+                py: 1
             }
         }}
     >

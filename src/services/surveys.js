@@ -48,6 +48,7 @@ export const getSurvey = (id) => ({
         id: 1,
         name: faker.name.findName(), 
         address: faker.address.buildingNumber(),
+        complete: true,
     })),
     roles: [...Array(2)].map(() => ({
         id: 1,
@@ -80,6 +81,11 @@ export const getStatusOptions = () => ([
 export const getUsersStatusOptions = () => ([
     { label: 'Respondió', value: 0 },
     { label: 'Por responder', value: 1 },
+])
+
+export const getQuestionsTypeOptions = () => ([
+    { label: 'Abierta', value: 0 },
+    { label: 'Cerrada', value: 1 },
 ])
 
 export const postSurvey = (body) => {

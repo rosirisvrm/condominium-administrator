@@ -28,16 +28,17 @@ BasicTable.propTypes = {
     headers: PropTypes.array,
     elements: PropTypes.array,
     children: PropTypes.func,
-    caption: PropTypes.string
+    caption: PropTypes.string,
+    mt: PropTypes.number
 }
 
-function BasicTable({ headers, elements, children, caption }){
+function BasicTable({ headers, elements, children, caption, mt = 4 }){
 
     const renderFunc = children
 
     return (
         <>
-            <TableContainer component={Paper} sx={{ mt: 4 }}>
+            <TableContainer component={Paper} sx={{ mt }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
