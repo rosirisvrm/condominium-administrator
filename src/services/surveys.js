@@ -24,11 +24,16 @@ export const getSurvey = (id) => ({
     initialDate: faker.date.past(),
     finalDate: faker.date.future(),
     file: faker.system.filePath(),
-    questions: [...Array(5)].map(() => ({
+    questions: [...Array(5)].map((_, index) => ({
         id: faker.datatype.uuid(),
-        question: faker.lorem.sentence(5),
+        // question: faker.lorem.sentence(5),
+        question: `Pregunta ${index}`,
         questionDescription: faker.lorem.paragraph(),
-        type: { label: 'Abierta', value: 0 },
+        // type: { label: 'Cerrada', value: 1 },
+        type: sample([
+            { label: 'Abierta', value: 0 },
+            { label: 'Cerrada', value: 1 },
+        ]),
         options: [...Array(4)].map(() => ({
             id: faker.datatype.uuid(),
             option: faker.lorem.sentence(1),
