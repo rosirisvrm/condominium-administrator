@@ -6,7 +6,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import { AuthRoute } from './components/AuthRoute';
 //
 import { Login } from './pages/Login';
-import Products from './pages/Products';
+// import Products from './pages/Products';
 import Blog from './pages/Blog';
 
 import { Page404 } from './pages/Page404';
@@ -24,7 +24,7 @@ import {
 } from './pages/Accounting';
 import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
-// import { Groups } from './pages/Groups';
+import { Roles } from './pages/Roles';
 // import { Permissions } from './pages/Permissions';
 
 import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
@@ -181,7 +181,7 @@ export default function Router() {
           path: 'roles', 
           element: (
             <AuthRoute>
-              <Products />
+              <Roles />
             </AuthRoute>
           )
         },

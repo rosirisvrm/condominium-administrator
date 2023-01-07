@@ -8,6 +8,7 @@ import { surveysReducer } from "src/slices/surveys";
 import { employeesReducer } from "src/slices/employees";
 import { providersReducer } from "src/slices/providers";
 import { newsReducer } from "src/slices/news";
+import { rolesReducer } from "src/slices/roles";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     surveys: surveysReducer,
     employees: employeesReducer,
     providers: providersReducer,
-    news: newsReducer
+    news: newsReducer,
+    roles: rolesReducer,
 })
 
 export { rootReducer };
