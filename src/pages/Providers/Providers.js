@@ -99,7 +99,7 @@ function Providers() {
         >
           {row => {
             const { id, companyName, email, phone, product } = row;
-            const isItemSelected = selected.indexOf(companyName) !== -1;
+            const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
               <TableRow
@@ -111,7 +111,7 @@ function Providers() {
                 aria-checked={isItemSelected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, companyName)} />
+                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>

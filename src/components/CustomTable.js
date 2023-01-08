@@ -92,7 +92,7 @@ function CustomTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = elementList.map((n) => n.name);
+      const newSelecteds = elementList.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }

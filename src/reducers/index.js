@@ -9,6 +9,8 @@ import { employeesReducer } from "src/slices/employees";
 import { providersReducer } from "src/slices/providers";
 import { newsReducer } from "src/slices/news";
 import { rolesReducer } from "src/slices/roles";
+import { eventsModuleReducer } from "src/slices/eventsModule";
+import { visitsReducer } from "src/slices/visits";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
     providers: providersReducer,
     news: newsReducer,
     roles: rolesReducer,
+    eventsModule: eventsModuleReducer,
+    visits: visitsReducer,
 })
 
 export { rootReducer };
