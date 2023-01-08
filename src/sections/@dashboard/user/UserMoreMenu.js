@@ -60,6 +60,17 @@ export default function UserMoreMenu({ actions, idItem, deleteItem, actionsRedir
               </MenuItem>
             );
           }
+
+          if(element === 'answer'){
+            return (
+              <MenuItem component={RouterLink} to={actionsRedirect[element]} sx={{ color: 'text.secondary' }} key={element}>
+                <ListItemIcon>
+                  <Iconify icon="mdi:file-document-check" width={24} height={24} />
+                </ListItemIcon>
+                <ListItemText primary="Responder" primaryTypographyProps={{ variant: 'body2' }} />
+              </MenuItem>
+            );
+          }
           
           // Detail
           return(

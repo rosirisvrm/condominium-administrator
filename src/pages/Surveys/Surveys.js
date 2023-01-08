@@ -143,11 +143,12 @@ function Surveys() {
 
                 <TableCell align="right">
                   <UserMoreMenu 
-                    actions={['delete', 'edit', 'detail']}
+                    actions={['delete', 'edit', 'detail', 'answer']}
                     idItem={id}
                     deleteItem={deleteItem}
                     actionsRedirect={{
                       edit: `/dashboard/encuestas/editar/${id}`,
+                      answer: `/dashboard/encuestas/responder/${id}`,
                       detail: `/dashboard/encuestas/detalle/${id}`,
                     }}
                   />

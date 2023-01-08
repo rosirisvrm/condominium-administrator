@@ -150,7 +150,9 @@ function Input({
                                 <em style={emStyle}>{placeholder}</em>
                             </MenuItem>
                             {selectOptions.map((item, index) => (
-                                <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
+                                <MenuItem key={index} value={item?.value || item?.id}>
+                                    {item?.label || item?.option}
+                                </MenuItem>
                             ))}
                         </Select>
                     )}

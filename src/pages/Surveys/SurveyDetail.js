@@ -652,7 +652,7 @@ function SurveyDetail() {
                     {(autocomplete?.type?.value === 1) && <>
                         <LabelStyle>Filtrar respuestas</LabelStyle>
                         <Autocomplete
-                          id="questions-autocomplete"
+                          id="answers-filter-autocomplete"
                           value={autocomplete4}
                           onChange={(event, newValue) => {
                             setAutocomplete4(newValue);

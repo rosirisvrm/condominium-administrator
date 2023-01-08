@@ -34,7 +34,7 @@ import { CreateNews } from './pages/News/CreateNews';
 import { NewsDetail } from './pages/News/NewsDetail';
 import { Notifications } from './pages/Notifications';
 import { Events } from './pages/Events';
-import { Surveys, CreateSurvey, SurveyDetail } from './pages/Surveys';
+import { Surveys, CreateSurvey, SurveyDetail, AnswerSurvey } from './pages/Surveys';
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
 import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
 import { ExternalCommunication } from './pages/ExternalCommunication';
@@ -346,6 +346,14 @@ export default function Router() {
           element: (
             <AuthRoute>
               <CreateSurvey /> 
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'encuestas/responder/:id', 
+          element: (
+            <AuthRoute>
+              <AnswerSurvey /> 
             </AuthRoute>
           )
         },

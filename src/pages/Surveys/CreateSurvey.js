@@ -340,7 +340,6 @@ function CreateSurvey() {
 
         <FormCard>   
           <form onSubmit={handleSubmit(onSubmit)}>
-
             <CustomStepper 
               activeStep={activeStep} 
               steps={steps} 
@@ -683,7 +682,6 @@ function CreateSurvey() {
               )}
 
             </CustomStepper>
-            
           </form>
         </FormCard>
 
