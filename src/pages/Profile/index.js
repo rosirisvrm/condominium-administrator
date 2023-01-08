@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, Avatar, IconButton, Tooltip } from '@mui/material';
+import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
+import { AvatarUploader } from '../../components/AvatarUploader';
 // import { Loader } from '../../components/Loader';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
@@ -46,6 +46,28 @@ function Profile() {
     }
   });
 
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
+  const [image, setImage] = React.useState('')
+  const [preview, setPreview] = React.useState('')
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
+  const readImage = () => {
+    const reader = new FileReader()
+
+    reader.onloadend = () => {
+      setPreview(reader.result)
+    }
+
+    reader.readAsDataURL(image)
+  }
+
   useEffect(() => {
     // const fetchProfile = async () => {
     //   dispatch(setLoadingProfile(true))
@@ -61,14 +83,11 @@ function Profile() {
     // fetchProfile()
 
     setFormValues()
-  }, [dispatch])
 
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-  const [image, setImage] = React.useState('')
+    if(image){
+      readImage()
+    }
+  }, [dispatch, image, readImage])
 
   const setFormValues = () => {
     setValue("name", auth?.name || '')
@@ -104,10 +123,6 @@ function Profile() {
     }, 2000)
   }
 
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
-
   return (
     <Page title='Perfil'>
       <Container maxWidth="xl">
@@ -122,31 +137,12 @@ function Profile() {
               <Grid container spacing={2}>
 
               <Grid container item xs={12} justifyContent='center' alignItems='center' mb={3}>
-                <div style={{ position: 'relative' }}>
-                <Tooltip title="Seleccionar imagen">
-                  <IconButton 
-                    aria-label="upload picture" 
-                    component="label" 
-                    sx={{ position: 'absolute', bottom: 0, right: 0, zIndex: 1 }}
-                  >
-                    <input 
-                      hidden
-                      accept="image/*" 
-                      type="file"
-                      onChange={(event) => {
-                        console.log('image ', event.target.files[0]);
-                        setImage(event.target.files[0])
-                      }}
-                    />
-                    <Iconify icon="fluent:camera-add-48-filled" width={30} height={30} />
-                  </IconButton>
-                </Tooltip>
-                <Avatar
-                  alt={auth?.name || 'Profile'}
-                  src={auth?.photoURL || ''}
-                  sx={{ width: 140, height: 140 }}
+                <AvatarUploader 
+                  url={preview || auth?.photoURL}
+                  name={auth?.name || 'Profile'}
+                  tooltipText="Seleccionar imagen"
+                  setImage={setImage}
                 />
-                </div>
               </Grid>
 
               <Grid container item spacing={spacing}>
