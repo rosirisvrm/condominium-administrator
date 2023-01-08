@@ -3,15 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 // @mui
-import { 
-  Container, 
-  Typography, 
-  Grid
-} from '@mui/material';
+import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
+import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
@@ -21,7 +17,6 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { DownloadButton } from '../../components/DownloadButton';
 //
 import useResponsive from '../../hooks/useResponsive';
-import { fDate, fDateDistance } from '../../utils/formatTime';
 // 
 import { getSurvey, putSurvey } from '../../services/surveys';
 import { setSurvey, setLoadingSurvey, setLoadingCreateSurvey } from '../../slices/surveys';
@@ -39,6 +34,7 @@ function AnswerSurvey() {
   const { id } = useParams()
 
   const survey = useSelector(state => state.surveys.survey)
+  console.log('survey ', survey);
   const loadingSurvey = useSelector(state => state.surveys.loadingSurvey)
 
   const dispatch = useDispatch()
@@ -46,22 +42,8 @@ function AnswerSurvey() {
   const navigate = useNavigate()
 
   const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
 
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
-
-  const { 
-    control, 
-    handleSubmit, 
-    formState: { errors }, 
-    setValue, 
-    getValues, 
-    watch, 
-    setError, 
-    clearErrors 
-  } = useForm({
+  const { control, handleSubmit, formState: { errors }, /* watch */ } = useForm({
     defaultValues: {
       question01: '',
       question02: '',
@@ -74,13 +56,13 @@ function AnswerSurvey() {
   useEffect(() => {
     if(id){
       const fetchSurvey = async () => {
-          dispatch(setLoadingSurvey(true))
-          
-          setTimeout(async ()=> {
-              const res = await getSurvey(id)
-              dispatch(setSurvey(res))
-              dispatch(setLoadingSurvey(false))
-          }, 1000)
+        dispatch(setLoadingSurvey(true))
+        
+        setTimeout(async ()=> {
+          const res = await getSurvey(id)
+          dispatch(setSurvey(res))
+          dispatch(setLoadingSurvey(false))
+        }, 1000)
       }
 
       fetchSurvey()
@@ -89,22 +71,6 @@ function AnswerSurvey() {
 
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
-
-  const setStatusColor = () => {
-    let color;
-
-    if(survey?.status?.value === 0){ // Por enviar
-      color = 'warning';
-
-    }else if(survey?.status?.value === 1){ // Enviada
-      color = 'success';
-
-    }else if(survey?.status?.value === 2){ // Terminada
-      color = 'default';
-    }
-
-    return color;
-  }
 
   const downloadFile = () => {
     console.log('descarga de archivo');
@@ -152,18 +118,16 @@ function AnswerSurvey() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
 
-                <Grid item container direction="row" justifyContent="space-between" alignItems="center">
+                <Grid item xs={12} sx={{ mb: 2 }}>
                   <Typography variant="h5">
                     {survey?.title || ''}
                   </Typography>
-
-                  <Label variant="ghost" color={setStatusColor()} sx={{ py: 2, px: 5 }}>
-                    {survey?.status?.label || ''}
-                  </Label>
                 </Grid>
 
                 <Grid item xs={12} sx={{ mb: 2 }}>
-                  <p>{survey?.description || ''}</p>
+                  <Typography variant="body1">
+                    {survey?.description || ''}
+                  </Typography>
                 </Grid>
 
                 <Grid item xs={12} sm={4} sx={{ mb: 2 }}>
@@ -172,9 +136,17 @@ function AnswerSurvey() {
 
                 {(survey?.questions?.length > 0) && 
                   survey.questions.map((item, index) => (
-                    <Grid item xs={12} container key={index}>
+                    <Grid item xs={12} container spacing={2} key={index}>
+                      <Grid item xs={12} container direction='row' alignItems='center'>
+                        <Iconify icon="material-symbols:circle" width={8} height={8} sx={{ mr: 1, color: 'primary.main' }} />
+                        <Typography variant="body1">
+                          {item?.question || ''}
+                        </Typography>
+                      </Grid>
                       <Grid item xs={12}>
-                        <p>{item?.question || ''}</p>
+                        <Typography variant="caption">
+                          {`(${item?.questionDescription || ''})`}
+                        </Typography>
                       </Grid>
                       <Grid item xs={12}>
                         {item.type.value === 0 ? // Abierta

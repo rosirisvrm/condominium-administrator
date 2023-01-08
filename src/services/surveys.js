@@ -28,7 +28,7 @@ export const getSurvey = (id) => ({
         id: faker.datatype.uuid(),
         // question: faker.lorem.sentence(5),
         question: `Pregunta ${index}`,
-        questionDescription: faker.lorem.paragraph(),
+        questionDescription: faker.lorem.sentence(),
         // type: { label: 'Cerrada', value: 1 },
         type: sample([
             { label: 'Abierta', value: 0 },
