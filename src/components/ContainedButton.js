@@ -28,6 +28,8 @@ ContainedButton.propTypes = {
     type: PropTypes.string,
     color: PropTypes.string,
     size: PropTypes.string,
+    defaultMarginRight: PropTypes.bool,
+    customMarginRight: PropTypes.string,
     defaultPadding: PropTypes.bool,
     customPadding: PropTypes.string,
     onClick: PropTypes.func,
@@ -41,6 +43,8 @@ function ContainedButton({
     type = 'button', 
     color = 'primary',
     size = 'medium',
+    defaultMarginRight,
+    customMarginRight,
     defaultPadding,
     customPadding,
     onClick,
@@ -48,7 +52,9 @@ function ContainedButton({
     ... other
 }) {
 
-    const theme = useTheme()
+    const theme = useTheme();
+
+    const marginRight = defaultMarginRight ? theme.spacing(2) : customMarginRight;
 
     const padding = defaultPadding ? theme.spacing(1, 6) : customPadding;
 
@@ -62,6 +68,7 @@ function ContainedButton({
                     component={RouterLink}
                     to={path}
                     sx={{
+                        marginRight,
                         padding
                     }}
                     {...other}
@@ -77,6 +84,7 @@ function ContainedButton({
                     type={type}
                     onClick={onClick ? () => onClick() : null}
                     sx={{
+                        marginRight,
                         padding
                     }}
                     {...other}
@@ -91,6 +99,7 @@ function ContainedButton({
                     size={size}
                     loading
                     sx={{
+                        marginRight,
                         padding
                     }}
                     {...other}
