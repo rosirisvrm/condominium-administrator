@@ -100,7 +100,7 @@ function Users() {
         >
           {row => {
             const { id, name, address, email, phone, role } = row;
-            const isItemSelected = selected.indexOf(name) !== -1;
+            const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
               <TableRow
@@ -112,7 +112,7 @@ function Users() {
                 aria-checked={isItemSelected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>

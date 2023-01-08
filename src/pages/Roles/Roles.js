@@ -54,11 +54,11 @@ function Roles() {
 
   const [selected, setSelected] = useState([]);
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -100,7 +100,7 @@ function Roles() {
         >
           {row => {
             const { id, name, description, status, numberOfUsers } = row;
-            const isItemSelected = selected.indexOf(name) !== -1;
+            const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
               <TableRow
@@ -112,7 +112,7 @@ function Roles() {
                 aria-checked={isItemSelected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>

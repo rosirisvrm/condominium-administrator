@@ -60,12 +60,12 @@ const navConfig = [
     icon: getIcon('mdi:toolbox'),
     outlineIcon: getIcon('mdi:toolbox-outline'),
   },
-  {
-    title: 'proveedores',
-    path: '/dashboard/proveedores',
-    icon: getIcon('mdi:truck-delivery'),
-    outlineIcon: getIcon('mdi:truck-delivery-outline'),
-  },
+  // {
+  //   title: 'proveedores',
+  //   path: '/dashboard/proveedores',
+  //   icon: getIcon('mdi:truck-delivery'),
+  //   outlineIcon: getIcon('mdi:truck-delivery-outline'),
+  // },
   {
     title: 'noticias',
     path: '/dashboard/noticias',

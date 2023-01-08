@@ -16,49 +16,51 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { fDate, fTime } from '../../utils/formatTime';
 //
-import { fDate } from '../../utils/formatTime';
-import { getNewsList } from '../../services/news';
-import { setNewsList, setLoadingNewsList } from '../../slices/news'
+import { getEventsModule } from '../../services/eventsModule';
+import { setEventsModule, setLoadingEventsModuleList } from '../../slices/eventsModule'
 
 // ----------------------------------------------------------------------
 
-function News() {
+function EventsModule() {
 
-  const news = useSelector(state => state.news.newsList)
-  const loadingNewsList = useSelector(state => state.news.loadingNewsList)
+  // bring the fake information of the slice
+  const eventsModule = useSelector(state => state.eventsModule.eventsModuleList)
+  console.log(eventsModule);
+  const loadingEventsModuleList = useSelector(state => state.eventsModule.loadingEventsModuleList)
   
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const fetchNews = async () => {
-      dispatch(setLoadingNewsList(true))
+    const fetchEventsModule = async () => {
+      dispatch(setLoadingEventsModuleList(true))
 
       setTimeout(async () => {
-        const res = await getNewsList()
-        dispatch(setNewsList(res))
-        dispatch(setLoadingNewsList(false))
+        const res = await getEventsModule()
+        dispatch(setEventsModule(res))
+        dispatch(setLoadingEventsModuleList(false))
       }, 1000)
     }
 
-    fetchNews()
+    fetchEventsModule()
   }, [dispatch])
 
   const tableHead = [
-    { id: 'title', label: 'Título', alignRight: false },
-    { id: 'author', label: 'Autor', alignRight: false },
-    { id: 'postedAt', label: 'Fecha', alignRight: false },
-    { id: 'sections', label: 'Secciones', alignRight: false },
+    { id: 'name', label: 'Nombre', alignRight: false },
+    { id: 'date', label: 'Fecha', alignRight: false },
+    { id: 'checkIn', label: 'Hora de llegada', alignRight: false },
+    { id: 'place', label: 'Lugar', alignRight: false },
     { id: '' },
   ];
 
   const [selected, setSelected] = useState([]);
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -73,33 +75,33 @@ function News() {
     console.log('eliminando item', id);
   }
 
-  const download = () => {
+  const donwload = () => {
     console.log('descargando');
   }
 
   return (
-    <Page title="Noticias">
+    <Page title="Eventos">
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>
-            Noticias
+            Eventos
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/noticias/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/empleados/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
             Crear
           </Button>
         </Stack>
 
         <CustomTable 
           tableHead={tableHead} 
-          elementList={news} 
+          elementList={eventsModule} 
           selected={selected} 
           setSelected={setSelected}
-          loading={loadingNewsList}
-          searchParam='title'
-          download={download}
+          loading={loadingEventsModuleList}
+          searchParam='name'
+          donwload={donwload}
         >
           {row => {
-            const { id, title, author, postedAt, sections } = row;
+            const { id, name, date, checkIn, place } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
@@ -116,20 +118,20 @@ function News() {
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>
-                    {title}
+                    {name}
                   </Typography>
                 </TableCell>
-                <TableCell align="left">{author?.name || ''}</TableCell>
-                <TableCell align="left">{postedAt ? fDate(postedAt) : ''}</TableCell>
-                <TableCell align="left">{sections.length}</TableCell>
+                <TableCell align="left">{fDate(date)}</TableCell>
+                <TableCell align="left">{fTime(checkIn)}</TableCell>
+                <TableCell align="left">{place}</TableCell>
                 <TableCell align="right">
                   <UserMoreMenu 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 
                     actionsRedirect={{
-                      edit: `/dashboard/noticias/editar/${id}` ,
-                      detail: `/dashboard/noticias/detalle/${id}`,
+                      edit: `/dashboard/eventos/editar/${id}` ,
+                      detail: `/dashboard/eventos/detalle/${id}`,
                     }} 
                   />
                 </TableCell>
@@ -143,4 +145,4 @@ function News() {
   );
 }
 
-export { News };
+export { EventsModule };

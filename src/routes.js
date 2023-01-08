@@ -7,7 +7,7 @@ import { AuthRoute } from './components/AuthRoute';
 //
 import { Login } from './pages/Login';
 // import Products from './pages/Products';
-import Blog from './pages/Blog';
+// import Blog from './pages/Blog';
 
 import { Page404 } from './pages/Page404';
 import { Landing } from './pages/Landing';
@@ -33,8 +33,13 @@ import { News } from './pages/News/News';
 import { CreateNews } from './pages/News/CreateNews';
 import { NewsDetail } from './pages/News/NewsDetail';
 import { Notifications } from './pages/Notifications';
+<<<<<<< HEAD
 import { Events } from './pages/Events';
 import { Surveys, CreateSurvey, SurveyDetail, AnswerSurvey } from './pages/Surveys';
+=======
+import { EventsModule } from './pages/EventsModule';
+import { Surveys, CreateSurvey, SurveyDetail } from './pages/Surveys';
+>>>>>>> main
 import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
 import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
 import { ExternalCommunication } from './pages/ExternalCommunication';
@@ -188,15 +193,15 @@ export default function Router() {
 
 // ----------------------------------------------------------------------
 
-        // Permisssions
-        { 
-          path: 'permisos', 
-          element: (
-            <AuthRoute>
-              <Blog />
-            </AuthRoute>
-          )
-        },
+        // // Permisssions
+        // { 
+        //   path: 'permisos', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Blog />
+        //     </AuthRoute>
+        //   )
+        // },
 
 // ----------------------------------------------------------------------
 
@@ -325,7 +330,7 @@ export default function Router() {
           path: 'eventos', 
           element: (
             <AuthRoute>
-              <Events />
+              <EventsModule />
             </AuthRoute>
           )
         },
