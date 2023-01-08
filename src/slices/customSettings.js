@@ -12,7 +12,10 @@ const initialState = {
     paymentMethodOptions: [],
     paymentMethodTypeOptions: [],
     bankOptions: [],
-    identificationTypeOptions: []
+    identificationTypeOptions: [],
+    generalInfo: null,
+    loadingGeneralInfo: false,
+    loadingEditGeneralInfo: false,
 }
 
 export const customSettingsSlice = createSlice({
@@ -40,6 +43,15 @@ export const customSettingsSlice = createSlice({
         setIdentificationTypeOptions: (state, action) => {
             state.identificationTypeOptions = action.payload;
         },
+        setGeneralInfo: (state, action) => {
+            state.generalInfo = action.payload;
+        },
+        setLoadingGeneralInfo: (state, action) => {
+            state.loadingGeneralInfo = action.payload;
+        },
+        setLoadingEditGeneralInfo: (state, action) => {
+            state.loadingEditGeneralInfo = action.payload;
+        },
     }
 })
 
@@ -50,7 +62,10 @@ export const {
     setPaymentMethodOptions,
     setPaymentMethodTypeOptions,
     setBankOptions,
-    setIdentificationTypeOptions
+    setIdentificationTypeOptions,
+    setGeneralInfo,
+    setLoadingGeneralInfo,
+    setLoadingEditGeneralInfo
 } = customSettingsSlice.actions;
 
 export const customSettingsReducer = customSettingsSlice.reducer;

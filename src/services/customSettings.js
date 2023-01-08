@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 //  http request here 
 
 export const getCoinOptions = () => ([
@@ -168,3 +170,39 @@ export const getIdentificationTypeOptions = () => ([
     { label: 'J', value: 1 },
     { label: 'E', value: 2 },
 ]);
+
+export const getGeneralInfo = () => ({
+    id: faker.datatype.uuid(),
+    logo: `/static/logo.svg`,
+    condominiumName: faker.company.companyName(),
+    feeAmount: faker.finance.amount(),
+    address: faker.address.cityName() + faker.address.streetAddress(),
+    phone: faker.phone.number('+58 412 ### ####'),
+    email: `${faker.random.word()}@${faker.random.word()}.com`,
+    description: faker.lorem.paragraph(),
+    dueDate: faker.date.future(),
+    administrator: {
+        id: faker.datatype.uuid(),
+        name: faker.name.findName(),
+        identification: faker.random.numeric(8),
+        address: faker.address.cityName() + faker.address.streetAddress(),
+        phone: faker.phone.number('+58 412 ### ####'),
+        email: `${faker.random.word()}@${faker.random.word()}.com`,
+    },
+    condoBoard: [...Array(3)].map(() => ({
+        id: faker.datatype.uuid(),
+        name: faker.name.findName(),
+        identification: faker.random.numeric(8),
+        address: faker.address.cityName() + faker.address.streetAddress(),
+        phone: faker.phone.number('+58 412 ### ####'),
+        email: `${faker.random.word()}@${faker.random.word()}.com`,
+    }))
+});
+
+export const putGeneralInfo = (id, body) => {
+    console.log('editando');
+    console.log('id: ', id);
+    console.log('body: ', body);
+
+    return true;
+}
