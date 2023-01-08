@@ -102,7 +102,7 @@ function Requests() {
         >
           {row => {
             const { id, name, address, subject, level, status } = row;
-            const isItemSelected = selected.indexOf(name) !== -1;
+            const isItemSelected = selected.indexOf(id) !== -1;
             let color;
 
             if(status === 'Pendiente'){
@@ -126,7 +126,7 @@ function Requests() {
                 aria-checked={isItemSelected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>

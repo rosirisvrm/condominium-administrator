@@ -17,7 +17,8 @@ Modal.propTypes = {
   handleSave: PropTypes.func,
   closeButtonText: PropTypes.string,
   saveButtonText: PropTypes.string,
-  disabledSaveButton: PropTypes.bool
+  disabledSaveButton: PropTypes.bool,
+  maxWidth: PropTypes.string
 };
 
 function Modal({ 
@@ -29,15 +30,26 @@ function Modal({
     saveButtonText,
     handleSave,
     disabledSaveButton,
+    maxWidth = 'sm'
 }){
 
   return (  
-    <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
+    <Dialog 
+        open={open} 
+        onClose={handleClose} 
+        fullWidth
+        maxWidth={maxWidth}
+        PaperProps={{
+            sx: {
+                py: 1
+            }
+        }}
+    >
+        <DialogTitle sx={{ px: 5 }}>{title}</DialogTitle>
+        <DialogContent sx={{ px: 5 }}>
             {children}
         </DialogContent>
-        <DialogActions sx={{ mr: 2, mb: 1 }}>
+        <DialogActions sx={{ mr: 2, mb: 1, px: 5 }}>
             {closeButtonText && 
                 <OutlinedButton onClick={handleClose}>
                     {closeButtonText}

@@ -104,7 +104,7 @@ function Surveys() {
         >
           {row => {
             const { id, title, answers, initialDate, finalDate, status, users } = row;
-            const isItemSelected = selected.indexOf(title) !== -1;
+            const isItemSelected = selected.indexOf(id) !== -1;
             let color;
 
             if(status === 'Por Enviar'){
@@ -125,7 +125,7 @@ function Surveys() {
                 aria-checked={isItemSelected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, title)} />
+                  <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="subtitle2" noWrap>

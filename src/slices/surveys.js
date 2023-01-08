@@ -10,6 +10,8 @@ const initialState = {
     statusOptions: [],
     rolesOptions: [],
     usersOptions: [],
+    usersStatusOptions: [],
+    questionsTypeOptions: [],
 }
 
 export const surveysSlice = createSlice({
@@ -42,7 +44,13 @@ export const surveysSlice = createSlice({
         },
         setUsersOptions: (state, action) => {
             state.usersOptions = action.payload
-        }
+        },
+        setUsersStatusOptions: (state, action) => {
+            state.usersStatusOptions = action.payload
+        },
+        setQuestionsTypeOptions: (state, action) => {
+            state.questionsTypeOptions = action.payload
+        }, 
     }
 })
 
@@ -56,7 +64,9 @@ export const {
     setLevelOptions,
     setStatusOptions,
     setRolesOptions,
-    setUsersOptions
+    setUsersOptions,
+    setUsersStatusOptions,
+    setQuestionsTypeOptions
 } = surveysSlice.actions;
 
 export const surveysReducer = surveysSlice.reducer;
