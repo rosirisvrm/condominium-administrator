@@ -7,7 +7,6 @@ import { AuthRoute } from './components/AuthRoute';
 //
 import { Login } from './pages/Login';
 // import Products from './pages/Products';
-// import Blog from './pages/Blog';
 
 import { Page404 } from './pages/Page404';
 import { Landing } from './pages/Landing';
