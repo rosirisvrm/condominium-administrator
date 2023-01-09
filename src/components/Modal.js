@@ -49,7 +49,7 @@ function Modal({
         <DialogContent sx={{ px: 5 }}>
             {children}
         </DialogContent>
-        <DialogActions sx={{ mr: 2, mb: 1, px: 5 }}>
+        <DialogActions sx={{ mb: 1, px: 5 }}>
             {closeButtonText && 
                 <OutlinedButton onClick={handleClose}>
                     {closeButtonText}

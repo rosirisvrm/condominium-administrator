@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 // @mui
 import { Container, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -11,6 +11,7 @@ import { Input } from '../../components/Input';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { AvatarUploader } from '../../components/AvatarUploader';
+import { Modal } from '../../components/Modal';
 // import { Loader } from '../../components/Loader';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
@@ -35,7 +36,7 @@ function Profile() {
 
   const dispatch = useDispatch()
 
-  const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+  const { control, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
       name: '',
       identification: '',
@@ -43,6 +44,9 @@ function Profile() {
       role: '',
       phone: '',
       email: '',
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     }
   });
 
@@ -50,6 +54,7 @@ function Profile() {
   const [color, setColor] = React.useState('')
   const [image, setImage] = React.useState('')
   const [preview, setPreview] = React.useState('')
+  const [openModal, setOpenModal] = React.useState(false)
 
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
@@ -71,7 +76,7 @@ function Profile() {
   useEffect(() => {
     // const fetchProfile = async () => {
     //   dispatch(setLoadingProfile(true))
-      
+
     //   setTimeout(async ()=> {
     //     const res = await getProfile()
     //     dispatch(setProfile(res))
@@ -123,6 +128,22 @@ function Profile() {
     }, 2000)
   }
 
+  const handleClickOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setValue("currentPassword", '')
+    setValue("newPassword", '')
+    setValue("confirmPassword", '')
+
+    setOpenModal(false);
+  };
+
+  const handleModalSave = () => {
+    handleClose()
+  }
+
   return (
     <Page title='Perfil'>
       <Container maxWidth="xl">
@@ -132,12 +153,12 @@ function Profile() {
 
         {/* {(loadingUser) ?
           <Loader /> : */}
-          <FormCard>   
+          <FormCard>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
 
               <Grid container item xs={12} justifyContent='center' alignItems='center' mb={3}>
-                <AvatarUploader 
+                <AvatarUploader
                   url={preview || auth?.photoURL}
                   name={auth?.name || 'Profile'}
                   tooltipText="Seleccionar imagen"
@@ -166,7 +187,7 @@ function Profile() {
                   />
                 </Grid>
               </Grid>
-              
+
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
                   <Input
@@ -237,7 +258,7 @@ function Profile() {
                 mt={8}
               >
                 <GridStyle container item xs={12} sm={3} md={4} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
-                  <ContainedButton type='submit' defaultPadding defaultMarginRight={smUp}>
+                  <ContainedButton onClick={() => handleClickOpen()} defaultPadding defaultMarginRight={smUp}>
                     Cambiar contraseña
                   </ContainedButton>
                 </GridStyle>
@@ -253,6 +274,72 @@ function Profile() {
             </form>
           </FormCard>
         {/* } */}
+
+        <Modal
+            open={openModal}
+            handleClose={handleClose}
+            handleSave={handleModalSave}
+            title='Cambiar Contraseña'
+            closeButtonText='Cancelar'
+            saveButtonText='Cambiar'
+            disabledSaveButton={
+              (!watch('currentPassword') || !watch('newPassword') || !watch('confirmPassword') )
+            }
+            maxWidth='xs'
+        >
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Input
+                    name='currentPassword'
+                    label='Contraseña actual'
+                    placeholder='Ingrese la contraseña actual'
+                    type='password'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.currentPassword}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Input
+                    name='newPassword'
+                    label='Nueva contraseña'
+                    placeholder='Ingrese la nueva contraseña'
+                    type='password'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.newPassword}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Input
+                    name='confirmPassword'
+                    label='Confirmación de contraseña'
+                    placeholder='Ingrese la confirmación de contraseña'
+                    type='password'
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.confirmPassword}
+                  />
+                </Grid>
+            </Grid>
+        </Modal>
 
         <CustomSnackbar
           open={open}
