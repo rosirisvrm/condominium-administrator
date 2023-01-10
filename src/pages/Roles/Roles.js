@@ -84,7 +84,7 @@ function Roles() {
           <Typography variant="h4" gutterBottom>
             Roles
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/empleados/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/roles/crear" startIcon={<Iconify icon="eva:plus-fill" />}>
             Crear
           </Button>
         </Stack>

@@ -25,6 +25,7 @@ import {
 import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
 
 import { Roles } from './pages/Roles';
+import { CreateRole } from './pages/Roles/CreateRole';
 // import { Permissions } from './pages/Permissions';
 
 import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
@@ -42,6 +43,7 @@ import { CustomizeSite } from './pages/CustomizeSite';
 import { Profile } from './pages/Profile';
 import { GeneralInfo } from './pages/GeneralInfo';
 import { PaymentMethods } from './pages/PaymentMethods';
+
 
 // ----------------------------------------------------------------------
 
@@ -184,6 +186,14 @@ export default function Router() {
               <Roles />
             </AuthRoute>
           )
+        },
+        { 
+          path: 'roles/crear', 
+          element: (
+            <AuthRoute>
+              <CreateRole />
+            </AuthRoute>
+          ) 
         },
 
 // ----------------------------------------------------------------------

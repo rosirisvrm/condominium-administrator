@@ -3,6 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     rolesList: [],
     loadingRolesList: false,
+    roleStatusOptions: [],
+    permissionsStatusOptions: [],
+    moduleStatusOptions: [],
     // employee: null,
     // loadingEmployee: false,
     // loadingCreateEmployee: false,
@@ -19,6 +22,15 @@ export const rolesSlice = createSlice({
         setLoadingRolesList: (state, action) => {
             state.loadingRolesList = action.payload;
         },
+        setPermissionsStatusOptions: (state, action) => {
+            state.permissionsStatusOptions = action.payload;
+        },
+        setModuleStatusOptions: (state, action) => {
+            state.moduleStatusOptions = action.payload;
+        },
+        setRoleStatusOptions: (state, action) => {
+            state.roleStatusOptions = action.payload
+        }
         // setEmployee: (state, action) => {
         //     state.employee = action.payload;
         // },
@@ -37,6 +49,9 @@ export const rolesSlice = createSlice({
 export const { 
     setRoles,
     setLoadingRolesList,
+    setRoleStatusOptions,
+    setPermissionsStatusOptions,
+    setModuleStatusOptions,
     // setEmployee,
     // setLoadingEmployee,
     // setLoadingCreateEmployee,

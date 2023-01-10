@@ -132,6 +132,7 @@ function CreatePayment() {
     const selected = receiverOptions.find(item => parseInt(item.value, 10) === parseInt(event, 10))
 
     setValue("paymentMethod", selected?.paymentMethod || '')
+    console.log(event)
     clearErrors('paymentMethod');
   }
 
