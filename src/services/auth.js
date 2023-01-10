@@ -7,8 +7,10 @@ export const login = (data) => {
     // TO DO http request
     
     return {
+        id: 1,
         name: 'Rosiris',
         lastname: 'Romero',
+        identification: 87786433,
         role: {
             value: 2,
             label: 'Administrador'

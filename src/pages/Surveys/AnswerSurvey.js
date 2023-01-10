@@ -143,9 +143,14 @@ function AnswerSurvey() {
                           {item?.question || ''}
                         </Typography>
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={12} container direction='column'>
+                        {item?.questionDescription && 
+                          <Typography variant="caption">
+                            {`(${item?.questionDescription || ''})`}
+                          </Typography>
+                        }
                         <Typography variant="caption">
-                          {`(${item?.questionDescription || ''})`}
+                          {`Tipo de pregunta: ${item?.type?.label || ''}`}
                         </Typography>
                       </Grid>
                       <Grid item xs={12}>
@@ -170,6 +175,8 @@ function AnswerSurvey() {
                             control={control}
                             isSelect
                             selectOptions={item?.options?.length > 0 ? item?.options : []}
+                            selectLabelField='option'
+                            selectValueField='id'
                             validations={{
                               required: {
                                 value: true,

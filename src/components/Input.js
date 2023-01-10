@@ -64,6 +64,8 @@ Input.propTypes = {
     isFileUpload: PropTypes.bool,
     callback: PropTypes.func,
     accept: PropTypes.string,
+    selectValueField: PropTypes.string,
+    selectLabelField: PropTypes.string
 }
 
 function Input({ 
@@ -84,6 +86,8 @@ function Input({
     isFileUpload = false,
     callback = null,
     accept = "image/*",
+    selectValueField = 'value',
+    selectLabelField = 'label',
     ...other
 }){
 
@@ -150,8 +154,8 @@ function Input({
                                 <em style={emStyle}>{placeholder}</em>
                             </MenuItem>
                             {selectOptions.map((item, index) => (
-                                <MenuItem key={index} value={item?.value || item?.id}>
-                                    {item?.label || item?.option}
+                                <MenuItem key={index} value={item[selectValueField]}>
+                                    {item[selectLabelField]}
                                 </MenuItem>
                             ))}
                         </Select>

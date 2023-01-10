@@ -48,12 +48,12 @@ const navConfig = [
     icon: getIcon('mdi:account-group'),
     outlineIcon: getIcon('mdi:account-group-outline'),
   },
-  {
-    title: 'permisos',
-    path: '/dashboard/permisos',
-    icon: getIcon('bxs:lock-alt'),
-    outlineIcon: getIcon('bx:lock-alt'),
-  },
+  // {
+  //   title: 'permisos',
+  //   path: '/dashboard/permisos',
+  //   icon: getIcon('bxs:lock-alt'),
+  //   outlineIcon: getIcon('bx:lock-alt'),
+  // },
   {
     title: 'empleados',
     path: '/dashboard/empleados',

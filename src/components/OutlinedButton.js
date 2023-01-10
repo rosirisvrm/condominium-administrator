@@ -51,7 +51,7 @@ function OutlinedButton({
     ...other
 }){
     
-    const theme = useTheme()
+    const theme = useTheme();
 
     const marginRight = defaultMarginRight ? theme.spacing(2) : customMarginRight;
     
