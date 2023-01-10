@@ -277,7 +277,7 @@ function CreateRole() {
                     <OutlinedButton
                       size="medium"
                       onClick={addOption}
-                      disabled={!(watch('permission') && watch('module'))}
+                      disabled={((watch('permission') === '') || (watch('module') === ''))}
                     >
                       Añadir opción
                     </OutlinedButton>
