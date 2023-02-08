@@ -29,16 +29,14 @@ import { News } from './pages/News/News';
 import { CreateNews } from './pages/News/CreateNews';
 import { NewsDetail } from './pages/News/NewsDetail';
 import { Notifications } from './pages/Notifications';
-import { Surveys, CreateSurvey, SurveyDetail, AnswerSurvey } from './pages/Surveys';
-import { EventsModule } from './pages/EventsModule';
-import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
-import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
-import { ExternalCommunication } from './pages/ExternalCommunication';
-import { CustomizeSite } from './pages/CustomizeSite';
+// import { Surveys, CreateSurvey, SurveyDetail, AnswerSurvey } from './pages/Surveys';
+// import { EventsModule } from './pages/EventsModule';
+// import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
+// import { Requests, CreateRequest, EditRequest, RequestDetail } from './pages/Requests';
+// import { CustomizeSite } from './pages/CustomizeSite';
 import { Profile } from './pages/Profile';
 import { GeneralInfo } from './pages/GeneralInfo';
 import { PaymentMethods } from './pages/PaymentMethods';
-
 
 // ----------------------------------------------------------------------
 
@@ -191,6 +189,14 @@ export default function Router() {
           ) 
         },
         { 
+          path: 'roles/editar/:id', 
+          element: (
+            <AuthRoute>
+              <CreateRole />
+            </AuthRoute>
+          ) 
+        },
+        { 
           path: 'roles/detalle/:id', 
           element: (
             <AuthRoute>
@@ -198,18 +204,6 @@ export default function Router() {
             </AuthRoute>
           ) 
         },
-
-// ----------------------------------------------------------------------
-
-        // // Permisssions
-        // { 
-        //   path: 'permisos', 
-        //   element: (
-        //     <AuthRoute>
-        //       <Blog />
-        //     </AuthRoute>
-        //   )
-        // },
 
 // ----------------------------------------------------------------------
 
@@ -333,141 +327,131 @@ export default function Router() {
 
 // ----------------------------------------------------------------------
 
-        // Events
-        { 
-          path: 'eventos', 
-          element: (
-            <AuthRoute>
-              <EventsModule />
-            </AuthRoute>
-          )
-        },
+        // // Events
+        // { 
+        //   path: 'eventos', 
+        //   element: (
+        //     <AuthRoute>
+        //       <EventsModule />
+        //     </AuthRoute>
+        //   )
+        // },
 
 // ----------------------------------------------------------------------
 
-        // Polls
-        { 
-          path: 'encuestas', 
-          element: (
-            <AuthRoute>
-              <Surveys />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'encuestas/crear', 
-          element: (
-            <AuthRoute>
-              <CreateSurvey /> 
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'encuestas/responder/:id', 
-          element: (
-            <AuthRoute>
-              <AnswerSurvey /> 
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'encuestas/detalle/:id', 
-          element: (
-            <AuthRoute>
-              <SurveyDetail /> 
-            </AuthRoute>
-          )
-        },
+        // // Polls
+        // { 
+        //   path: 'encuestas', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Surveys />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'encuestas/crear', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateSurvey /> 
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'encuestas/responder/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <AnswerSurvey /> 
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'encuestas/detalle/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <SurveyDetail /> 
+        //     </AuthRoute>
+        //   )
+        // },
 
 // ----------------------------------------------------------------------
 
-        // Visits
-        { 
-          path: 'visitas', 
-          element: (
-            <AuthRoute>
-              <Visits />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'visitas', 
-          element: (
-            <AuthRoute>
-              <CreateVisit />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'visitas', 
-          element: (
-            <AuthRoute>
-              <CreateVisit /> 
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'visitas', 
-          element: (
-            <AuthRoute>
-              <VisitDetail /> 
-            </AuthRoute>
-          )
-        },
+        // // Visits
+        // { 
+        //   path: 'visitas', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Visits />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'visitas', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateVisit />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'visitas', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateVisit /> 
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'visitas', 
+        //   element: (
+        //     <AuthRoute>
+        //       <VisitDetail /> 
+        //     </AuthRoute>
+        //   )
+        // },
 
-        // Request and Suggestions
-        { 
-          path: 'solicitudes-sugerencias', 
-          element: (
-            <AuthRoute>
-              <Requests />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'solicitudes-sugerencias/crear', 
-          element: (
-            <AuthRoute>
-              <CreateRequest /> 
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'solicitudes-sugerencias/editar/:id', 
-          element: (
-            <AuthRoute>
-              <EditRequest /> 
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'solicitudes-sugerencias/detalle/:id', 
-          element: (
-            <AuthRoute>
-              <RequestDetail /> 
-            </AuthRoute>
-          )
-        },
+        // // Request and Suggestions
+        // { 
+        //   path: 'solicitudes-sugerencias', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Requests />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'solicitudes-sugerencias/crear', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateRequest /> 
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'solicitudes-sugerencias/editar/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <EditRequest /> 
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'solicitudes-sugerencias/detalle/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <RequestDetail /> 
+        //     </AuthRoute>
+        //   )
+        // },
 
-        // External Communication
-        { 
-          path: 'comunicacion-externa', 
-          element: (
-            <AuthRoute>
-              <ExternalCommunication />
-            </AuthRoute>
-          )
-        },
-
-        // Customize Site
-        { 
-          path: 'personalizar-sitio', 
-          element: (
-            <AuthRoute>
-              <CustomizeSite />
-            </AuthRoute>
-          )
-        },
+        // // Customize Site
+        // { 
+        //   path: 'personalizar-sitio', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CustomizeSite />
+        //     </AuthRoute>
+        //   )
+        // },
 
         // Profile
         { 
@@ -479,7 +463,7 @@ export default function Router() {
           )
         },
 
-        // GeneralInfo
+        // General Info
         { 
           path: 'informacion-general', 
           element: (
@@ -491,13 +475,13 @@ export default function Router() {
 
         // Payment Methods
         { 
-        path: 'metodos-de-pago', 
-        element: (
-          <AuthRoute>
-            <PaymentMethods />
-          </AuthRoute>
-        )
-      },
+          path: 'metodos-de-pago', 
+          element: (
+            <AuthRoute>
+              <PaymentMethods />
+            </AuthRoute>
+          )
+        },
       ],
     },
     {

@@ -15,7 +15,7 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { UserActions } from '../../sections/@dashboard/user';
 //
 import { getUsers } from '../../services/users';
 import { setUsers, setLoadingUsersList } from '../../slices/usersSlice'
@@ -124,7 +124,7 @@ function Users() {
                 <TableCell align="left">{email}</TableCell>
                 <TableCell align="left">{role}</TableCell>
                 <TableCell align="right">
-                  <UserMoreMenu 
+                  <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 

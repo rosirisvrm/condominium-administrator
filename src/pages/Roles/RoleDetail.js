@@ -80,77 +80,77 @@ function RoleDetail() {
             <Loader />
             :
             <FormCard>
-            <form>
-                <Grid container spacing={2}>
-                <Grid container item spacing={spacing}>
-                    <Grid item xs={12} sm={6}>
-                    <Input
-                        name="name"
-                        label="Nombre"
-                        disabled
-                        type="text"
-                        control={control}
-                    />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                    <Input
-                        name="status"
-                        label="Status"
-                        disabled
-                        control={control}
-                    />
-                    </Grid>
-                </Grid>
-
-                <Grid container item spacing={spacing}>
-                    <Grid item xs={12} sm={12}>
-                    <Input
-                        name="description"
-                        label="Descripción"
-                        disabled
-                        type="text"
-                        control={control}
-                    />
-                    </Grid>
-                </Grid>
-
-                {role?.permissions?.length > 0 && (
-                    <>
-                        <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
-                            Permisos
-                        </Typography>
-
-                        {role.permissions.map((option, index) => (
-                            <Grid container item spacing={3} key={index}>
-                                <Grid item xs={6} sm={3}>
-                                    <Typography variant="span">{option.permission.label}</Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={1}>
-                                    <Typography variant="span">{option.module.label}</Typography>
-                                </Grid>
+                <form>
+                    <Grid container spacing={2}>
+                        <Grid container item spacing={spacing}>
+                            <Grid item xs={12} sm={6}>
+                            <Input
+                                name="name"
+                                label="Nombre"
+                                disabled
+                                type="text"
+                                control={control}
+                            />
                             </Grid>
-                        ))}
-                    </>
-                )}                
 
-                <Grid container item spacing={2} direction="row" justifyContent="flex-end" alignItems="flex-end" mt={8}>
-                    <GridStyle
-                    container
-                    item
-                    xs={12}
-                    sm={3}
-                    md={2}
-                    justifyContent={smUp ? 'flex-end' : 'center'}
-                    mb={!smUp ? 2 : 0}
-                    >
-                    <OutlinedButton isRouterLink path="/dashboard/roles" defaultPadding defaultMarginRight={smUp}>
-                        Volver
-                    </OutlinedButton>
-                    </GridStyle>
-                </Grid>
-                </Grid>
-            </form>
+                            <Grid item xs={12} sm={6}>
+                            <Input
+                                name="status"
+                                label="Status"
+                                disabled
+                                control={control}
+                            />
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item spacing={spacing}>
+                            <Grid item xs={12} sm={12}>
+                            <Input
+                                name="description"
+                                label="Descripción"
+                                disabled
+                                type="text"
+                                control={control}
+                            />
+                            </Grid>
+                        </Grid>
+
+                        {role?.permissions?.length > 0 && (
+                            <>
+                                <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
+                                    Permisos
+                                </Typography>
+
+                                {role.permissions.map((option, index) => (
+                                    <Grid container item spacing={3} key={index}>
+                                        <Grid item xs={6} sm={3}>
+                                            <Typography variant="span">{option.permission.label}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6} sm={1}>
+                                            <Typography variant="span">{option.module.label}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                ))}
+                            </>
+                        )}                
+
+                        <Grid container item spacing={2} direction="row" justifyContent="flex-end" alignItems="flex-end" mt={8}>
+                            <GridStyle
+                            container
+                            item
+                            xs={12}
+                            sm={3}
+                            md={2}
+                            justifyContent={smUp ? 'flex-end' : 'center'}
+                            mb={!smUp ? 2 : 0}
+                            >
+                            <OutlinedButton isRouterLink path="/dashboard/roles" defaultPadding defaultMarginRight={smUp}>
+                                Volver
+                            </OutlinedButton>
+                            </GridStyle>
+                        </Grid>
+                    </Grid>
+                </form>
             </FormCard>
         }
       </Container>

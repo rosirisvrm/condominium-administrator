@@ -15,7 +15,7 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
 import { getNewsList } from '../../services/news';
@@ -123,7 +123,7 @@ function News() {
                 <TableCell align="left">{postedAt ? fDate(postedAt) : ''}</TableCell>
                 <TableCell align="left">{sections.length}</TableCell>
                 <TableCell align="right">
-                  <UserMoreMenu 
+                  <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 

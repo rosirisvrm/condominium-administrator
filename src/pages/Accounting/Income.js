@@ -12,7 +12,7 @@ import {
 // components
 import Page from '../../components/Page';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { UserActions } from '../../sections/@dashboard/user';
 //
 import { getIncome } from '../../services/accounting';
 import { setIncome, setLoadingIncomeList } from '../../slices/accountingSlice'
@@ -120,7 +120,7 @@ function Income() {
                 <TableCell align="left">{reference}</TableCell>
                 <TableCell align="left">{status?.label || ''}</TableCell>
                 <TableCell align="right">
-                  <UserMoreMenu 
+                  <UserActions 
                     actions={['detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 

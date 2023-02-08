@@ -48,24 +48,18 @@ const navConfig = [
     icon: getIcon('mdi:account-group'),
     outlineIcon: getIcon('mdi:account-group-outline'),
   },
-  // {
-  //   title: 'permisos',
-  //   path: '/dashboard/permisos',
-  //   icon: getIcon('bxs:lock-alt'),
-  //   outlineIcon: getIcon('bx:lock-alt'),
-  // },
   {
     title: 'empleados',
     path: '/dashboard/empleados',
     icon: getIcon('mdi:toolbox'),
     outlineIcon: getIcon('mdi:toolbox-outline'),
   },
-  // {
-  //   title: 'proveedores',
-  //   path: '/dashboard/proveedores',
-  //   icon: getIcon('mdi:truck-delivery'),
-  //   outlineIcon: getIcon('mdi:truck-delivery-outline'),
-  // },
+  {
+    title: 'proveedores',
+    path: '/dashboard/proveedores',
+    icon: getIcon('mdi:truck-delivery'),
+    outlineIcon: getIcon('mdi:truck-delivery-outline'),
+  },
   {
     title: 'noticias',
     path: '/dashboard/noticias',
@@ -78,42 +72,36 @@ const navConfig = [
     icon: getIcon('fa-brands:telegram-plane'),
     outlineIcon: getIcon('la:telegram'),
   },
-  {
-    title: 'eventos',
-    path: '/dashboard/eventos',
-    icon: getIcon('ic:baseline-date-range'),
-    outlineIcon: getIcon('ic:outline-date-range'),
-  },
-  {
-    title: 'encuestas',
-    path: '/dashboard/encuestas',
-    icon: getIcon('bxs:bar-chart-square'),
-    outlineIcon: getIcon('bx:bar-chart-square'),
-  },
-  {
-    title: 'visitas',
-    path: '/dashboard/visitas',
-    icon: getIcon('fa6-solid:person'),
-    outlineIcon: getIcon('carbon:person'),
-  },
-  {
-    title: 'solicitudes y sugerencias',
-    path: '/dashboard/solicitudes-sugerencias',
-    icon: getIcon('eva:message-circle-fill'),
-    outlineIcon: getIcon('eva:message-circle-outline'),
-  },
-  {
-    title: 'comunicación externa',
-    path: '/dashboard/comunicacion-externa',
-    icon: getIcon('mdi:email'),
-    outlineIcon: getIcon('mdi:email-outline'),
-  },
-  {
-    title: 'personalizar sitio',
-    path: '/dashboard/personalizar-sitio',
-    icon: getIcon('fa-solid:edit'),
-    outlineIcon: getIcon('fa-regular:edit'),
-  },
+  // {
+  //   title: 'eventos',
+  //   path: '/dashboard/eventos',
+  //   icon: getIcon('ic:baseline-date-range'),
+  //   outlineIcon: getIcon('ic:outline-date-range'),
+  // },
+  // {
+  //   title: 'encuestas',
+  //   path: '/dashboard/encuestas',
+  //   icon: getIcon('bxs:bar-chart-square'),
+  //   outlineIcon: getIcon('bx:bar-chart-square'),
+  // },
+  // {
+  //   title: 'visitas',
+  //   path: '/dashboard/visitas',
+  //   icon: getIcon('fa6-solid:person'),
+  //   outlineIcon: getIcon('carbon:person'),
+  // },
+  // {
+  //   title: 'solicitudes y sugerencias',
+  //   path: '/dashboard/solicitudes-sugerencias',
+  //   icon: getIcon('eva:message-circle-fill'),
+  //   outlineIcon: getIcon('eva:message-circle-outline'),
+  // },
+  // {
+  //   title: 'personalizar sitio',
+  //   path: '/dashboard/personalizar-sitio',
+  //   icon: getIcon('fa-solid:edit'),
+  //   outlineIcon: getIcon('fa-regular:edit'),
+  // },
 ];
 
 export default navConfig;

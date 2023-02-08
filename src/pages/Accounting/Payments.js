@@ -15,7 +15,7 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
 import { getPayments } from '../../services/accounting';
@@ -126,7 +126,7 @@ function Payments() {
                 <TableCell align="left">{fDate(date)}</TableCell>
                 <TableCell align="left">{status?.label || ''}</TableCell>
                 <TableCell align="right">
-                  <UserMoreMenu 
+                  <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 

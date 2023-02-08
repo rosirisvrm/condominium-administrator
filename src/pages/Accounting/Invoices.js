@@ -8,7 +8,8 @@ import {
   TableCell,
   Container,
   Typography,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
@@ -110,9 +111,11 @@ function Invoices() {
                 <TableCell align="left">{invoiceNumber}</TableCell>
                 {/* <TableCell align="left">{status?.label || ''}</TableCell> */}
                 <TableCell align="left">
-                  <IconButton onClick={downloadInvoice}>
-                    <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
-                  </IconButton>
+                  <Tooltip title='Descargar'>
+                    <IconButton onClick={downloadInvoice}>
+                      <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             );

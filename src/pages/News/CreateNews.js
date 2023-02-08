@@ -3,19 +3,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, TableCell, TableRow,IconButton } from '@mui/material';
+import { 
+    Container, 
+    Typography, 
+    Grid, 
+    // TableCell, 
+    // TableRow,
+    // IconButton
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
+// import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
-import { Modal } from '../../components/Modal';
-import { BasicTable } from '../../components/BasicTable';
+// import { Modal } from '../../components/Modal';
+// import { BasicTable } from '../../components/BasicTable';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
@@ -44,21 +51,27 @@ function CreateNews() {
 
   const navigate = useNavigate()
 
-  const { control, handleSubmit, formState: { errors }, setValue, watch, getValues } = useForm({
+  const { 
+    control, 
+    handleSubmit, 
+    formState: { errors }, 
+    setValue, 
+    // watch, 
+    // getValues 
+} = useForm({
     defaultValues: {
       title: '',
       sumary: '',
       content: '',
       image: '',
       file: '',
-      sectionTitle: '',
-      sectionContent: '',
-      sectionFile: '',
+    //   sectionTitle: '',
+    //   sectionContent: '',
+    //   sectionFile: '',
     }
   });
 
   useEffect(() => {
-
     if(id){
         const fetchNews = async () => {
             dispatch(setLoadingNews(true))
@@ -73,7 +86,6 @@ function CreateNews() {
 
         fetchNews()
     }
-    
   }, [dispatch, id])
 
   const smUp = useResponsive('up', 'sm');
@@ -82,7 +94,7 @@ function CreateNews() {
   const [color, setColor] = React.useState('')
   const [file, setFile] = React.useState(null)
   const [image, setImage] = React.useState(null)
-  const [sectionFile, setSectionFile] = React.useState(null)
+//   const [sectionFile, setSectionFile] = React.useState(null)
 
   const onSubmit = (event) => {
     if(!id){
@@ -93,13 +105,13 @@ function CreateNews() {
 
     console.log('event ', event);
     console.log('news ', news);
-    console.log('sections ', sections);
+    // console.log('sections ', sections);
 
     const body = {
      ...event,
      file,
      image,
-     sections,
+    //  sections,
     }
 
     setTimeout(() => {
@@ -135,14 +147,13 @@ function CreateNews() {
     setValue("image", news?.image || '')
     setValue("file", news?.file || '')
 
-
     // Falta setear file, image
     setFile({ name: news?.file || '' })
     setImage({ name: news?.image || '' })
 
-    if(news?.sections?.length > 0){
-        setSections(news.sections)
-    }
+    // if(news?.sections?.length > 0){
+    //     setSections(news.sections)
+    // }
   }
 
   const handleFileUpload = (files) => {
@@ -153,93 +164,93 @@ function CreateNews() {
     setImage(files[0])
   }
 
-  const handleSectionFileUpload = (files) => {
-    setSectionFile(files[0])
-  }
+//   const handleSectionFileUpload = (files) => {
+//     setSectionFile(files[0])
+//   }
 
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+//   const [dialogOpen, setDialogOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-  };
+//   const handleClickOpen = () => {
+//     setDialogOpen(true);
+//   };
 
-  const handleClose = () => {
-    setDialogOpen(false);
+//   const handleClose = () => {
+//     setDialogOpen(false);
 
-    setValue("sectionTitle", '')
-    setValue("sectionContent", '')
-    setValue("sectionFile", '')
-    setSectionFile(null)
-    setIsEditing(false)
-  };
+//     setValue("sectionTitle", '')
+//     setValue("sectionContent", '')
+//     setValue("sectionFile", '')
+//     setSectionFile(null)
+//     setIsEditing(false)
+//   };
 
-  const handleModalSave = () => {
-    if(!isEditing){
-        addSection()    
-    }else{
-        saveEditSection()
-    }
+//   const handleModalSave = () => {
+//     if(!isEditing){
+//         addSection()    
+//     }else{
+//         saveEditSection()
+//     }
     
-    handleClose()
-  }
+//     handleClose()
+//   }
 
-  const [sections, setSections] = React.useState([]);
-  const [indexSection, setIndexSection] = React.useState(null);
-  const [isEditing, setIsEditing] = React.useState(false);
+//   const [sections, setSections] = React.useState([]);
+//   const [indexSection, setIndexSection] = React.useState(null);
+//   const [isEditing, setIsEditing] = React.useState(false);
 
-  const headers = ['Subtítulo', 'Imagen/Archivo', ''];
+//   const headers = ['Subtítulo', 'Imagen/Archivo', ''];
 
-  const addSection = () => {
-    const newSections = [... sections, {
-        title: getValues('sectionTitle'),
-        content: getValues('sectionContent'),
-        file: sectionFile,
-    }]
+//   const addSection = () => {
+//     const newSections = [... sections, {
+//         title: getValues('sectionTitle'),
+//         content: getValues('sectionContent'),
+//         file: sectionFile,
+//     }]
   
-      setSections(newSections)
-      setValue("sectionTitle", '')
-      setValue("sectionContent", '')
-      setValue("sectionFile", '')
-      setSectionFile(null)
-  }
+//       setSections(newSections)
+//       setValue("sectionTitle", '')
+//       setValue("sectionContent", '')
+//       setValue("sectionFile", '')
+//       setSectionFile(null)
+//   }
 
-  const editSection = (index) => {
-    handleClickOpen()
-    setIsEditing(true)
-    setIndexSection(index)
+//   const editSection = (index) => {
+//     handleClickOpen()
+//     setIsEditing(true)
+//     setIndexSection(index)
 
-    const section = sections.find((_, i) => index === i)
+//     const section = sections.find((_, i) => index === i)
 
-    setValue("sectionTitle", section?.title || '')
-    setValue("sectionContent", section?.content || '')
-    setValue("sectionFile", section?.file?.name || '')
-    setSectionFile(section.file)
-  }
+//     setValue("sectionTitle", section?.title || '')
+//     setValue("sectionContent", section?.content || '')
+//     setValue("sectionFile", section?.file?.name || '')
+//     setSectionFile(section.file)
+//   }
 
-  const saveEditSection = () => {
-    const newSections = [... sections];
+//   const saveEditSection = () => {
+//     const newSections = [... sections];
 
-    newSections[indexSection] = {
-        title: getValues('sectionTitle'),
-        content: getValues('sectionContent'),
-        file: sectionFile,
-    };
+//     newSections[indexSection] = {
+//         title: getValues('sectionTitle'),
+//         content: getValues('sectionContent'),
+//         file: sectionFile,
+//     };
   
-    setSections(newSections)
-    setValue("sectionTitle", '')
-    setValue("sectionContent", '')
-    setValue("sectionFile", '')
-    setSectionFile(null)
-  }
+//     setSections(newSections)
+//     setValue("sectionTitle", '')
+//     setValue("sectionContent", '')
+//     setValue("sectionFile", '')
+//     setSectionFile(null)
+//   }
 
-  const deleteSection = (index) => {
+//   const deleteSection = (index) => {
 
-    const newSections = [... sections]
+//     const newSections = [... sections]
 
-    newSections.splice(index, 1)
+//     newSections.splice(index, 1)
 
-    setSections(newSections)
-  }
+//     setSections(newSections)
+//   }
 
   return (
     <Page title={`${!id ? 'Crear' : 'Editar'} Noticia`}>
@@ -339,7 +350,7 @@ function CreateNews() {
                             />
                         </Grid>
 
-                        <Grid container item direction="row" justifyContent="flex-end" alignItems="flex-end">
+                        {/* <Grid container item direction="row" justifyContent="flex-end" alignItems="flex-end">
                             <OutlinedButton size='small' onClick={handleClickOpen}>
                                 Añadir sección
                             </OutlinedButton>
@@ -370,7 +381,7 @@ function CreateNews() {
                                     )}
                                 </BasicTable>
                             </>
-                        }
+                        } */}
 
                         <Grid
                             container
@@ -404,7 +415,7 @@ function CreateNews() {
             </FormCard>
         }
 
-        <Modal 
+        {/* <Modal 
             open={dialogOpen}
             handleClose={handleClose}
             handleSave={handleModalSave}
@@ -448,7 +459,7 @@ function CreateNews() {
                 />
                 </Grid>
             </Grid>
-        </Modal>
+        </Modal> */}
 
         <CustomSnackbar
           open={open}

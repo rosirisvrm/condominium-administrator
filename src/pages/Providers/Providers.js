@@ -15,7 +15,7 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { UserActions } from '../../sections/@dashboard/user';
 //
 import { getProviders } from '../../services/providers';
 import { setProviders, setLoadingProvidersList } from '../../slices/providers'
@@ -122,7 +122,7 @@ function Providers() {
                 <TableCell align="left">{phone}</TableCell>
                 <TableCell align="left">{email}</TableCell>
                 <TableCell align="right">
-                  <UserMoreMenu 
+                  <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 

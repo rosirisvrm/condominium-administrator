@@ -15,7 +15,7 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
-import { UserMoreMenu } from '../../sections/@dashboard/user';
+import { UserActions } from '../../sections/@dashboard/user';
 //
 import { getRoles } from '../../services/roles';
 import { setRoles, setLoadingRolesList } from '../../slices/roles'
@@ -24,7 +24,6 @@ import { setRoles, setLoadingRolesList } from '../../slices/roles'
 
 function Roles() {
 
-  // bring the fake information of the slice
   const roles = useSelector(state => state.roles.rolesList)
   const loadingRolesList = useSelector(state => state.roles.loadingRolesList)
   
@@ -122,8 +121,8 @@ function Roles() {
                 <TableCell align="left">{description}</TableCell>
                 <TableCell align="left">{status.label}</TableCell>
                 <TableCell align="left">{numberOfUsers}</TableCell>
-                <TableCell align="right">
-                  <UserMoreMenu 
+                <TableCell align="left">
+                  <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
                     deleteItem={deleteItem} 

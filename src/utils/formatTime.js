@@ -8,20 +8,21 @@ export function fDate(date) {
 }
 
 export function fDateTime(date) {
-  return format(new Date(date), 'dd MMM yyyy HH:mm');
+  return format(new Date(date), 'dd MMM yyyy HH:mm', { locale: es });
 }
 
 export function fTime(date) {
-  return format(new Date(date), 'HH:mm');
+  return format(new Date(date), 'HH:mm', { locale: es });
 }
 
 export function fDateTimeSuffix(date) {
-  return format(new Date(date), 'dd/MM/yyyy hh:mm p');
+  return format(new Date(date), 'dd/MM/yyyy hh:mm p', { locale: es });
 }
 
 export function fToNow(date) {
-  return formatDistanceToNow(new Date(date), {
+  return formatDistanceToNow(new Date(date), { 
     addSuffix: true,
+    locale: es,
   });
 }
 
