@@ -8,8 +8,8 @@ const initialState = {
     moduleStatusOptions: [],
     role: null,
     loadingRole: false,
-    // loadingCreateEmployee: false,
-    // loadingEditEmployee: false,
+    loadingCreateRole: false,
+    loadingEditRole: false,
 }
 
 export const rolesSlice = createSlice({
@@ -37,12 +37,12 @@ export const rolesSlice = createSlice({
         setLoadingRole: (state, action) => {
             state.loadingRole = action.payload;
         },
-        // setLoadingCreateEmployee: (state, action) => {
-        //     state.loadingCreateEmployee = action.payload
-        // },
-        // setLoadingEditEmployee: (state, action) => {
-        //     state.loadingEditEmployee = action.payload;
-        // }
+        setLoadingCreateRole: (state, action) => {
+            state.loadingCreateRole = action.payload
+        },
+        setLoadingEditRole: (state, action) => {
+            state.loadingEditRole = action.payload;
+        }
     }
 })
 
@@ -54,8 +54,8 @@ export const {
     setModuleStatusOptions,
     setRole,
     setLoadingRole,
-    // setLoadingCreateEmployee,
-    // setLoadingEditEmployee,
+    setLoadingCreateRole,
+    setLoadingEditRole,
 } = rolesSlice.actions;
 
 export const rolesReducer = rolesSlice.reducer;

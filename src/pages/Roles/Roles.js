@@ -45,7 +45,7 @@ function Roles() {
 
   const tableHead = [
     { id: 'name', label: 'Nombre', alignRight: false },
-    { id: 'description', label: 'Descripción', alignRight: false },
+    // { id: 'description', label: 'Descripción', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: 'numberOfUsers', label: 'Cantidad de Usuarios', alignRight: false },
     { id: '' },
@@ -118,7 +118,7 @@ function Roles() {
                     {name}
                   </Typography>
                 </TableCell>
-                <TableCell align="left">{description}</TableCell>
+                {/* <TableCell align="left">{description}</TableCell> */}
                 <TableCell align="left">{status.label}</TableCell>
                 <TableCell align="left">{numberOfUsers}</TableCell>
                 <TableCell align="left">
