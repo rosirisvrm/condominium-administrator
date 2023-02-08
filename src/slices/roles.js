@@ -6,8 +6,8 @@ const initialState = {
     roleStatusOptions: [],
     permissionsStatusOptions: [],
     moduleStatusOptions: [],
-    // employee: null,
-    // loadingEmployee: false,
+    role: null,
+    loadingRole: false,
     // loadingCreateEmployee: false,
     // loadingEditEmployee: false,
 }
@@ -30,13 +30,13 @@ export const rolesSlice = createSlice({
         },
         setRoleStatusOptions: (state, action) => {
             state.roleStatusOptions = action.payload
-        }
-        // setEmployee: (state, action) => {
-        //     state.employee = action.payload;
-        // },
-        // setLoadingEmployee: (state, action) => {
-        //     state.loadingEmployee = action.payload;
-        // },
+        },
+        setRole: (state, action) => {
+            state.role = action.payload;
+        },
+        setLoadingRole: (state, action) => {
+            state.loadingRole = action.payload;
+        },
         // setLoadingCreateEmployee: (state, action) => {
         //     state.loadingCreateEmployee = action.payload
         // },
@@ -52,8 +52,8 @@ export const {
     setRoleStatusOptions,
     setPermissionsStatusOptions,
     setModuleStatusOptions,
-    // setEmployee,
-    // setLoadingEmployee,
+    setRole,
+    setLoadingRole,
     // setLoadingCreateEmployee,
     // setLoadingEditEmployee,
 } = rolesSlice.actions;

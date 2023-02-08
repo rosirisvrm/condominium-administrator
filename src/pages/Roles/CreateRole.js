@@ -92,7 +92,7 @@ function CreateRole() {
   const [open, setOpen] = React.useState(false);
   const [color, setColor] = React.useState('');
 
-  const [options, setOptions] = React.useState([]);
+  const [permissions, setOptions] = React.useState([]);
   const [preSelectionedPermissions, setPreSelectionedPermissions] = React.useState('');
   const [preSelectionedModule, setPreSelectionedModule] = React.useState('');
 
@@ -106,7 +106,7 @@ function CreateRole() {
       name: event.name,
       description: event.description,
       status: event.status,
-      options,
+      permissions,
     };
 
     setTimeout(() => {
@@ -144,7 +144,7 @@ function CreateRole() {
 
   const addOption = () => {
     const newOptions = [
-      ...options,
+      ...permissions,
       {
         permission: preSelectionedPermissions,
         module: preSelectionedModule,
@@ -157,7 +157,7 @@ function CreateRole() {
   };
 
   const deleteOption = (index) => {
-    const newOptions = [...options];
+    const newOptions = [...permissions];
 
     newOptions.splice(index, 1);
 
@@ -230,84 +230,82 @@ function CreateRole() {
                 </Grid>
               </Grid>
 
-              <>
-                <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
-                  Añadir permisos
-                </Typography>
+              <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
+                Añadir permisos
+              </Typography>
 
-                <Grid container item spacing={3}>
-                  <Grid item xs={12} sm={3}>
-                    <Input
-                      name="permission"
-                      label="Permiso"
-                      placeholder="Seleccione el permiso"
-                      isSelect
-                      selectOptions={permissionsOptions}
-                      control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido',
-                        },
-                      }}
-                      error={errors.permission}
-                      callback={handlerSelectPermissions}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <Input
-                      name="module"
-                      label="Módulo"
-                      placeholder="Seleccione el módulo"
-                      isSelect
-                      selectOptions={moduleOptions}
-                      control={control}
-                      validations={{
-                        required: {
-                          value: true,
-                          message: 'El campo es requerido',
-                        },
-                      }}
-                      error={errors.module}
-                      callback={handlerSelectModule}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={4} container direction="row" justifyContent="start" alignItems="flex-end">
-                    <OutlinedButton
-                      size="medium"
-                      onClick={addOption}
-                      disabled={((watch('permission') === '') || (watch('module') === ''))}
-                    >
-                      Añadir opción
-                    </OutlinedButton>
-                  </Grid>
+              <Grid container item spacing={3}>
+                <Grid item xs={12} sm={3}>
+                  <Input
+                    name="permission"
+                    label="Permiso"
+                    placeholder="Seleccione el permiso"
+                    isSelect
+                    selectOptions={permissionsOptions}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido',
+                      },
+                    }}
+                    error={errors.permission}
+                    callback={handlerSelectPermissions}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Input
+                    name="module"
+                    label="Módulo"
+                    placeholder="Seleccione el módulo"
+                    isSelect
+                    selectOptions={moduleOptions}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido',
+                      },
+                    }}
+                    error={errors.module}
+                    callback={handlerSelectModule}
+                  />
                 </Grid>
 
-                {options.length > 0 && (
-                  <>
-                    <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
-                      Opciones añadidas
-                    </Typography>
+                <Grid item xs={12} sm={4} container direction="row" justifyContent="start" alignItems="flex-end">
+                  <OutlinedButton
+                    size="medium"
+                    onClick={addOption}
+                    disabled={((watch('permission') === '') || (watch('module') === ''))}
+                  >
+                    Añadir permiso
+                  </OutlinedButton>
+                </Grid>
+              </Grid>
 
-                    {options.map((option, index) => (
-                      <Grid container item spacing={3} key={index}>
-                        <Grid item xs={6} sm={3}>
-                          <Typography variant="span">{option.permission.label}</Typography>
-                        </Grid>
-                        <Grid item xs={6} sm={1}>
-                          <Typography variant="span">{option.module.label}</Typography>
-                        </Grid>
-                        <Grid item xs={6} sm={5.7} container direction="row" justifyContent="center">
-                          <IconButton onClick={() => deleteOption(index)} sx={{ p: 0 }}>
-                            <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                          </IconButton>
-                        </Grid>
+              {permissions.length > 0 && (
+                <>
+                  <Typography variant="h6" sx={{ pt: 2, pl: 2 }}>
+                    Permisos añadidos
+                  </Typography>
+
+                  {permissions.map((option, index) => (
+                    <Grid container item spacing={3} key={index}>
+                      <Grid item xs={6} sm={3}>
+                        <Typography variant="span">{option.permission.label}</Typography>
                       </Grid>
-                    ))}
-                  </>
-                )}
-              </>
+                      <Grid item xs={6} sm={1}>
+                        <Typography variant="span">{option.module.label}</Typography>
+                      </Grid>
+                      <Grid item xs={6} sm={5.7} container direction="row" justifyContent="center">
+                        <IconButton onClick={() => deleteOption(index)} sx={{ p: 0 }}>
+                          <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  ))}
+                </>
+              )}
 
               <Grid container item spacing={2} direction="row" justifyContent="flex-end" alignItems="flex-end" mt={8}>
                 <GridStyle
