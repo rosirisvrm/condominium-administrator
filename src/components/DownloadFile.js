@@ -22,15 +22,16 @@ const BoxStyle = styled(Box)(() => ({
 DownloadFile.propTypes = {
     label: PropTypes.string,
     download: PropTypes.func,
+    buttonText: PropTypes.string,
 }
 
-function DownloadFile({ label = 'Archivo', download }){
+function DownloadFile({ label = 'Archivo', download, buttonText = 'Descargar' }){
 
     return(
         <>
             <LabelStyle>{label}</LabelStyle>
             <BoxStyle>
-                <DownloadButton onClick={download} text='Descargar' />
+                <DownloadButton onClick={download} text={buttonText} />
             </BoxStyle>
         </>
     );

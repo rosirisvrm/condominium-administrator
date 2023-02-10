@@ -27,7 +27,7 @@ import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
 import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
 import { News } from './pages/News/News';
 import { CreateNews } from './pages/News/CreateNews';
-import { NewsDetail } from './pages/News/NewsDetail';
+import { NewsReader } from './pages/News/NewsReader';
 import { Notifications } from './pages/Notifications';
 // import { Surveys, CreateSurvey, SurveyDetail, AnswerSurvey } from './pages/Surveys';
 // import { EventsModule } from './pages/EventsModule';
@@ -308,7 +308,7 @@ export default function Router() {
           path: 'noticias/detalle/:id', 
           element: (
             <AuthRoute>
-              <NewsDetail />
+              <NewsReader />
             </AuthRoute>
           )
         },

@@ -94,17 +94,19 @@ function CreateRole() {
     };
     fetchModuleOptions();
 
-    const fetch = async () => {
-      dispatch(setLoadingRole(true))
-      
-      setTimeout(async () => {
-        const res = await getRole(id)
-        dispatch(setRole(res))
-        setFormValues()
-        dispatch(setLoadingRole(false))
-      }, 1000)
+    if(id){
+      const fetch = async () => {
+        dispatch(setLoadingRole(true))
+        
+        setTimeout(async () => {
+          const res = await getRole(id)
+          dispatch(setRole(res))
+          setFormValues()
+          dispatch(setLoadingRole(false))
+        }, 1000)
+      }
+      fetch()
     }
-    fetch()
   }, [dispatch, id]);
 
   const setFormValues = () => {
