@@ -11,6 +11,7 @@ import { newsReducer } from "src/slices/news";
 import { rolesReducer } from "src/slices/roles";
 import { eventsModuleReducer } from "src/slices/eventsModule";
 import { visitsReducer } from "src/slices/visits";
+import { notificationsReducer } from "src/slices/notifications";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     roles: rolesReducer,
     eventsModule: eventsModuleReducer,
     visits: visitsReducer,
+    notifications: notificationsReducer
 })
 
 export { rootReducer };
