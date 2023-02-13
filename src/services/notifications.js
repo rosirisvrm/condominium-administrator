@@ -6,6 +6,7 @@ export const getNotificationsList = ({ perPage = 24 } = {}) => [...Array(perPage
     title: faker.lorem.sentence(5),
     text: faker.lorem.paragraph(7),
     date: faker.date.recent(),
+    hour: faker.date.recent(),
     users: [...Array(3)].map(() => ({
         id: faker.datatype.uuid(),
         name: faker.name.findName(),
@@ -13,6 +14,7 @@ export const getNotificationsList = ({ perPage = 24 } = {}) => [...Array(perPage
     author: {
         id: faker.datatype.uuid(),
         name: faker.name.findName(),
+        address: faker.address.cityName() + faker.address.streetAddress(),
     },
     status: sample([
         {
@@ -31,9 +33,11 @@ export const getNotification = (id) => ({
     title: faker.lorem.sentence(5),
     text: faker.lorem.paragraph(7),
     date: faker.date.recent(),
+    hour: faker.date.recent(),
     users: [...Array(3)].map(() => ({
         id: faker.datatype.uuid(),
         name: faker.name.findName(),
+        address: faker.address.cityName() + faker.address.streetAddress(),
     })),
     author: {
         id: faker.datatype.uuid(),

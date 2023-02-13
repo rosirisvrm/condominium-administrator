@@ -28,7 +28,7 @@ import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
 import { News } from './pages/News/News';
 import { CreateNews } from './pages/News/CreateNews';
 import { NewsReader } from './pages/News/NewsReader';
-import { Notifications, CreateNotification } from './pages/Notifications';
+import { Notifications, CreateNotification, NotificationDetail } from './pages/Notifications';
 // import { Surveys, CreateSurvey, SurveyDetail, AnswerSurvey } from './pages/Surveys';
 // import { EventsModule } from './pages/EventsModule';
 // import { Visits, CreateVisit, VisitDetail } from './pages/Visits';
@@ -337,6 +337,14 @@ export default function Router() {
           element: (
             <AuthRoute>
               <CreateNotification /> 
+            </AuthRoute>
+          )
+        },
+        { 
+          path: 'notificaciones/detalle/:id', 
+          element: (
+            <AuthRoute>
+              <NotificationDetail /> 
             </AuthRoute>
           )
         },

@@ -20,7 +20,7 @@ import { CustomTable } from '../../components/CustomTable';
 import { UserActions } from '../../sections/@dashboard/user';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
-import { fDateTime } from '../../utils/formatTime';
+import { fDate, fTime } from '../../utils/formatTime';
 import { getNotificationsList, deleteNotification } from '../../services/notifications';
 import { setNotificationsList, setLoadingNotificationsList, setLoadingDeleteNotification } from '../../slices/notifications'
 
@@ -126,7 +126,7 @@ function Notifications() {
           download={download}
         >
           {row => {
-            const { id, title, author, date, status } = row;
+            const { id, title, author, date, status, hour } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
             const color = getStatusColor(status);
 
@@ -148,7 +148,9 @@ function Notifications() {
                   </Typography>
                 </TableCell>
                 <TableCell align="left">{author?.name || ''}</TableCell>
-                <TableCell align="left">{date ? fDateTime(date) : ''}</TableCell>
+                <TableCell align="left">
+                  {date && hour ? `${fDate(date)} ${fTime(hour)}` : ''}
+                </TableCell>
                 <TableCell align="left">
                     <Label variant="ghost" color={color}>
                         {sentenceCase(status.label)}

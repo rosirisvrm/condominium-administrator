@@ -14,6 +14,10 @@ import { styled } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
+const TableContainerStyle = styled(TableContainer)(() => ({
+    boxShadow: '0px 4px 4px 0px #00000040',
+}));
+
 const TableCaption = styled(Box)(({ theme }) => ({
     display: 'flex',
     justifyContent: 'flex-end',
@@ -38,7 +42,7 @@ function BasicTable({ headers, elements, children, caption, mt = 4 }){
 
     return (
         <>
-            <TableContainer component={Paper} sx={{ mt }}>
+            <TableContainerStyle component={Paper} sx={{ mt }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -51,7 +55,7 @@ function BasicTable({ headers, elements, children, caption, mt = 4 }){
                     {elements.map((row, index) => renderFunc(row, index))} 
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainerStyle>
 
             {caption && 
                 <TableCaption>
