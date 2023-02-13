@@ -15,6 +15,8 @@ import {
 import { styled, useTheme } from '@mui/material/styles';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 //
 import useResponsive from '../hooks/useResponsive';
 import Iconify from './Iconify'
@@ -65,7 +67,8 @@ Input.propTypes = {
     callback: PropTypes.func,
     accept: PropTypes.string,
     selectValueField: PropTypes.string,
-    selectLabelField: PropTypes.string
+    selectLabelField: PropTypes.string,
+    isTime: PropTypes.bool
 }
 
 function Input({ 
@@ -88,6 +91,7 @@ function Input({
     accept = "image/*",
     selectValueField = 'value',
     selectLabelField = 'label',
+    isTime = false,
     ...other
 }){
 
@@ -111,7 +115,7 @@ function Input({
 
             {label && <LabelStyle>{label}</LabelStyle>}
 
-            {(!isSelect && !isDate && !isFileUpload) && 
+            {(!isSelect && !isDate && !isFileUpload && !isTime) && 
                 <Controller
                     name={name}
                     control={control}
@@ -196,6 +200,37 @@ function Input({
                 />
             }
 
+            {isTime &&
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={validations}
+                    render={({ field: { onChange, value } }) => (
+                        <>
+                            {!smUp ? 
+                                    <MobileTimePicker
+                                        value={value}
+                                        onChange={onChange}
+                                        renderInput={(params) => (
+                                            <TextField {...params} sx={{ width:  '100%' }} error={isError} />
+                                        )}
+                                        disabled={disabled}
+                                    />
+                                :
+                                    <DesktopTimePicker
+                                        value={value}
+                                        onChange={onChange}
+                                            renderInput={(params) => (
+                                            <TextField {...params} sx={{ width:  '100%' }} error={isError} />
+                                        )}
+                                        disabled={disabled}
+                                    />
+                            }
+                        </>
+                    )}
+                />
+            }
+
             {isFileUpload &&
                 <Controller
                     name={name}
@@ -229,6 +264,7 @@ function Input({
                     {helperText}
                 </HelperTextStyle>
             }
+
             {error && 
                 <HelperTextStyle style={{ textAlign: 'start' }}>
                     {error.message}
