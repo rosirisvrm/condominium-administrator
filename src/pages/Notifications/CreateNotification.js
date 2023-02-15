@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
@@ -62,12 +62,12 @@ function CreateNotification() {
   const navigate = useNavigate()
   const smUp = useResponsive('up', 'sm');
 
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-  const [checkedRole, setCheckedRole] = React.useState(false);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [users, setUsers] = React.useState([])
-  const [roles, setRoles] = React.useState([])
+  const [open, setOpen] = useState(false)
+  const [color, setColor] = useState('')
+  const [checkedRole, setCheckedRole] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [users, setUsers] = useState([])
+  const [roles, setRoles] = useState([])
 
   const { 
     control, 
@@ -104,23 +104,26 @@ function CreateNotification() {
         const res = await getRolesOptions()
         dispatch(setRolesOptions(res))
     }
-  
     fetchRolesOptions()
   
     const fetchUsersOptions = async () => {
         const res = await getUsersOptions()
         dispatch(setUsersOptions(res))
     }
-  
     fetchUsersOptions()
   }, [dispatch, id])
 
-  const handleChangeCheckedRole = (event) => {
-    setCheckedRole(event.target.checked);
+  const setFormValues = () => {
+    setValue("title", notification?.title || '')
+    setValue("text", notification?.text || '')
+    setValue("date", notification?.date || '')
+    setValue("hour", notification?.hour || '')
+    setValue("author", notification?.author ? notification?.author?.name : '')
 
-    setUsers([])
-    setRoles([])
-  };
+    if(notification?.users?.length > 0){
+        setUsers(notification.users)
+    }
+  }
 
   const onSubmit = (event) => {
     if(!id){
@@ -163,17 +166,12 @@ function CreateNotification() {
     }, 2000)
   }
 
-  const setFormValues = () => {
-    setValue("title", notification?.title || '')
-    setValue("text", notification?.text || '')
-    setValue("date", notification?.date || '')
-    setValue("hour", notification?.hour || '')
-    setValue("author", notification?.author ? notification?.author?.name : '')
+  const handleChangeCheckedRole = (event) => {
+    setCheckedRole(event.target.checked);
 
-    if(notification?.users?.length > 0){
-        setUsers(notification.users)
-    }
-  }
+    setUsers([])
+    setRoles([])
+  };
 
   const handleClickOpen = () => {
     setDialogOpen(true);

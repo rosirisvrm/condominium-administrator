@@ -7,7 +7,8 @@ import {
     Typography, 
     Grid,
     Button,
-    Stack
+    Stack,
+    IconButton
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 // components
@@ -16,18 +17,33 @@ import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
-// import { Modal } from '../../components/Modal';
+import { Modal } from '../../components/Modal';
+import { Input } from '../../components/Input';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
 import { 
     getPaymentMethodOptions,
+    getPaymentMethodTypeOptions, 
+    getBankOptions, 
+    getIdentificationTypeOptions 
 } from '../../services/customSettings';
+import { getPaymentMethod } from '../../services/paymentMethods';
 // slices
 import { 
     setPaymentMethodOptions,
     setLoadingPaymentMethods,
+    setPaymentMethodTypeOptions, 
+    setBankOptions, 
+    setIdentificationTypeOptions
 } from '../../slices/customSettings';
+import { 
+  setPaymentMethod, 
+  setLoadingPaymentMethod,
+  setLoadingCreatePaymentMethod, 
+  setLoadingEditPaymentMethod, 
+  setLoadingDeletePaymentMethod
+} from '../../slices/paymentMethods';
 
 // ----------------------------------------------------------------------
 
@@ -41,27 +57,43 @@ function PaymentMethods() {
 
   const paymentMethods = useSelector(state => state.customSettings.paymentMethodOptions)
   const loadingPaymentMethods = useSelector(state => state.customSettings.loadingPaymentMethods)
+  const paymentMethod = useSelector(state => state.paymentMethods.paymentMethod)
+  const loadingPaymentMethod = useSelector(state => state.paymentMethods.loadingPaymentMethod)
+
+  console.log('paymentMethod', paymentMethod);
+
+  const paymentMethodTypeOptions = useSelector(state => state.customSettings.paymentMethodTypeOptions)
+  const bankOptions = useSelector(state => state.customSettings.bankOptions)
+  const identificationTypeOptions = useSelector(state => state.customSettings.identificationTypeOptions)
 
   const dispatch = useDispatch()
-  const smUp = useResponsive('up', 'sm');
+  const smUp = useResponsive('up', 'sm')
+  const mdUp = useResponsive('up', 'md')
   const theme = useTheme()
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
 
   const [open, setOpen] = React.useState(false)
   const [color, setColor] = React.useState('')
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
 
   const { 
     control, 
-    handleSubmit, 
-    formState: { errors }, 
+    getValues,
     setValue, 
-    watch 
+    watch, 
+    reset
 } = useForm({
     defaultValues: {
-      title: '',
-      text: '',
-      date: new Date(),
-      hour: new Date(),
+      paymentMethodType: '',
+      bank: '',
+      identificationType: '',
+      paymentMethodIdentification: '',
+      bankAcount: '',
+      paymentMethodPhone: ''
     }
   });
 
@@ -79,50 +111,115 @@ function PaymentMethods() {
     fetchPaymentMethods()
   }, [dispatch])
 
-  // const onSubmit = (event) => {
-  //   if(!id){
-  //       dispatch(setLoadingCreateNotification(true))
-  //   }else{
-  //       dispatch(setLoadingEditNotification(true))
-  //   }
+  useEffect(() => {
+    const fetchPaymentMethodTypes = async () => {
+      setTimeout(async ()=> {
+          const res = await getPaymentMethodTypeOptions()
+          dispatch(setPaymentMethodTypeOptions(res))
+      }, 1000)
+    }
+    fetchPaymentMethodTypes()
 
-  //   console.log('event ', event);
+    const fetchBankOptions = async () => {
+        setTimeout(async ()=> {
+            const res = await getBankOptions()
+            dispatch(setBankOptions(res))
+        }, 1000)
+    }
+    fetchBankOptions()
 
-  //   const body = {
-  //    ...event,
-  //   }
 
-  //   setTimeout(() => {
-  //     const submitNotification = async () => {
-  //       let res = null;
+    const fetchIdentificationTypes = async () => {
+        setTimeout(async ()=> {
+            const res = await getIdentificationTypeOptions()
+            dispatch(setIdentificationTypeOptions(res))
+        }, 1000)
+    }
+    fetchIdentificationTypes()
+  }, [open, dispatch])
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+
+    reset({
+      paymentMethodType: '',
+      bank: '',
+      identificationType: '',
+      paymentMethodIdentification: '',
+      bankAcount: '',
+      paymentMethodPhone: ''
+    })
+  };
+
+  const handleModalSave = () => {
+   onSubmit()
+  }
+
+  const setFormValues = () => {
+    setValue('paymentMethodType', paymentMethod?.type ? paymentMethod.type?.value : '')
+    setValue('bank', paymentMethod?.bank ? paymentMethod.bank?.value : '')
+    setValue('identificationType', 
+      paymentMethod?.identificationType ? paymentMethod?.identificationType.value : '')
+    setValue('paymentMethodIdentification', paymentMethod?.identification || '')
+    setValue('bankAcount', paymentMethod?.bankAcount || '')
+    setValue('bankAcount', paymentMethod?.phone || '')
+  }
+
+  const edit = (id) => {
+    handleClickOpen()
+    setIsEditing(true)
+
+    dispatch(setLoadingPaymentMethod(true))
+
+    setTimeout(async () => {
+      const res = await getPaymentMethod(id)
+      dispatch(setPaymentMethod(res))
+      setFormValues()
+      dispatch(setLoadingPaymentMethod(false))
+    }, 2000)
+  }
+
+  const onSubmit = () => {
+    // if(!isEditing){
+    //     dispatch(setLoadingCreateNotification(true))
+    // }else{
+    //     dispatch(setLoadingEditNotification(true))
+    // }
+
+    console.log('getValues', getValues());
+
+    // const body = {
+    //  ...event,
+    // }
+
+    // setTimeout(() => {
+    //   const submit = async () => {
+    //     let res = null;
   
-  //       if(!id){
-  //           res = await postNotification(body)
-  //           dispatch(setLoadingCreateNotification(false))
-  //       }else{
-  //           res = await putNotification(id, body)
-  //           dispatch(setLoadingEditNotification(false))
-  //       }
+    //     if(!isEditing){
+    //         res = await postNotification(body)
+    //         dispatch(setLoadingCreateNotification(false))
+    //     }else{
+    //         res = await putNotification(id, body)
+    //         dispatch(setLoadingEditNotification(false))
+    //     }
 
-  //       setColor(res ? 'success' : 'error')
-  //       setOpen(true);
-  //     }
+    //     setColor(res ? 'success' : 'error')
+    //     setOpen(true);
+    //     handleClose()
+    //   }
 
-  //     submitNotification()
-  //   }, 2000)
-  // }
+    //   submit()
+    // }, 2000)
+  }
 
-  // const handleClickOpen = () => {
-  //   setDialogOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setDialogOpen(false);
-  // };
-
-  // const handleModalSave = () => {    
-  //   handleClose()
-  // }
+  const deleteItem = (id) => {
+    console.log('deleting', id);
+  }
 
   const getIcon = (type) => {
     if(type.value === 0){
@@ -148,6 +245,17 @@ function PaymentMethods() {
     return '';
   }
 
+  const validateForm = () => {
+    return (
+      watch('paymentMethodType') === '' || 
+      watch('bank') === '' ||
+      watch('identificationType') === '' ||
+      watch('paymentMethodIdentification') === '' ||
+      (watch('paymentMethodType') === 0 && watch('bankAcount') === '') ||
+      (watch('paymentMethodType') === 1 && watch('paymentMethodPhone') === '')
+    );
+  }
+
   return (
     <Page title='Métodos de Pago'>
       <Container maxWidth="xl">
@@ -168,7 +276,10 @@ function PaymentMethods() {
                 alignItems="flex-end"
               >
                 <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'}>
-                  <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                  <Button 
+                    variant="contained" 
+                    startIcon={<Iconify icon="eva:plus-fill" />} 
+                    onClick={handleClickOpen}>
                     Agregar
                   </Button>
                 </GridStyle>
@@ -177,8 +288,8 @@ function PaymentMethods() {
               {paymentMethods && 
                 paymentMethods?.length && 
                   paymentMethods.length > 0 &&
-                    paymentMethods.map((item) => (
-                      <Grid item xs={12} container>
+                    paymentMethods.map((item, index) => (
+                      <Grid item xs={12} container key={index}>
                         <Stack direction="row" alignItems="center" justifyContent="flex-start">
                           <Iconify 
                             icon={getIcon(item.type)} 
@@ -195,65 +306,127 @@ function PaymentMethods() {
                           </Typography>
                         </Stack>
                         
-                        <Grid item xs={12} container>
+                        <Grid item xs={12} container sx={{ pl: 5 }}>
                           <Grid item xs={12} md={3} container>
-                            <Typography variant='caption'>{item?.bank?.label || ''}</Typography>
+                            <Typography variant='body2'>
+                              {item?.bank?.label || ''}
+                            </Typography>
                           </Grid>
 
                           <Grid item xs={12} md={3} container>
-                            <Typography variant='caption'>
+                            <Typography variant='body2'>
                               {getNumber(item)}
                             </Typography>
                           </Grid>
 
+                          <Grid item xs={12} md={3} container>
+                            <Typography variant='body2'>
+                              {`${item?.identificationType?.label || ''} ${item?.identification || ''}`}
+                            </Typography>
+                          </Grid>
+
+                          <Grid item xs={12} md={3} container direction='row' alignItems='center' justifyContent='flex-end'>
+                            <IconButton onClick={() => edit(item?.id)}>
+                              <Iconify icon="eva:edit-fill" width={24} height={24} />
+                            </IconButton>
+                            
+                            <IconButton onClick={() => deleteItem(item?.id)}>
+                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                            </IconButton>
+                          </Grid>
                         </Grid>
                       </Grid>
               ))}
-
             </Grid>
           </FormCard>
         }
 
-        {/* <Modal 
-            open={dialogOpen}
-            handleClose={handleClose}
-            handleSave={handleModalSave}
-            title='Programar Notificación'
-            closeButtonText='Cancelar'
-            saveButtonText={'Programar'}
-            disabledSaveButton={(!watch('date') || !watch('hour'))}
-            maxWidth='xs'
+        <Modal 
+          open={dialogOpen}
+          handleClose={handleClose}
+          handleSave={handleModalSave}
+          title='Agregar Método dePago'
+          closeButtonText='Cancelar'
+          saveButtonText={!isEditing ? 'Agregar' : 'Actualizar'}
+          disabledSaveButton={validateForm()}
+          maxWidth='md'
         >
-          <form onSubmit={handleSubmit(onSubmit)}>
+         {loadingPaymentMethod ?
+          <Loader /> :
+          <form>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography variant='body1'>
-                        Seleccione la fecha y hora para enviar la notificación a los usuarios.
-                    </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
+              <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
                     <Input
-                        name='date'
-                        label='Fecha'
-                        placeholder='Seleccione la fecha'
-                        isDate
+                        name='paymentMethodType'
+                        label='Tipo de Método de Pago'
+                        placeholder='Seleccione el tipo de método de pago'
+                        isSelect
+                        selectOptions={paymentMethodTypeOptions}
                         control={control}
                     />
-                </Grid>
+                  </Grid>
 
-                <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <Input
-                        name='hour'
-                        label='Hora'
-                        placeholder='Seleccione la hora'
-                        isTime
+                        name='bank'
+                        label='Banco'
+                        placeholder='Seleccione el banco'
+                        isSelect
+                        selectOptions={bankOptions}
                         control={control}
                     />
-                </Grid>
+                  </Grid>
+              </Grid>
+
+              <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                        name='identificationType'
+                        label='Tipo de Documento de Identidad'
+                        placeholder='Seleccione el tipo de documento de identidad'
+                        isSelect
+                        selectOptions={identificationTypeOptions}
+                        control={control}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <Input
+                        name='paymentMethodIdentification'
+                        label='Documento de Identidad'
+                        placeholder='Ingrese el documento de identidad'
+                        type='number'
+                        control={control}
+                    />
+                  </Grid>
+              </Grid>
+
+              <Grid container item spacing={spacing}>
+                  <Grid item xs={12} sm={6}>
+                      {watch("paymentMethodType") === 0 &&
+                          <Input
+                              name='bankAcount'
+                              label='Número de Cuenta del Banco'
+                              placeholder='Ingrese el número de cuenta del banco'
+                              control={control}
+                          />
+                      }
+                    
+                      {watch("paymentMethodType") === 1 &&
+                          <Input
+                              name='paymentMethodPhone'
+                              label='Número de Teléfono'
+                              placeholder='Ingrese el número de teléfono'
+                              control={control}
+                          />
+                      }
+                  </Grid>
+              </Grid>
             </Grid>
           </form>
-        </Modal> */}
+         }
+        </Modal>
 
         <CustomSnackbar
           open={open}

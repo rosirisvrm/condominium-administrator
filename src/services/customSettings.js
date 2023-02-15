@@ -13,8 +13,9 @@ export const getRate = () => ({
 
 export const getPaymentMethodOptions = () => ([
     { 
+        id: 0,
         label: 'Transferencia Banco Mercantil', 
-        value: 1,
+        value: 0,
         type: { label: 'Transferencia', value: 0 },
         bank: {
             value: "0105",
@@ -26,8 +27,9 @@ export const getPaymentMethodOptions = () => ([
         phone: faker.phone.number('+58 412 ### ####'),
     },
     { 
+        id: 1,
         label: 'Transferencia Banco Banesco', 
-        value: 0,
+        value: 1,
         type: { label: 'Transferencia', value: 0 },
         bank:  {
             value: "0134",
@@ -39,6 +41,7 @@ export const getPaymentMethodOptions = () => ([
         phone: faker.phone.number('+58 412 ### ####'),
     },
     { 
+        id: 2,
         label: 'Pago Móvil Banco BNC', 
         value: 2,
         type: { label: 'Pago Móvil', value: 1 },
@@ -52,6 +55,7 @@ export const getPaymentMethodOptions = () => ([
         phone: faker.phone.number('+58 412 ### ####'),
     },
     { 
+        id: 3,
         label: 'Pago Móvil Banco Provincial', 
         value: 3,
         type: { label: 'Pago Móvil', value: 1 },
@@ -65,6 +69,7 @@ export const getPaymentMethodOptions = () => ([
         phone: faker.phone.number('+58 412 ### ####'),
     },
     { 
+        id: 4,
         label: 'Efectivo', 
         value: 4,
         type: { label: 'Efectivo', value: 2 },

@@ -98,7 +98,7 @@ function Roles() {
           donwload={donwload}
         >
           {row => {
-            const { id, name, description, status, numberOfUsers } = row;
+            const { id, name, status, numberOfUsers } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
