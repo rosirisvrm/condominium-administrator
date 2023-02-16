@@ -270,16 +270,15 @@ function PaymentMethods() {
     return '';
   }
 
-  const validateForm = () => {
-    return (
-      watch('paymentMethodType') === '' || 
-      watch('bank') === '' ||
-      watch('identificationType') === '' ||
-      watch('paymentMethodIdentification') === '' ||
-      (watch('paymentMethodType') === 0 && watch('bankAcount') === '') ||
-      (watch('paymentMethodType') === 1 && watch('paymentMethodPhone') === '')
-    );
-  }
+  const validateForm = () => (
+    watch('paymentMethodType') === '' || 
+    (watch('paymentMethodType') !== 2 && watch('bank') === '') ||
+    (watch('paymentMethodType') !== 2 && watch('identificationType') === '') ||
+    (watch('paymentMethodType') !== 2 && watch('paymentMethodIdentification') === '') ||
+    (watch('paymentMethodType') === 0 && watch('bankAcount') === '') ||
+    (watch('paymentMethodType') === 1 && watch('paymentMethodPhone') === '') ||
+    (watch('paymentMethodType') === 2 && watch('description') === '')
+  );
 
   const handleClickOpenDelete = (id) => {
     setIdDelete(id)
@@ -392,7 +391,7 @@ function PaymentMethods() {
           open={dialogOpen}
           handleClose={handleClose}
           handleSave={handleModalSave}
-          title='Agregar Método dePago'
+          title={!isEditing ? 'Agregar Método de Pago' : 'Editar Método de Pago'}
           closeButtonText='Cancelar'
           saveButtonText={!isEditing ? 'Agregar' : 'Actualizar'}
           loadingSave={!isEditing ? loadingCreatePaymentMethod : loadingEditPaymentMethod}
