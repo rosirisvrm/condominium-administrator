@@ -8,7 +8,8 @@ import {
     Grid,
     Button,
     Stack,
-    IconButton
+    IconButton,
+    Tooltip
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 // components
@@ -19,6 +20,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { Loader } from '../../components/Loader';
 import { Modal } from '../../components/Modal';
 import { Input } from '../../components/Input';
+import { DeleteModal } from '../../components/DeleteModal';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
@@ -28,7 +30,12 @@ import {
     getBankOptions, 
     getIdentificationTypeOptions 
 } from '../../services/customSettings';
-import { getPaymentMethod, postPaymentMethod, putPaymentMethod } from '../../services/paymentMethods';
+import { 
+  getPaymentMethod,
+  postPaymentMethod, 
+  putPaymentMethod, 
+  deletePaymentMethod 
+} from '../../services/paymentMethods';
 // slices
 import { 
     setPaymentMethodOptions,
@@ -76,12 +83,14 @@ function PaymentMethods() {
   if(smUp) spacing = 6;
   if(mdUp) spacing = 12;
 
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
+  const [open, setOpen] = React.useState(false);
+  const [color, setColor] = React.useState('');
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
   const [idEdit, setIdEdit] = React.useState(null);
+  const [idDelete, setIdDelete] = React.useState(null);
   const [reload, setReload] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
 
   const { 
     control, 
@@ -96,7 +105,8 @@ function PaymentMethods() {
       identificationType: '',
       paymentMethodIdentification: '',
       bankAcount: '',
-      paymentMethodPhone: ''
+      paymentMethodPhone: '',
+      description: ''
     }
   });
 
@@ -112,7 +122,7 @@ function PaymentMethods() {
     }
 
     fetchPaymentMethods()
-  }, [dispatch])
+  }, [dispatch, reload])
 
   useEffect(() => {
     const fetchPaymentMethodTypes = async () => {
@@ -131,7 +141,6 @@ function PaymentMethods() {
     }
     fetchBankOptions()
 
-
     const fetchIdentificationTypes = async () => {
         setTimeout(async ()=> {
             const res = await getIdentificationTypeOptions()
@@ -139,7 +148,7 @@ function PaymentMethods() {
         }, 1000)
     }
     fetchIdentificationTypes()
-  }, [open, dispatch, reload])
+  }, [open, dispatch])
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -156,7 +165,8 @@ function PaymentMethods() {
       identificationType: '',
       paymentMethodIdentification: '',
       bankAcount: '',
-      paymentMethodPhone: ''
+      paymentMethodPhone: '',
+      description: ''
     })
   };
 
@@ -222,8 +232,18 @@ function PaymentMethods() {
     }, 2000)
   }
 
-  const deleteItem = (id) => {
-    console.log('deleting', id);
+  const deleteItem = () => {
+    dispatch(setLoadingDeletePaymentMethod(true))
+    
+    setTimeout(async () => {
+      const res = await deletePaymentMethod(idDelete)
+      dispatch(setLoadingDeletePaymentMethod(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true);
+      handleCloseDelete()
+      setReload(prev => !prev)
+    }, 2000)
   }
 
   const getIcon = (type) => {
@@ -260,6 +280,15 @@ function PaymentMethods() {
       (watch('paymentMethodType') === 1 && watch('paymentMethodPhone') === '')
     );
   }
+
+  const handleClickOpenDelete = (id) => {
+    setIdDelete(id)
+    setOpenDelete(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
 
   return (
     <Page title='Métodos de Pago'>
@@ -312,32 +341,45 @@ function PaymentMethods() {
                         </Stack>
                         
                         <Grid item xs={12} container sx={{ pl: 5 }}>
-                          <Grid item xs={12} md={3} container>
-                            <Typography variant='body2'>
-                              {item?.bank?.label || ''}
-                            </Typography>
-                          </Grid>
+                          {(item.type.value !== 2) ?
+                            <>
+                              <Grid item xs={12} md={3} container>
+                                <Typography variant='body2'>
+                                  {item?.bank?.label || ''}
+                                </Typography>
+                              </Grid>
 
-                          <Grid item xs={12} md={3} container>
-                            <Typography variant='body2'>
-                              {getNumber(item)}
-                            </Typography>
-                          </Grid>
+                              <Grid item xs={12} md={3} container>
+                                <Typography variant='body2'>
+                                  {getNumber(item)}
+                                </Typography>
+                              </Grid>
 
-                          <Grid item xs={12} md={3} container>
-                            <Typography variant='body2'>
-                              {`${item?.identificationType?.label || ''} ${item?.identification || ''}`}
-                            </Typography>
-                          </Grid>
-
+                              <Grid item xs={12} md={3} container>
+                                <Typography variant='body2'>
+                                  {`${item?.identificationType?.label || ''} ${item?.identification || ''}`}
+                                </Typography>
+                              </Grid>
+                            </> : 
+                            <Grid item xs={12} md={9} container>
+                              <Typography variant='body2'>
+                                {item?.description || ''}
+                              </Typography>
+                            </Grid>
+                          }
+                      
                           <Grid item xs={12} md={3} container direction='row' alignItems='center' justifyContent='flex-end'>
-                            <IconButton onClick={() => edit(item?.id)}>
-                              <Iconify icon="eva:edit-fill" width={24} height={24} />
-                            </IconButton>
+                            <Tooltip title="Editar">
+                              <IconButton onClick={() => edit(item?.id)}>
+                                <Iconify icon="eva:edit-fill" width={24} height={24} />
+                              </IconButton>
+                            </Tooltip>
                             
-                            <IconButton onClick={() => deleteItem(item?.id)}>
-                              <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                            </IconButton>
+                            <Tooltip title="Eliminar">
+                              <IconButton onClick={() => handleClickOpenDelete(item?.id)}>
+                                <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                              </IconButton>
+                            </Tooltip>
                           </Grid>
                         </Grid>
                       </Grid>
@@ -373,66 +415,88 @@ function PaymentMethods() {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
-                    <Input
+                  {watch('paymentMethodType') !== 2 ?
+                    <Grid item xs={12} sm={6}>
+                      <Input
                         name='bank'
                         label='Banco'
                         placeholder='Seleccione el banco'
                         isSelect
                         selectOptions={bankOptions}
                         control={control}
-                    />
-                  </Grid>
-              </Grid>
-
-              <Grid container item spacing={spacing}>
-                  <Grid item xs={12} sm={6}>
-                    <Input
-                        name='identificationType'
-                        label='Tipo de Documento de Identidad'
-                        placeholder='Seleccione el tipo de documento de identidad'
-                        isSelect
-                        selectOptions={identificationTypeOptions}
+                      />
+                    </Grid> : 
+                    <Grid item xs={12} sm={6}>
+                      <Input
+                        name='description'
+                        label='Descripción'
+                        placeholder='Ingrese la descripción del método de pago'
+                        type='text'
                         control={control}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <Input
-                        name='paymentMethodIdentification'
-                        label='Documento de Identidad'
-                        placeholder='Ingrese el documento de identidad'
-                        type='number'
-                        control={control}
-                    />
-                  </Grid>
+                      />
+                    </Grid>
+                  }
               </Grid>
 
-              <Grid container item spacing={spacing}>
-                  <Grid item xs={12} sm={6}>
-                      {watch("paymentMethodType") === 0 &&
-                          <Input
-                              name='bankAcount'
-                              label='Número de Cuenta del Banco'
-                              placeholder='Ingrese el número de cuenta del banco'
-                              control={control}
-                          />
-                      }
-                    
-                      {watch("paymentMethodType") === 1 &&
-                          <Input
-                              name='paymentMethodPhone'
-                              label='Número de Teléfono'
-                              placeholder='Ingrese el número de teléfono'
-                              control={control}
-                          />
-                      }
+              {watch('paymentMethodType') !== 2 && 
+                <>
+                  <Grid container item spacing={spacing}>
+                      <Grid item xs={12} sm={6}>
+                        <Input
+                            name='identificationType'
+                            label='Tipo de Documento de Identidad'
+                            placeholder='Seleccione el tipo de documento de identidad'
+                            isSelect
+                            selectOptions={identificationTypeOptions}
+                            control={control}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Input
+                            name='paymentMethodIdentification'
+                            label='Documento de Identidad'
+                            placeholder='Ingrese el documento de identidad'
+                            type='number'
+                            control={control}
+                        />
+                      </Grid>
                   </Grid>
-              </Grid>
+
+                  <Grid container item spacing={spacing}>
+                      <Grid item xs={12} sm={6}>
+                          {watch("paymentMethodType") === 0 &&
+                              <Input
+                                  name='bankAcount'
+                                  label='Número de Cuenta del Banco'
+                                  placeholder='Ingrese el número de cuenta del banco'
+                                  control={control}
+                              />
+                          }
+                        
+                          {watch("paymentMethodType") === 1 &&
+                              <Input
+                                  name='paymentMethodPhone'
+                                  label='Número de Teléfono'
+                                  placeholder='Ingrese el número de teléfono'
+                                  control={control}
+                              />
+                          }
+                      </Grid>
+                  </Grid>
+                </>
+              }
             </Grid>
           </form>
          }
         </Modal>
+
+        <DeleteModal 
+          open={openDelete}
+          handleClose={handleCloseDelete}
+          onDelete={() => deleteItem()}
+          loading={loadingDeletePaymentMethod}
+        />
 
         <CustomSnackbar
           open={open}

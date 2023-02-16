@@ -73,6 +73,7 @@ export const getPaymentMethodOptions = () => ([
         label: 'Efectivo', 
         value: 4,
         type: { label: 'Efectivo', value: 2 },
+        description: 'Los pagos en efectivo se realizan en la oficina del condominio en el horario de 8:00 am a 5:00 pm de Lunes a Viernes.'
     }
 ]);
 

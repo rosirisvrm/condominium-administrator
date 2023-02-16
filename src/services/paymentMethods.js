@@ -27,3 +27,9 @@ export const putPaymentMethod = (id, body) => {
 
     return true;
 }
+
+export const deletePaymentMethod = (id) => {
+    console.log('deleting: ', id);
+
+    return true;
+}
