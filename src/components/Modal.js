@@ -18,7 +18,8 @@ Modal.propTypes = {
   closeButtonText: PropTypes.string,
   saveButtonText: PropTypes.string,
   disabledSaveButton: PropTypes.bool,
-  maxWidth: PropTypes.string
+  maxWidth: PropTypes.string,
+  loadingSave: PropTypes.bool
 };
 
 function Modal({ 
@@ -30,7 +31,8 @@ function Modal({
     saveButtonText,
     handleSave,
     disabledSaveButton,
-    maxWidth = 'sm'
+    maxWidth = 'sm',
+    loadingSave,
 }){
 
   return (  
@@ -56,7 +58,7 @@ function Modal({
                 </OutlinedButton>
             }
             {saveButtonText && 
-                <ContainedButton onClick={handleSave} disabled={disabledSaveButton}>
+                <ContainedButton onClick={handleSave} disabled={disabledSaveButton} loading={loadingSave}>
                     {saveButtonText}
                 </ContainedButton>
             }

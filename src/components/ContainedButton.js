@@ -11,12 +11,21 @@ import { styled, useTheme } from '@mui/material/styles';
 const ButtonStyle = styled(Button)(({ theme }) => ({
     boxShadow: 'none',
     border: `2px solid ${theme.palette.primary.main}`,
+    '&:hover': {
+      border: `2px solid ${theme.palette.primary.dark}`
+    },
+    '&:disabled': {
+        border: `2px solid ${theme.palette.grey[400]}`
+    },
 }))
 
 const LoadingButtonStyle = styled(LoadingButton)(({ theme }) => ({
     backgroundColor: `${theme.palette.primary.main} !important`,
     boxShadow: 'none',
     border: `1px solid ${theme.palette.primary.main}`,
+    '.css-1iyu4y0-MuiLoadingButton-loadingIndicator': {
+        color: theme.palette.common.white
+    }
 }))
 
 // ----------------------------------------------------------------------

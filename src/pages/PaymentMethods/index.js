@@ -28,7 +28,7 @@ import {
     getBankOptions, 
     getIdentificationTypeOptions 
 } from '../../services/customSettings';
-import { getPaymentMethod } from '../../services/paymentMethods';
+import { getPaymentMethod, postPaymentMethod, putPaymentMethod } from '../../services/paymentMethods';
 // slices
 import { 
     setPaymentMethodOptions,
@@ -59,8 +59,9 @@ function PaymentMethods() {
   const loadingPaymentMethods = useSelector(state => state.customSettings.loadingPaymentMethods)
   const paymentMethod = useSelector(state => state.paymentMethods.paymentMethod)
   const loadingPaymentMethod = useSelector(state => state.paymentMethods.loadingPaymentMethod)
-
-  console.log('paymentMethod', paymentMethod);
+  const loadingCreatePaymentMethod = useSelector(state => state.paymentMethods.loadingCreatePaymentMethod)
+  const loadingEditPaymentMethod = useSelector(state => state.paymentMethods.loadingEditPaymentMethod)
+  const loadingDeletePaymentMethod = useSelector(state => state.paymentMethods.loadingDeletePaymentMethod)
 
   const paymentMethodTypeOptions = useSelector(state => state.customSettings.paymentMethodTypeOptions)
   const bankOptions = useSelector(state => state.customSettings.bankOptions)
@@ -79,6 +80,8 @@ function PaymentMethods() {
   const [color, setColor] = React.useState('')
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
+  const [idEdit, setIdEdit] = React.useState(null);
+  const [reload, setReload] = React.useState(false);
 
   const { 
     control, 
@@ -136,7 +139,7 @@ function PaymentMethods() {
         }, 1000)
     }
     fetchIdentificationTypes()
-  }, [open, dispatch])
+  }, [open, dispatch, reload])
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -144,6 +147,8 @@ function PaymentMethods() {
 
   const handleClose = () => {
     setDialogOpen(false);
+    setIsEditing(false)
+    setIdEdit(null)
 
     reset({
       paymentMethodType: '',
@@ -156,7 +161,7 @@ function PaymentMethods() {
   };
 
   const handleModalSave = () => {
-   onSubmit()
+    onSubmit()
   }
 
   const setFormValues = () => {
@@ -172,6 +177,7 @@ function PaymentMethods() {
   const edit = (id) => {
     handleClickOpen()
     setIsEditing(true)
+    setIdEdit(id)
 
     dispatch(setLoadingPaymentMethod(true))
 
@@ -184,37 +190,36 @@ function PaymentMethods() {
   }
 
   const onSubmit = () => {
-    // if(!isEditing){
-    //     dispatch(setLoadingCreateNotification(true))
-    // }else{
-    //     dispatch(setLoadingEditNotification(true))
-    // }
+    if(!isEditing){
+        dispatch(setLoadingCreatePaymentMethod(true))
+    }else{
+        dispatch(setLoadingEditPaymentMethod(true))
+    }
 
     console.log('getValues', getValues());
 
-    // const body = {
-    //  ...event,
-    // }
+    const body = {...getValues()}
 
-    // setTimeout(() => {
-    //   const submit = async () => {
-    //     let res = null;
+    setTimeout(() => {
+      const submit = async () => {
+        let res = null;
   
-    //     if(!isEditing){
-    //         res = await postNotification(body)
-    //         dispatch(setLoadingCreateNotification(false))
-    //     }else{
-    //         res = await putNotification(id, body)
-    //         dispatch(setLoadingEditNotification(false))
-    //     }
+        if(!isEditing){
+            res = await postPaymentMethod(body)
+            dispatch(setLoadingCreatePaymentMethod(false))
+        }else{
+            res = await putPaymentMethod(idEdit, body)
+            dispatch(setLoadingEditPaymentMethod(false))
+        }
 
-    //     setColor(res ? 'success' : 'error')
-    //     setOpen(true);
-    //     handleClose()
-    //   }
+        setColor(res ? 'success' : 'error')
+        setOpen(true);
+        setReload(prev => !prev)
+        handleClose()
+      }
 
-    //   submit()
-    // }, 2000)
+      submit()
+    }, 2000)
   }
 
   const deleteItem = (id) => {
@@ -348,6 +353,7 @@ function PaymentMethods() {
           title='Agregar Método dePago'
           closeButtonText='Cancelar'
           saveButtonText={!isEditing ? 'Agregar' : 'Actualizar'}
+          loadingSave={!isEditing ? loadingCreatePaymentMethod : loadingEditPaymentMethod}
           disabledSaveButton={validateForm()}
           maxWidth='md'
         >
