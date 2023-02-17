@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid } from '@mui/material';
+import { Container, Typography, Grid, IconButton, InputAdornment } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
+import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
@@ -31,10 +32,28 @@ function CreateUser() {
   const loadingCreateUser = useSelector(state => state.users.loadingCreateUser)
 
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
+  const [showPassword, setShowPassword] = React.useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
+  const { 
+    control, 
+    handleSubmit, 
+    formState: { errors }, 
+    getValues, 
+    setError, 
+    clearErrors 
+  } = useForm({
     defaultValues: {
       name: '',
       identification: '',
@@ -42,6 +61,8 @@ function CreateUser() {
       role: '',
       phone: '',
       email: '',
+      password: '',
+      passwordConfirm: ''
     }
   });
 
@@ -54,46 +75,52 @@ function CreateUser() {
     fetchRoleOptions()
   }, [dispatch])
 
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-
   const onSubmit = (event) => {
-    dispatch(setLoadingCreateUser(true))
+    if(getValues('password') !== getValues('passwordConfirm')){
+      setError("passwordConfirm", {
+        type: "manual",
+        message: "No coincide con la contraseña ingresada"
+      });
+    }else{
+      clearErrors("passwordConfirm")
 
-    console.log('submit');
-    console.log('event ', event);
+      console.log('event ', event);
 
-    const body = {
-     ...event,
-     identification: parseInt(event.identification, 10),
-     phone: parseInt(event.phone, 10)
-    }
+      dispatch(setLoadingCreateUser(true))
 
-    setTimeout(() => {
-      const createUserRequest = async () => {
-        const res = await postUser(body)
-  
-        dispatch(setLoadingCreateUser(false))
-        setColor(res ? 'success' : 'error')
-        setOpen(true);
-
-        if(res){
-          setTimeout(() => {
-            navigate('/dashboard/usuarios')
-          }, 2000)
-        }
+      const body = {
+        ...event,
+        identification: parseInt(event.identification, 10),
+        phone: parseInt(event.phone, 10)
       }
-
-      createUserRequest()
-    }, 2000)
+    
+      setTimeout(() => {
+        const createUserRequest = async () => {
+          const res = await postUser(body)
+    
+          dispatch(setLoadingCreateUser(false))
+          setColor(res ? 'success' : 'error')
+          setOpen(true);
+  
+          if(res){
+            setTimeout(() => {
+              navigate('/dashboard/usuarios')
+            }, 2000)
+          }
+        }
+  
+        createUserRequest()
+      }, 2000)
+    }
   }
 
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
+  const changeShowPassword = () => {
+    setShowPassword(prev => !prev)
+  }
+
+  const changeShowConfirmPassword = () => {
+    setShowConfirmPassword(prev => !prev)
+  }
 
   return (
     <Page title="Crear Usuario">
@@ -105,6 +132,8 @@ function CreateUser() {
         <FormCard>   
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
+
+              {errors.name && <p>{errors.name.message}</p>}
 
               <Grid container item spacing={spacing}>
                 <Grid item xs={12} sm={6}>
@@ -217,6 +246,63 @@ function CreateUser() {
                 </Grid>
               </Grid>
 
+              <Grid container item spacing={spacing}>
+                <Grid item xs={12} sm={6}>
+                  <Input
+                    name='password'
+                    label='Contraseña'
+                    placeholder='Ingrese una contraseña'
+                    type={showPassword ? 'text' : 'password'}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.password}
+                    endAdornment={
+                      <InputAdornment position="start" style={{ marginRight: 10 }}>
+                        <IconButton onClick={changeShowPassword}>
+                          <Iconify 
+                            icon={showPassword ? "charm:eye" : 'mdi:eye-off'} 
+                            width={24} 
+                            height={24} 
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Input
+                    name='passwordConfirm'
+                    label='Confirmación de la Contraseña'
+                    placeholder='Ingrese la confirmación de la contraseña'
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    control={control}
+                    validations={{
+                      required: {
+                        value: true,
+                        message: 'El campo es requerido'
+                      }
+                    }}
+                    error={errors.passwordConfirm}
+                    endAdornment={
+                      <InputAdornment position="start" style={{ marginRight: 10 }}>
+                        <IconButton onClick={changeShowConfirmPassword}>
+                          <Iconify 
+                            icon={showConfirmPassword ? "charm:eye" : 'mdi:eye-off'} 
+                            width={24} 
+                            height={24} 
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </Grid>
+              </Grid>
+
               <Grid
                 container
                 item
@@ -243,7 +329,6 @@ function CreateUser() {
                   </ContainedButton>
                 </GridStyle>
               </Grid>
-
             </Grid>
           </form>
         </FormCard>
