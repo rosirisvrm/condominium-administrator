@@ -50,3 +50,9 @@ export const putProvider = (id, body) => {
 
     return true;
 }
+
+export const deleteProvider = (id) => {
+    console.log('deleting', id);
+
+    return true;
+}

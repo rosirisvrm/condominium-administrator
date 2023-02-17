@@ -26,7 +26,7 @@ function CustomSnackbar({
     message,
     open,
     onClose,
-    hideDuration = 5000,
+    hideDuration = 3000,
     vertical = 'top',
     horizontal = 'right',
     color,

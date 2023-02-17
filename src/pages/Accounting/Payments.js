@@ -15,11 +15,12 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
-import { getPayments } from '../../services/accounting';
-import { setPayments, setLoadingPaymentsList } from '../../slices/accountingSlice'
+import { getPayments, deletePayment } from '../../services/accounting';
+import { setPayments, setLoadingPaymentsList, setLoadingDeletePayment } from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +28,23 @@ function Payments() {
 
   const paymentsList = useSelector(state => state.accounting.paymentsList)
   const loadingPaymentsList = useSelector(state => state.accounting.loadingPaymentsList)
+  const loadingDeletePayment = useSelector(state => state.accounting.loadingDeletePayment)
   
   const dispatch = useDispatch()
+
+  const tableHead = [
+    { id: 'subject', label: 'Asunto', alignRight: false },
+    { id: 'amount', label: 'Monto (USD)', alignRight: false },
+    { id: 'reference', label: 'Reference', alignRight: false },
+    { id: 'date', label: 'Fecha', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([])
+  const [open, setOpen] = useState(false)
+  const [color, setColor] = useState('')
+  const [reload, setReload] = useState('')
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -42,18 +58,7 @@ function Payments() {
     }
 
     fetchPayments()
-  }, [dispatch])
-
-  const tableHead = [
-    { id: 'subject', label: 'Asunto', alignRight: false },
-    { id: 'amount', label: 'Monto (USD)', alignRight: false },
-    { id: 'reference', label: 'Reference', alignRight: false },
-    { id: 'date', label: 'Fecha', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
+  }, [dispatch, reload])
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -71,13 +76,21 @@ function Payments() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item', id);
+    dispatch(setLoadingDeletePayment(true))
+
+    setTimeout(async () => {
+      const res = await deletePayment(id)
+      dispatch(setLoadingDeletePayment(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
+    }, 1000)
   }
 
   const download = () => {
     console.log('descargando');
   }
-
 
   return (
     <Page title="Pagos">
@@ -129,7 +142,8 @@ function Payments() {
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeletePayment} 
                     actionsRedirect={{
                       edit: `/dashboard/contabilidad/editar-pago/${id}` ,
                       detail: `/dashboard/contabilidad/detalle-pago/${id}`,
@@ -141,6 +155,11 @@ function Payments() {
           }}
         </CustomTable>
 
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

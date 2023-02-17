@@ -58,3 +58,9 @@ export const putEmployee = (id, body) => {
 
     return true;
 }
+
+export const deleteEmployee = (id) => {
+    console.log('deleting', id);
+
+    return true;
+}

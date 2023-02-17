@@ -30,11 +30,22 @@ function Notifications() {
 
   const notifications = useSelector(state => state.notifications.notificationsList)
   const loadingNotificationsList = useSelector(state => state.notifications.loadingNotificationsList)
+  const loadingDeleteNotification = useSelector(state => state.notifications.loadingDeleteNotification)
   
   const dispatch = useDispatch()
 
+  const tableHead = [
+    { id: 'title', label: 'Título', alignRight: false },
+    { id: 'author', label: 'Creada por', alignRight: false },
+    { id: 'date', label: 'Fecha y hora de envío', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
   const [color, setColor] = useState('')
+  const [reload, setReload] = useState('')
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -48,17 +59,8 @@ function Notifications() {
     }
 
     fetchNotifications()
-  }, [dispatch])
+  }, [dispatch, reload])
 
-  const tableHead = [
-    { id: 'title', label: 'Título', alignRight: false },
-    { id: 'author', label: 'Creada por', alignRight: false },
-    { id: 'date', label: 'Fecha y hora de envío', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -79,11 +81,12 @@ function Notifications() {
     dispatch(setLoadingDeleteNotification(true))
 
     setTimeout(async () => {
-        const res = await deleteNotification(id)
+      const res = await deleteNotification(id)
+      dispatch(setLoadingDeleteNotification(false))
 
-        setColor(res ? 'success' : 'error')
-        setOpen(true)
-        dispatch(setLoadingDeleteNotification(false))
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
     }, 1000)
   }
 
@@ -160,7 +163,8 @@ function Notifications() {
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeleteNotification}
                     actionsRedirect={{
                       edit: `/dashboard/notificaciones/editar/${id}` ,
                       detail: `/dashboard/notificaciones/detalle/${id}`,

@@ -15,10 +15,11 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getRoles } from '../../services/roles';
-import { setRoles, setLoadingRolesList } from '../../slices/roles'
+import { getRoles, deleteRole } from '../../services/roles';
+import { setRoles, setLoadingRolesList, setLoadingDeleteRole } from '../../slices/roles'
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +27,21 @@ function Roles() {
 
   const roles = useSelector(state => state.roles.rolesList)
   const loadingRolesList = useSelector(state => state.roles.loadingRolesList)
+  const loadingDeleteRole = useSelector(state => state.roles.loadingDeleteRole)
   
   const dispatch = useDispatch()
+
+  const tableHead = [
+    { id: 'name', label: 'Nombre', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
+    { id: 'numberOfUsers', label: 'Cantidad de Usuarios', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([])
+  const [open, setOpen] = useState(false)
+  const [color, setColor] = useState('')
+  const [reload, setReload] = useState('')
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -41,17 +55,7 @@ function Roles() {
     }
 
     fetchRoles()
-  }, [dispatch])
-
-  const tableHead = [
-    { id: 'name', label: 'Nombre', alignRight: false },
-    // { id: 'description', label: 'Descripción', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
-    { id: 'numberOfUsers', label: 'Cantidad de Usuarios', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
+  }, [dispatch, reload])
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
@@ -69,7 +73,16 @@ function Roles() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item', id);
+    dispatch(setLoadingDeleteRole(true))
+
+    setTimeout(async () => {
+      const res = await deleteRole(id)
+      dispatch(setLoadingDeleteRole(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
+    }, 1000)
   }
 
   const donwload = () => {
@@ -118,14 +131,14 @@ function Roles() {
                     {name}
                   </Typography>
                 </TableCell>
-                {/* <TableCell align="left">{description}</TableCell> */}
                 <TableCell align="left">{status.label}</TableCell>
                 <TableCell align="left">{numberOfUsers}</TableCell>
                 <TableCell align="left">
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeleteRole}
                     actionsRedirect={{
                       edit: `/dashboard/roles/editar/${id}` ,
                       detail: `/dashboard/roles/detalle/${id}`,
@@ -137,6 +150,11 @@ function Roles() {
           }}
         </CustomTable>
 
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

@@ -493,7 +493,7 @@ function PaymentMethods() {
         <DeleteModal 
           open={openDelete}
           handleClose={handleCloseDelete}
-          onDelete={() => deleteItem()}
+          onDelete={deleteItem}
           loading={loadingDeletePaymentMethod}
         />
 

@@ -58,3 +58,9 @@ export const putNews = (id, body) => {
 
     return true;
 }
+
+export const deleteNews = (id) => {
+    console.log('deleting', id);
+
+    return true;
+}

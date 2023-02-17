@@ -7,6 +7,7 @@ const initialState = {
     loadingProvider: false,
     loadingCreateProvider: false,
     loadingEditProvider: false,
+    loadingDeleteProvider: false,
 }
 
 export const providersSlice = createSlice({
@@ -30,7 +31,10 @@ export const providersSlice = createSlice({
         },
         setLoadingEditProvider: (state, action) => {
             state.loadingEditProvider = action.payload;
-        }
+        },
+        setLoadingDeleteProvider: (state, action) => {
+            state.loadingDeleteProvider = action.payload;
+        },
     }
 })
 
@@ -41,6 +45,7 @@ export const {
     setLoadingProvider,
     setLoadingCreateProvider,
     setLoadingEditProvider,
+    setLoadingDeleteProvider
 } = providersSlice.actions;
 
 export const providersReducer = providersSlice.reducer;

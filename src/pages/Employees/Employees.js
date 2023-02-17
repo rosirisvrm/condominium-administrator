@@ -15,10 +15,11 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getEmployees } from '../../services/employees';
-import { setEmployees, setLoadingEmployeesList } from '../../slices/employees'
+import { getEmployees, deleteEmployee } from '../../services/employees';
+import { setEmployees, setLoadingEmployeesList, setLoadingDeleteEmployee } from '../../slices/employees'
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +27,23 @@ function Employees() {
 
   const employees = useSelector(state => state.employees.employeesList)
   const loadingEmployeesList = useSelector(state => state.employees.loadingEmployeesList)
+  const loadingDeleteEmployee = useSelector(state => state.employees.loadingDeleteEmployee)
   
   const dispatch = useDispatch()
+
+  const tableHead = [
+    { id: 'name', label: 'Nombre', alignRight: false },
+    { id: 'identification', label: 'Cédula', alignRight: false },
+    { id: 'phone', label: 'Teléfono', alignRight: false },
+    { id: 'email', label: 'Email', alignRight: false },
+    { id: 'position', label: 'Cargo', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([])
+  const [open, setOpen] = useState(false)
+  const [color, setColor] = useState('')
+  const [reload, setReload] = useState('')
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -41,18 +57,7 @@ function Employees() {
     }
 
     fetchEmployees()
-  }, [dispatch])
-
-  const tableHead = [
-    { id: 'name', label: 'Nombre', alignRight: false },
-    { id: 'identification', label: 'Cédula', alignRight: false },
-    { id: 'phone', label: 'Teléfono', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'position', label: 'Cargo', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
+  }, [dispatch, reload])
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -70,7 +75,16 @@ function Employees() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item', id);
+    dispatch(setLoadingDeleteEmployee(true))
+
+    setTimeout(async () => {
+      const res = await deleteEmployee(id)
+      dispatch(setLoadingDeleteEmployee(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
+    }, 1000)
   }
 
   const download = () => {
@@ -127,7 +141,8 @@ function Employees() {
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeleteEmployee}
                     actionsRedirect={{
                       edit: `/dashboard/empleados/editar/${id}` ,
                       detail: `/dashboard/empleados/detalle/${id}`,
@@ -139,6 +154,11 @@ function Employees() {
           }}
         </CustomTable>
 
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

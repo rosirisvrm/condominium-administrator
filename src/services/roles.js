@@ -84,3 +84,9 @@ export const putRole = (id, body) => {
 
   return true;
 }
+
+export const deleteRole = (id) => {
+  console.log('deleting', id);
+
+  return true;
+}

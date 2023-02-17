@@ -16,9 +16,10 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
 import { UserActions } from '../../sections/@dashboard/user';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
-import { getProviders } from '../../services/providers';
-import { setProviders, setLoadingProvidersList } from '../../slices/providers'
+import { getProviders, deleteProvider } from '../../services/providers';
+import { setProviders, setLoadingProvidersList, setLoadingDeleteProvider } from '../../slices/providers'
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +27,22 @@ function Providers() {
 
   const providers = useSelector(state => state.providers.providersList)
   const loadingProvidersList = useSelector(state => state.providers.loadingProvidersList)
+  const loadingDeleteProvider = useSelector(state => state.providers.loadingDeleteProvider)  
   
   const dispatch = useDispatch()
+
+  const tableHead = [
+    { id: 'companyName', label: 'Compañía', alignRight: false },
+    { id: 'product', label: 'Producto', alignRight: false },
+    { id: 'phone', label: 'Teléfono', alignRight: false },
+    { id: 'email', label: 'Email', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([]);
+  const [open, setOpen] = useState(false)
+  const [color, setColor] = useState('')
+  const [reload, setReload] = useState('')
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -41,17 +56,7 @@ function Providers() {
     }
 
     fetchProviders()
-  }, [dispatch])
-
-  const tableHead = [
-    { id: 'companyName', label: 'Compañía', alignRight: false },
-    { id: 'product', label: 'Producto', alignRight: false },
-    { id: 'phone', label: 'Teléfono', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
+  }, [dispatch, reload])
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -69,7 +74,16 @@ function Providers() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item', id);
+    dispatch(setLoadingDeleteProvider(true))
+
+    setTimeout(async () => {
+      const res = await deleteProvider(id)
+      dispatch(setLoadingDeleteProvider(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
+    }, 1000)
   }
 
   const download = () => {
@@ -125,7 +139,8 @@ function Providers() {
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeleteProvider}
                     actionsRedirect={{
                       edit: `/dashboard/proveedores/editar/${id}` ,
                       detail: `/dashboard/proveedores/detalle/${id}`,
@@ -137,6 +152,11 @@ function Providers() {
           }}
         </CustomTable>
 
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

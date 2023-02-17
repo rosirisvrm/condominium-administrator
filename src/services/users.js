@@ -52,3 +52,9 @@ export const putUser = (id, body) => {
 
     return true;
 }
+
+export const deleteUser = (id) => {
+    console.log('deleting ', id);
+
+    return true;
+}

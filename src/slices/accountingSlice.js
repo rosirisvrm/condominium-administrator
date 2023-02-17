@@ -16,6 +16,7 @@ const initialState = {
     receiverTypeOptions: [],
     receiverOptions: [],
     statusOptions: [],
+    loadingDeletePayment: false
 }
 
 export const accountingSlice = createSlice({
@@ -66,7 +67,10 @@ export const accountingSlice = createSlice({
         },
         setStatusOptions: (state, action) => {
             state.statusOptions = action.payload
-        }
+        },
+        setLoadingDeletePayment: (state, action) => {
+            state.loadingDeletePayment = action.payload
+        },
     }
 })
 
@@ -85,7 +89,8 @@ export const {
     setLoadingEditPayment,
     setReceiverTypeOptions,
     setReceiverOptions,
-    setStatusOptions
+    setStatusOptions,
+    setLoadingDeletePayment
 } = accountingSlice.actions;
 
 export const accountingReducer = accountingSlice.reducer;

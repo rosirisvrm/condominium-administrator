@@ -7,7 +7,8 @@ const initialState = {
     loadingUser: false,
     loadingCreateUser: false,
     loadingEditUser: false,
-    roleOptions: []
+    roleOptions: [],
+    loadingDeleteUser: false,
 }
 
 export const usersSlice = createSlice({
@@ -34,6 +35,9 @@ export const usersSlice = createSlice({
         },
         setRoleOptions: (state, action) => {
             state.roleOptions = action.payload
+        },
+        setLoadingDeleteUser: (state, action) => {
+            state.loadingDeleteUser = action.payload
         }
     }
 })
@@ -45,7 +49,8 @@ export const {
     setLoadingUser,
     setLoadingCreateUser,
     setLoadingEditUser,
-    setRoleOptions
+    setRoleOptions,
+    setLoadingDeleteUser
 } = usersSlice.actions;
 
 export const usersReducer = usersSlice.reducer;

@@ -15,10 +15,11 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getUsers } from '../../services/users';
-import { setUsers, setLoadingUsersList } from '../../slices/usersSlice'
+import { getUsers, deleteUser } from '../../services/users';
+import { setUsers, setLoadingUsersList, setLoadingDeleteUser } from '../../slices/usersSlice'
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +27,23 @@ function Users() {
 
   const users = useSelector(state => state.users.usersList)
   const loadingUsersList = useSelector(state => state.users.loadingUsersList)
+  const loadingDeleteUser = useSelector(state => state.users.loadingDeleteUser)
   
   const dispatch = useDispatch()
+
+  const tableHead = [
+    { id: 'name', label: 'Nombre', alignRight: false },
+    { id: 'address', label: 'Dirección', alignRight: false },
+    { id: 'subject', label: 'Teléfono', alignRight: false },
+    { id: 'level', label: 'Correo', alignRight: false },
+    { id: 'status', label: 'Rol', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([])
+  const [open, setOpen] = useState(false)
+  const [color, setColor] = useState('')
+  const [reload, setReload] = useState('')
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -41,18 +57,7 @@ function Users() {
     }
 
     fetchUsers()
-  }, [dispatch])
-
-  const tableHead = [
-    { id: 'name', label: 'Nombre', alignRight: false },
-    { id: 'address', label: 'Dirección', alignRight: false },
-    { id: 'subject', label: 'Teléfono', alignRight: false },
-    { id: 'level', label: 'Correo', alignRight: false },
-    { id: 'status', label: 'Rol', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
+  }, [dispatch, reload])
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -70,7 +75,16 @@ function Users() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item', id);
+    dispatch(setLoadingDeleteUser(true))
+
+    setTimeout(async () => {
+      const res = await deleteUser(id)
+      dispatch(setLoadingDeleteUser(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
+    }, 1000)
   }
 
   const download = () => {
@@ -127,7 +141,8 @@ function Users() {
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeleteUser}
                     actionsRedirect={{
                       edit: `/dashboard/usuarios/editar/${id}` ,
                       detail: `/dashboard/usuarios/detalle/${id}`,
@@ -139,6 +154,11 @@ function Users() {
           }}
         </CustomTable>
 
+        <CustomSnackbar
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
       </Container>
     </Page>
   );

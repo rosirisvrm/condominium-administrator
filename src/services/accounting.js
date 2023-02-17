@@ -205,3 +205,9 @@ export const putPayment = (id, body) => {
 
     return true;
 }
+
+export const deletePayment = (id) => {
+  console.log('deleting', id);
+
+  return true;
+}

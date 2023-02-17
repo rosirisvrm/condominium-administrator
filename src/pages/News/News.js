@@ -15,11 +15,12 @@ import {
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { CustomTable } from '../../components/CustomTable';
+import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
-import { getNewsList } from '../../services/news';
-import { setNewsList, setLoadingNewsList } from '../../slices/news'
+import { getNewsList, deleteNews } from '../../services/news';
+import { setNewsList, setLoadingNewsList, setLoadingDeleteNews } from '../../slices/news'
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +28,22 @@ function News() {
 
   const news = useSelector(state => state.news.newsList)
   const loadingNewsList = useSelector(state => state.news.loadingNewsList)
+  const loadingDeleteNews = useSelector(state => state.news.loadingDeleteNews)
   
   const dispatch = useDispatch()
+
+  const [selected, setSelected] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [color, setColor] = useState('');
+  const [reload, setReload] = useState(false);
+
+  const tableHead = [
+    { id: 'title', label: 'Título', alignRight: false },
+    { id: 'author', label: 'Autor', alignRight: false },
+    { id: 'postedAt', label: 'Fecha', alignRight: false },
+    { id: 'sections', label: 'Secciones', alignRight: false },
+    { id: '' },
+  ];
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -42,17 +57,7 @@ function News() {
     }
 
     fetchNews()
-  }, [dispatch])
-
-  const tableHead = [
-    { id: 'title', label: 'Título', alignRight: false },
-    { id: 'author', label: 'Autor', alignRight: false },
-    { id: 'postedAt', label: 'Fecha', alignRight: false },
-    { id: 'sections', label: 'Secciones', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
+  }, [dispatch, reload])
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -70,7 +75,16 @@ function News() {
   };
 
   const deleteItem = (id) => {
-    console.log('eliminando item', id);
+    dispatch(setLoadingDeleteNews(true))
+
+    setTimeout(() => {
+      const res = deleteNews(id)
+      dispatch(setLoadingDeleteNews(false))
+
+      setColor(res ? 'success' : 'error')
+      setOpen(true)
+      setReload(prev => !prev)
+    }, 1000)
   }
 
   const download = () => {
@@ -126,7 +140,8 @@ function News() {
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
                     idItem={id}
-                    deleteItem={deleteItem} 
+                    deleteItem={deleteItem}
+                    loadingDelete={loadingDeleteNews}
                     actionsRedirect={{
                       edit: `/dashboard/noticias/editar/${id}` ,
                       detail: `/dashboard/noticias/detalle/${id}`,
@@ -137,6 +152,12 @@ function News() {
             );
           }}
         </CustomTable>
+
+        <CustomSnackbar 
+          open={open}
+          onClose={() => setOpen(false)}
+          color={color}
+        />
 
       </Container>
     </Page>

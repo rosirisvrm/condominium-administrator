@@ -10,6 +10,7 @@ const initialState = {
     loadingRole: false,
     loadingCreateRole: false,
     loadingEditRole: false,
+    loadingDeleteRole: false,
 }
 
 export const rolesSlice = createSlice({
@@ -42,6 +43,9 @@ export const rolesSlice = createSlice({
         },
         setLoadingEditRole: (state, action) => {
             state.loadingEditRole = action.payload;
+        },
+        setLoadingDeleteRole: (state, action) => {
+            state.loadingDeleteRole = action.payload;
         }
     }
 })
@@ -56,6 +60,7 @@ export const {
     setLoadingRole,
     setLoadingCreateRole,
     setLoadingEditRole,
+    setLoadingDeleteRole
 } = rolesSlice.actions;
 
 export const rolesReducer = rolesSlice.reducer;
