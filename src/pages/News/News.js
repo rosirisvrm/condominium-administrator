@@ -41,7 +41,6 @@ function News() {
     { id: 'title', label: 'Título', alignRight: false },
     { id: 'author', label: 'Autor', alignRight: false },
     { id: 'postedAt', label: 'Fecha', alignRight: false },
-    { id: 'sections', label: 'Secciones', alignRight: false },
     { id: '' },
   ];
 
@@ -113,7 +112,7 @@ function News() {
           download={download}
         >
           {row => {
-            const { id, title, author, postedAt, sections } = row;
+            const { id, title, author, postedAt } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
 
             return (
@@ -135,7 +134,6 @@ function News() {
                 </TableCell>
                 <TableCell align="left">{author?.name || ''}</TableCell>
                 <TableCell align="left">{postedAt ? fDate(postedAt) : ''}</TableCell>
-                <TableCell align="left">{sections.length}</TableCell>
                 <TableCell align="right">
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 

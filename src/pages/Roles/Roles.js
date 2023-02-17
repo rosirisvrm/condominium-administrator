@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { sentenceCase } from 'change-case';
 // material
 import {
   Stack,
@@ -14,6 +15,7 @@ import {
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
+import Label from '../../components/Label';
 import { CustomTable } from '../../components/CustomTable';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
@@ -89,6 +91,14 @@ function Roles() {
     console.log('descargando');
   }
 
+  const getStatusColor = (status) => {
+    if(status?.value === 0){
+        return 'success';
+    }
+    
+    return 'warning';
+  }
+
   return (
     <Page title="Roles">
       <Container>
@@ -113,6 +123,7 @@ function Roles() {
           {row => {
             const { id, name, status, numberOfUsers } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
+            const color = getStatusColor(status);
 
             return (
               <TableRow
@@ -131,7 +142,11 @@ function Roles() {
                     {name}
                   </Typography>
                 </TableCell>
-                <TableCell align="left">{status.label}</TableCell>
+                <TableCell align="left">
+                  <Label variant="ghost" color={color}>
+                    {sentenceCase(status.label)}
+                  </Label>
+                </TableCell>
                 <TableCell align="left">{numberOfUsers}</TableCell>
                 <TableCell align="left">
                   <UserActions 

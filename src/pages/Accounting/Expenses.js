@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { sentenceCase } from 'change-case';
 // material
 import {
   Stack,
@@ -14,6 +15,7 @@ import {
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
+import Label from '../../components/Label';
 import { CustomTable } from '../../components/CustomTable';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
@@ -92,6 +94,18 @@ function Expenses() {
     console.log('descargando');
   }
 
+  const getStatusColor = (status) => {
+    if(status?.value === 0){
+        return 'warning';
+    }
+
+    if(status?.value === 1){
+      return 'success';
+    }
+    
+    return 'error';
+  }
+
   return (
     <Page title="Egresos">
       <Container>
@@ -116,6 +130,7 @@ function Expenses() {
           {row => {
             const { id, subject, amount, reference, date, status } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
+            const color = getStatusColor(status);
 
             return (
               <TableRow
@@ -137,7 +152,11 @@ function Expenses() {
                 <TableCell align="left">{amount}</TableCell>
                 <TableCell align="left">{reference}</TableCell>
                 <TableCell align="left">{fDate(date)}</TableCell>
-                <TableCell align="left">{status?.label || ''}</TableCell>
+                <TableCell align="left">
+                  <Label variant="ghost" color={color}>
+                    {sentenceCase(status.label)}
+                  </Label>
+                </TableCell>
                 <TableCell align="right">
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 

@@ -1,27 +1,35 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
 
-//  http request here
 export const getRoles = () => ([
   {
     id: faker.datatype.uuid(),
     name: 'Administrador',
     description: faker.lorem.sentence(),
-    status: { label: 'Activo', value: 0 },
+    status: sample([
+      { label: 'Activo', value: 0 },
+      { label: 'Inactivo', value: 1 },
+    ]),
     numberOfUsers: 1,
   },
   {
     id: faker.datatype.uuid(),
     name: 'Junta de condominio',
     description: faker.lorem.sentence(),
-    status: { label: 'Activo', value: 0 },
+    status: sample([
+      { label: 'Activo', value: 0 },
+      { label: 'Inactivo', value: 1 },
+    ]),
     numberOfUsers: 3,
   },
   {
     id: faker.datatype.uuid(),
     name: 'Propietario',
     description: faker.lorem.sentence(),
-    status: { label: 'Activo', value: 0 },
+    status: sample([
+      { label: 'Activo', value: 0 },
+      { label: 'Inactivo', value: 1 },
+    ]),
     numberOfUsers: faker.random.numeric(2),
   },
 ]);
@@ -30,7 +38,10 @@ export const getRole = () => ({
   id: faker.datatype.uuid(),
   name: sample(['Administrador', 'Junta de condominio', 'Propietario']),
   description: faker.lorem.sentence(),
-  status: { label: 'Activo', value: 0 },
+  status: sample([
+    { label: 'Activo', value: 0 },
+    { label: 'Inactivo', value: 1 },
+  ]),
   numberOfUsers: faker.random.numeric(1),
   permissions: [...Array(6)].map(() => ({
     permission: sample([

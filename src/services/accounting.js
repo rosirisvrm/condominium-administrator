@@ -1,18 +1,16 @@
 import { faker } from '@faker-js/faker';
+import { sample } from 'lodash';
 
-//  http request here 
 export const getExpenses = () => ([...Array(24)].map(() => ({
     id: faker.datatype.uuid(),
     subject: faker.lorem.sentence(4),
     amount: faker.finance.amount(),
     reference: faker.datatype.number(),
-    status: {
-      value: parseInt(faker.random.numeric(1, { 
-        bannedDigits: ['3', '4', '5', '6', '7', '8', '9'], 
-        allowLeadingZeros: true
-      }), 10),
-      label: 'Pendiente',
-    },
+    status: sample([
+      { label: 'Pendiente', value: 0 },
+      { label: 'Aprobado', value: 1 },
+      { label: 'Rechazado', value: 2 },
+    ]),
     date: faker.date.past(),
     user: {
       id: faker.datatype.uuid(),
@@ -27,15 +25,12 @@ export const getIncome = () => ([...Array(24)].map(() => ({
     subject: faker.lorem.sentence(4),
     amount: faker.finance.amount(),
     reference: faker.datatype.number(),
-    status: {
-      value: parseInt(faker.random.numeric(1, { 
-        bannedDigits: ['3', '4', '5', '6', '7', '8', '9'], 
-        allowLeadingZeros: true
-      }), 10),
-      label: 'Pendiente',
-    },
+    status: sample([
+      { label: 'Pendiente', value: 0 },
+      { label: 'Aprobado', value: 1 },
+      { label: 'Rechazado', value: 2 },
+    ]),
     date: faker.date.past(),
-    // User data 
     userId: faker.datatype.uuid(),
     name: faker.name.findName(),
     address: faker.address.cityName() + faker.address.streetAddress(),
@@ -47,13 +42,11 @@ export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map((
   subject: faker.lorem.sentence(4),
   amount: faker.finance.amount(),
   reference: faker.datatype.number(),
-  status: {
-    value: parseInt(faker.random.numeric(1, { 
-      bannedDigits: ['3', '4', '5', '6', '7', '8', '9'], 
-      allowLeadingZeros: true
-    }), 10),
-    label: 'Pendiente',
-  },
+  status: sample([
+    { label: 'Pendiente', value: 0 },
+    { label: 'Aprobado', value: 1 },
+    { label: 'Rechazado', value: 2 },
+  ]),
   date: faker.date.past(),
   user: {
     id: faker.datatype.uuid(),

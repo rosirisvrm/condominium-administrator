@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sentenceCase } from 'change-case';
 // material
 import {
   Stack,
@@ -11,6 +12,7 @@ import {
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
+import Label from '../../components/Label';
 import { CustomTable } from '../../components/CustomTable';
 import { UserActions } from '../../sections/@dashboard/user';
 //
@@ -26,6 +28,18 @@ function Income() {
   
   const dispatch = useDispatch()
 
+  const tableHead = [
+    { id: 'name', label: 'Nombre', alignRight: false },
+    { id: 'address', label: 'Dirección', alignRight: false },
+    { id: 'subject', label: 'Asunto', alignRight: false },
+    { id: 'amount', label: 'Monto (USD)', alignRight: false },
+    { id: 'reference', label: 'Referencia', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
+    { id: '' },
+  ];
+
+  const [selected, setSelected] = useState([])
+
   useEffect(() => {
     const fetchIncome = async () => {
       dispatch(setLoadingIncomeList(true))
@@ -39,18 +53,6 @@ function Income() {
 
     fetchIncome()
   }, [dispatch])
-
-  const tableHead = [
-    { id: 'name', label: 'Nombre', alignRight: false },
-    { id: 'address', label: 'Dirección', alignRight: false },
-    { id: 'subject', label: 'Asunto', alignRight: false },
-    { id: 'amount', label: 'Monto (USD)', alignRight: false },
-    { id: 'reference', label: 'Referencia', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
-    { id: '' },
-  ];
-
-  const [selected, setSelected] = useState([]);
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -75,6 +77,18 @@ function Income() {
     console.log('descargando');
   }
 
+  const getStatusColor = (status) => {
+    if(status?.value === 0){
+        return 'warning';
+    }
+
+    if(status?.value === 1){
+      return 'success';
+    }
+    
+    return 'error';
+  }
+
   return (
     <Page title="Ingresos">
       <Container>
@@ -96,6 +110,7 @@ function Income() {
           {row => {
             const { id, name, address, subject, amount, reference, status } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
+            const color = getStatusColor(status);
 
             return (
               <TableRow
@@ -118,7 +133,11 @@ function Income() {
                 <TableCell align="left">{subject}</TableCell>
                 <TableCell align="left">{amount}</TableCell>
                 <TableCell align="left">{reference}</TableCell>
-                <TableCell align="left">{status?.label || ''}</TableCell>
+                <TableCell align="left">
+                  <Label variant="ghost" color={color}>
+                    {sentenceCase(status.label)}
+                  </Label>
+                </TableCell>
                 <TableCell align="right">
                   <UserActions 
                     actions={['detail']} 

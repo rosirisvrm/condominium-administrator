@@ -29,7 +29,7 @@ function DeleteModal({ open, handleClose, onDelete, loading }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Esta es una acción irreversible, por favor esté seguro antes de realizar la acción.
+            Esta es una acción irreversible, por favor asegúrese antes de realizar la acción.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
