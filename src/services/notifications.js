@@ -72,6 +72,10 @@ export const putNotification = (id, body) => {
 
 export const deleteNotification = (id) => {
     console.log('deleting id ', id);
+    return true;
+}
 
+export const downloadNotification = () => {
+    console.log('downloading');
     return true;
 }

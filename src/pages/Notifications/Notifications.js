@@ -21,8 +21,17 @@ import { UserActions } from '../../sections/@dashboard/user';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
 import { fDate, fTime } from '../../utils/formatTime';
-import { getNotificationsList, deleteNotification } from '../../services/notifications';
-import { setNotificationsList, setLoadingNotificationsList, setLoadingDeleteNotification } from '../../slices/notifications'
+import { 
+  getNotificationsList, 
+  deleteNotification, 
+  downloadNotification 
+} from '../../services/notifications';
+import { 
+  setNotificationsList, 
+  setLoadingNotificationsList, 
+  setLoadingDeleteNotification, 
+  setLoadingDownloadNotification 
+} from '../../slices/notifications'
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +40,7 @@ function Notifications() {
   const notifications = useSelector(state => state.notifications.notificationsList)
   const loadingNotificationsList = useSelector(state => state.notifications.loadingNotificationsList)
   const loadingDeleteNotification = useSelector(state => state.notifications.loadingDeleteNotification)
+  const loadingDownloadNotification = useSelector(state => state.notifications.loadingDownloadNotification)
   
   const dispatch = useDispatch()
 
@@ -91,7 +101,12 @@ function Notifications() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadNotification(true))
+
+    setTimeout(async () => {
+      await downloadNotification()
+      dispatch(setLoadingDownloadNotification(false))
+    }, [2000])
   }
 
   const getStatusColor = (status) => {
@@ -127,6 +142,7 @@ function Notifications() {
           loading={loadingNotificationsList}
           searchParam='title'
           download={download}
+          loadingDownload={loadingDownloadNotification}
         >
           {row => {
             const { id, title, author, date, status, hour } = row;

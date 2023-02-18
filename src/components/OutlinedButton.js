@@ -15,7 +15,15 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
 
 const LoadingButtonStyle = styled(LoadingButton)(({ theme }) => ({
     border: `2px solid ${theme.palette.primary.main}`,
-    '&:hover': { border: `2px solid ${theme.palette.primary.main}` },
+    '&:hover': { 
+        border: `2px solid ${theme.palette.primary.main}` 
+    },
+    '&:disabled': { 
+        border: `2px solid ${theme.palette.primary.main}` 
+    },
+    '.css-1iyu4y0-MuiLoadingButton-loadingIndicator': {
+        color: theme.palette.primary.main
+    }
 }))
 
 // ----------------------------------------------------------------------

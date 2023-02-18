@@ -8,15 +8,17 @@ DownloadButton.propTypes = {
     text: PropTypes.string,
     onClick: PropTypes.func,
     icon: PropTypes.string,
+    loading: PropTypes.bool
 }
 
-function DownloadButton({ text = 'Descargar', onClick, icon = 'material-symbols:sim-card-download' }){
+function DownloadButton({ text = 'Descargar', onClick, icon = 'material-symbols:sim-card-download', loading }){
 
     return(
         <OutlinedButton 
             size='small' 
             onClick={onClick} 
             customPadding='3px 12px'
+            loading={loading}
         >
             <Iconify 
                 icon={icon}

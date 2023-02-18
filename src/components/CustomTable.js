@@ -30,6 +30,7 @@ CustomTable.propTypes = {
     loading: PropTypes.bool,
     searchParam: PropTypes.string,
     download: PropTypes.func,
+    loadingDownload: PropTypes.bool
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -69,7 +70,8 @@ function CustomTable({
   setSelected, 
   loading, 
   searchParam,
-  download
+  download,
+  loadingDownload
 }) {
 
   const renderFunc = children
@@ -161,7 +163,7 @@ function CustomTable({
           </Scrollbar>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" m={2}>
-            <DownloadButton text='Exportar' onClick={download} />
+            <DownloadButton text='Exportar' onClick={download} loading={loadingDownload} />
 
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
