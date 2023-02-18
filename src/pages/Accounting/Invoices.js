@@ -9,15 +9,21 @@ import {
   Container,
   Typography,
   IconButton,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
 import { CustomTable } from '../../components/CustomTable';
 import Iconify from '../../components/Iconify';
 //
-import { getInvoices, downloadInvoicesList } from '../../services/accounting';
-import { setInvoices, setLoadingInvoicesList, setLoadingDownloadInvoicesList } from '../../slices/accountingSlice'
+import { getInvoices, downloadInvoicesList, downloadInvoice } from '../../services/accounting';
+import { 
+  setInvoices, 
+  setLoadingInvoicesList, 
+  setLoadingDownloadInvoicesList, 
+  setLoadingDownloadInvoice
+} from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +32,7 @@ function Invoices() {
   const invoicesList = useSelector(state => state.accounting.invoicesList)
   const loadingInvoiceList = useSelector(state => state.accounting.loadingInvoiceList)
   const loadingDownloadInvoicesList = useSelector(state => state.accounting.loadingDownloadInvoicesList)
+  const loadingDownloadInvoice = useSelector(state => state.accounting.loadingDownloadInvoice)
   
   const dispatch = useDispatch()
 
@@ -33,9 +40,10 @@ function Invoices() {
     { id: 'subject', label: 'Asunto de Pago', alignRight: false },
     { id: 'invoiceNumber', label: 'Número de Factura', alignRight: false },
     { id: 'id', label: 'Descargar Factura' },
-  ];
+  ]
 
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([])
+  const [idInvoice, setIdInvoice] = useState()
 
   useEffect(() => {
     const fetchIncome = async () => {
@@ -75,8 +83,14 @@ function Invoices() {
     }, [2000])
   }
 
-  const downloadInvoice = () => {
-    console.log('descargando factura')
+  const downloadItem = (id) => {
+    setIdInvoice(id)
+    dispatch(setLoadingDownloadInvoice(true))
+
+    setTimeout(async () => {
+      await downloadInvoice(id)
+      dispatch(setLoadingDownloadInvoice(false))
+    }, [2000])
   }
 
   return (
@@ -122,11 +136,14 @@ function Invoices() {
                 <TableCell align="left">{invoiceNumber}</TableCell>
                 {/* <TableCell align="left">{status?.label || ''}</TableCell> */}
                 <TableCell align="left">
-                  <Tooltip title='Descargar'>
-                    <IconButton onClick={downloadInvoice}>
-                      <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
-                    </IconButton>
-                  </Tooltip>
+                  {(loadingDownloadInvoice && idInvoice === id) ? 
+                    <CircularProgress size={24} /> :
+                    <Tooltip title='Descargar'>
+                      <IconButton onClick={() => downloadItem(id)}>
+                        <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
+                      </IconButton>
+                    </Tooltip>
+                  }
                 </TableCell>
               </TableRow>
             );

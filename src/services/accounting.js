@@ -216,8 +216,8 @@ export const downloadInvoicesList = () => {
   return true;
 }
 
-export const downloadInvoice = () => {
-  console.log('downloading');
+export const downloadInvoice = (id) => {
+  console.log('downloading: ', id);
 
   return true;
 }

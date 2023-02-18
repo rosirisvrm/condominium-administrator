@@ -399,7 +399,7 @@ function PaymentMethods() {
           maxWidth='md'
         >
          {loadingPaymentMethod ?
-          <Loader /> :
+          <Loader small /> :
           <form>
             <Grid container spacing={2}>
               <Grid container item spacing={spacing}>
