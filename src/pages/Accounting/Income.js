@@ -16,8 +16,8 @@ import Label from '../../components/Label';
 import { CustomTable } from '../../components/CustomTable';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getIncome } from '../../services/accounting';
-import { setIncome, setLoadingIncomeList } from '../../slices/accountingSlice'
+import { getIncome, downloadPayment } from '../../services/accounting';
+import { setIncome, setLoadingIncomeList, setLoadingDownloadPayment } from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +25,7 @@ function Income() {
 
   const incomeList = useSelector(state => state.accounting.incomeList)
   const loadingIncomeList = useSelector(state => state.accounting.loadingIncomeList)
+  const loadingDownloadPayment = useSelector(state => state.accounting.loadingDownloadPayment)
   
   const dispatch = useDispatch()
 
@@ -74,7 +75,12 @@ function Income() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadPayment(true))
+
+    setTimeout(async () => {
+      await downloadPayment()
+      dispatch(setLoadingDownloadPayment(false))
+    }, [2000])
   }
 
   const getStatusColor = (status) => {
@@ -106,6 +112,7 @@ function Income() {
           loading={loadingIncomeList}
           searchParam='subject'
           download={download}
+          loadingDownload={loadingDownloadPayment}
         >
           {row => {
             const { id, name, address, subject, amount, reference, status } = row;

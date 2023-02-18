@@ -18,8 +18,8 @@ import { CustomTable } from '../../components/CustomTable';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getEmployees, deleteEmployee } from '../../services/employees';
-import { setEmployees, setLoadingEmployeesList, setLoadingDeleteEmployee } from '../../slices/employees'
+import { getEmployees, deleteEmployee, downloadEmployee } from '../../services/employees';
+import { setEmployees, setLoadingEmployeesList, setLoadingDeleteEmployee, setLoadingDownloadEmployee } from '../../slices/employees'
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +28,7 @@ function Employees() {
   const employees = useSelector(state => state.employees.employeesList)
   const loadingEmployeesList = useSelector(state => state.employees.loadingEmployeesList)
   const loadingDeleteEmployee = useSelector(state => state.employees.loadingDeleteEmployee)
+  const loadingDownloadEmployee = useSelector(state => state.employees.loadingDownloadEmployee)
   
   const dispatch = useDispatch()
 
@@ -88,7 +89,12 @@ function Employees() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadEmployee(true))
+
+    setTimeout(async () => {
+      await downloadEmployee()
+      dispatch(setLoadingDownloadEmployee(false))
+    }, [2000])
   }
 
   return (
@@ -111,6 +117,7 @@ function Employees() {
           loading={loadingEmployeesList}
           searchParam='name'
           download={download}
+          loadingDownload={loadingDownloadEmployee}
         >
           {row => {
             const { id, name, email, phone, position, identification } = row;

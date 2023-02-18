@@ -18,8 +18,8 @@ import { CustomTable } from '../../components/CustomTable';
 import { UserActions } from '../../sections/@dashboard/user';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 //
-import { getProviders, deleteProvider } from '../../services/providers';
-import { setProviders, setLoadingProvidersList, setLoadingDeleteProvider } from '../../slices/providers'
+import { getProviders, deleteProvider, downloadProvider } from '../../services/providers';
+import { setProviders, setLoadingProvidersList, setLoadingDeleteProvider, setLoadingDownloadProvider } from '../../slices/providers'
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +27,8 @@ function Providers() {
 
   const providers = useSelector(state => state.providers.providersList)
   const loadingProvidersList = useSelector(state => state.providers.loadingProvidersList)
-  const loadingDeleteProvider = useSelector(state => state.providers.loadingDeleteProvider)  
+  const loadingDeleteProvider = useSelector(state => state.providers.loadingDeleteProvider) 
+  const loadingDownloadProvider = useSelector(state => state.providers.loadingDownloadProvider) 
   
   const dispatch = useDispatch()
 
@@ -87,7 +88,12 @@ function Providers() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadProvider(true))
+
+    setTimeout(async() => {
+      await downloadProvider()
+      dispatch(setLoadingDownloadProvider(false))
+    }, [2000])
   }
 
   return (
@@ -110,6 +116,7 @@ function Providers() {
           loading={loadingProvidersList}
           searchParam='companyName'
           download={download}
+          loadingDownload={loadingDownloadProvider}
         >
           {row => {
             const { id, companyName, email, phone, product } = row;

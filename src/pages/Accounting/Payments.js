@@ -21,8 +21,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
-import { getPayments, deletePayment } from '../../services/accounting';
-import { setPayments, setLoadingPaymentsList, setLoadingDeletePayment } from '../../slices/accountingSlice'
+import { getPayments, deletePayment, downloadPayment } from '../../services/accounting';
+import { setPayments, setLoadingPaymentsList, setLoadingDeletePayment, setLoadingDownloadPayment } from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ function Payments() {
   const paymentsList = useSelector(state => state.accounting.paymentsList)
   const loadingPaymentsList = useSelector(state => state.accounting.loadingPaymentsList)
   const loadingDeletePayment = useSelector(state => state.accounting.loadingDeletePayment)
+  const loadingDownloadPayment = useSelector(state => state.accounting.loadingDownloadPayment)
   
   const dispatch = useDispatch()
 
@@ -91,7 +92,12 @@ function Payments() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadPayment(true))
+
+    setTimeout(async () => {
+      await downloadPayment()
+      dispatch(setLoadingDownloadPayment(false))
+    }, [2000])
   }
 
   const getStatusColor = (status) => {
@@ -126,6 +132,7 @@ function Payments() {
           loading={loadingPaymentsList}
           searchParam='subject'
           download={download}
+          loadingDownload={loadingDownloadPayment}
         >
           {row => {
             const { id, subject, amount, reference, date, status } = row;

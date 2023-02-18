@@ -20,8 +20,8 @@ import { CustomTable } from '../../components/CustomTable';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getRoles, deleteRole } from '../../services/roles';
-import { setRoles, setLoadingRolesList, setLoadingDeleteRole } from '../../slices/roles'
+import { getRoles, deleteRole, downloadRole } from '../../services/roles';
+import { setRoles, setLoadingRolesList, setLoadingDeleteRole, setLoadingDownloadRole } from '../../slices/roles'
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +30,7 @@ function Roles() {
   const roles = useSelector(state => state.roles.rolesList)
   const loadingRolesList = useSelector(state => state.roles.loadingRolesList)
   const loadingDeleteRole = useSelector(state => state.roles.loadingDeleteRole)
+  const loadingDownloadRole = useSelector(state => state.roles.loadingDownloadRole)
   
   const dispatch = useDispatch()
 
@@ -87,8 +88,13 @@ function Roles() {
     }, 1000)
   }
 
-  const donwload = () => {
-    console.log('descargando');
+  const download = () => {
+    dispatch(setLoadingDownloadRole(true))
+
+    setTimeout(async() => {
+      await downloadRole()
+      dispatch(setLoadingDownloadRole(false))
+    }, [2000])
   }
 
   const getStatusColor = (status) => {
@@ -118,7 +124,8 @@ function Roles() {
           setSelected={setSelected}
           loading={loadingRolesList}
           searchParam='name'
-          donwload={donwload}
+          download={download}
+          loadingDownload={loadingDownloadRole}
         >
           {row => {
             const { id, name, status, numberOfUsers } = row;

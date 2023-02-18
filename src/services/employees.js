@@ -45,22 +45,27 @@ export const getEmployee = (id) => ({
 });
 
 export const postEmployee = (body) => {
-    console.log('creando');
+    console.log('creating');
     console.log('body: ', body);
 
     return true;
 }
 
 export const putEmployee = (id, body) => {
-    console.log('editando');
-    console.log('id: ', id);
+    console.log('editing: ', id);
     console.log('body: ', body);
 
     return true;
 }
 
 export const deleteEmployee = (id) => {
-    console.log('deleting', id);
+    console.log('deleting ', id);
+
+    return true;
+}
+
+export const downloadEmployee = () => {
+    console.log('downloading');
 
     return true;
 }

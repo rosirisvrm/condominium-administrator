@@ -83,21 +83,27 @@ export const getRole = () => ({
 ]);
 
 export const postRole = (body) => {
-  console.log('creando usuario');
+  console.log('creating');
   console.log('body: ', body);
 
   return true;
 }
 
 export const putRole = (id, body) => {
-  console.log('editando usuario ', id);
+  console.log('editing id: ', id);
   console.log('body: ', body);
 
   return true;
 }
 
 export const deleteRole = (id) => {
-  console.log('deleting', id);
+  console.log('deleting ', id);
+
+  return true;
+}
+
+export const downloadRole = () => {
+  console.log('downloading');
 
   return true;
 }

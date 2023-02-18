@@ -18,8 +18,8 @@ import { CustomTable } from '../../components/CustomTable';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
-import { getUsers, deleteUser } from '../../services/users';
-import { setUsers, setLoadingUsersList, setLoadingDeleteUser } from '../../slices/usersSlice'
+import { getUsers, deleteUser, downloadUser } from '../../services/users';
+import { setUsers, setLoadingUsersList, setLoadingDeleteUser, setLoadingDownloadUser } from '../../slices/usersSlice'
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +28,7 @@ function Users() {
   const users = useSelector(state => state.users.usersList)
   const loadingUsersList = useSelector(state => state.users.loadingUsersList)
   const loadingDeleteUser = useSelector(state => state.users.loadingDeleteUser)
+  const loadingDownloadUser = useSelector(state => state.users.loadingDownloadUser)
   
   const dispatch = useDispatch()
 
@@ -88,7 +89,12 @@ function Users() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadUser(true))
+
+    setTimeout(async () => {
+      await downloadUser()
+      dispatch(setLoadingDownloadUser(false))
+    }, [2000])
   }
 
   return (
@@ -111,6 +117,7 @@ function Users() {
           loading={loadingUsersList}
           searchParam='name'
           download={download}
+          loadingDownload={loadingDownloadUser}
         >
           {row => {
             const { id, name, address, email, phone, role } = row;

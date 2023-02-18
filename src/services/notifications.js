@@ -56,15 +56,14 @@ export const getNotification = (id) => ({
 });
 
 export const postNotification = (body) => {
-    console.log('creando');
+    console.log('creating');
     console.log('body: ', body);
 
     return true;
 }
 
 export const putNotification = (id, body) => {
-    console.log('editando');
-    console.log('id: ', id);
+    console.log('editing: ', id);
     console.log('body: ', body);
 
     return true;

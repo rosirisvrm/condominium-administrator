@@ -16,8 +16,8 @@ import Page from '../../components/Page';
 import { CustomTable } from '../../components/CustomTable';
 import Iconify from '../../components/Iconify';
 //
-import { getInvoices } from '../../services/accounting';
-import { setInvoices, setLoadingInvoicesList } from '../../slices/accountingSlice'
+import { getInvoices, downloadInvoicesList } from '../../services/accounting';
+import { setInvoices, setLoadingInvoicesList, setLoadingDownloadInvoicesList } from '../../slices/accountingSlice'
 
 // ----------------------------------------------------------------------
 
@@ -25,8 +25,17 @@ function Invoices() {
 
   const invoicesList = useSelector(state => state.accounting.invoicesList)
   const loadingInvoiceList = useSelector(state => state.accounting.loadingInvoiceList)
+  const loadingDownloadInvoicesList = useSelector(state => state.accounting.loadingDownloadInvoicesList)
   
   const dispatch = useDispatch()
+
+  const tableHead = [
+    { id: 'subject', label: 'Asunto de Pago', alignRight: false },
+    { id: 'invoiceNumber', label: 'Número de Factura', alignRight: false },
+    { id: 'id', label: 'Descargar Factura' },
+  ];
+
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     const fetchIncome = async () => {
@@ -42,14 +51,6 @@ function Invoices() {
     fetchIncome()
   }, [dispatch])
 
-  const tableHead = [
-    { id: 'subject', label: 'Asunto de Pago', alignRight: false },
-    { id: 'invoiceNumber', label: 'Número de Factura', alignRight: false },
-    { id: 'id', label: 'Descargar Factura' },
-  ];
-
-  const [selected, setSelected] = useState([]);
-
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -64,6 +65,15 @@ function Invoices() {
     }
     setSelected(newSelected);
   };
+
+  const download = () => {
+    dispatch(setLoadingDownloadInvoicesList(true))
+
+    setTimeout(async () => {
+      await downloadInvoicesList()
+      dispatch(setLoadingDownloadInvoicesList(false))
+    }, [2000])
+  }
 
   const downloadInvoice = () => {
     console.log('descargando factura')
@@ -85,7 +95,8 @@ function Invoices() {
           setSelected={setSelected}
           loading={loadingInvoiceList}
           searchParam='subject'
-          download={downloadInvoice}
+          download={download}
+          loadingDownload={loadingDownloadInvoicesList}
         >
           {row => {
             const { id, subject, invoiceNumber } = row;

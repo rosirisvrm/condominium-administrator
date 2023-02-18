@@ -16,7 +16,10 @@ const initialState = {
     receiverTypeOptions: [],
     receiverOptions: [],
     statusOptions: [],
-    loadingDeletePayment: false
+    loadingDeletePayment: false,
+    loadingDownloadPayment: false,
+    loadingDownloadInvoicesList: false,
+    loadingDownloadInvoice: false,
 }
 
 export const accountingSlice = createSlice({
@@ -71,6 +74,15 @@ export const accountingSlice = createSlice({
         setLoadingDeletePayment: (state, action) => {
             state.loadingDeletePayment = action.payload
         },
+        setLoadingDownloadPayment: (state, action) => {
+            state.loadingDownloadPayment = action.payload
+        },
+        setLoadingDownloadInvoicesList: (state, action) => {
+            state.loadingDownloadInvoicesList = action.payload
+        },
+        setLoadingDownloadInvoice: (state, action) => {
+            state.loadingDownloadInvoice = action.payload
+        },
     }
 })
 
@@ -90,7 +102,10 @@ export const {
     setReceiverTypeOptions,
     setReceiverOptions,
     setStatusOptions,
-    setLoadingDeletePayment
+    setLoadingDeletePayment,
+    setLoadingDownloadPayment,
+    setLoadingDownloadInvoicesList,
+    setLoadingDownloadInvoice
 } = accountingSlice.actions;
 
 export const accountingReducer = accountingSlice.reducer;

@@ -8,6 +8,7 @@ const initialState = {
     loadingCreateEmployee: false,
     loadingEditEmployee: false,
     loadingDeleteEmployee: false,
+    loadingDownloadEmployee: false,
 }
 
 export const employeesSlice = createSlice({
@@ -34,6 +35,9 @@ export const employeesSlice = createSlice({
         },
         setLoadingDeleteEmployee: (state, action) => {
             state.loadingDeleteEmployee = action.payload;
+        },
+        setLoadingDownloadEmployee: (state, action) => {
+            state.loadingDownloadEmployee = action.payload;
         }
     }
 })
@@ -45,7 +49,8 @@ export const {
     setLoadingEmployee,
     setLoadingCreateEmployee,
     setLoadingEditEmployee,
-    setLoadingDeleteEmployee
+    setLoadingDeleteEmployee,
+    setLoadingDownloadEmployee
 } = employeesSlice.actions;
 
 export const employeesReducer = employeesSlice.reducer;

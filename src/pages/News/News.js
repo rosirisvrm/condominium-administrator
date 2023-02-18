@@ -19,8 +19,8 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
-import { getNewsList, deleteNews } from '../../services/news';
-import { setNewsList, setLoadingNewsList, setLoadingDeleteNews } from '../../slices/news'
+import { getNewsList, deleteNews, downloadNews } from '../../services/news';
+import { setNewsList, setLoadingNewsList, setLoadingDeleteNews, setLoadingDownloadNews } from '../../slices/news'
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +29,7 @@ function News() {
   const news = useSelector(state => state.news.newsList)
   const loadingNewsList = useSelector(state => state.news.loadingNewsList)
   const loadingDeleteNews = useSelector(state => state.news.loadingDeleteNews)
+  const loadingDownloadNews = useSelector(state => state.news.loadingDownloadNews)
   
   const dispatch = useDispatch()
 
@@ -87,7 +88,12 @@ function News() {
   }
 
   const download = () => {
-    console.log('descargando');
+    dispatch(setLoadingDownloadNews(true))
+
+    setTimeout(async () => {
+      await downloadNews()
+      dispatch(setLoadingDownloadNews(false))
+    }, 2000)
   }
 
   return (
@@ -110,6 +116,7 @@ function News() {
           loading={loadingNewsList}
           searchParam='title'
           download={download}
+          loadingDownload={loadingDownloadNews}
         >
           {row => {
             const { id, title, author, postedAt } = row;

@@ -8,6 +8,7 @@ const initialState = {
     loadingCreateProvider: false,
     loadingEditProvider: false,
     loadingDeleteProvider: false,
+    loadingDownloadProvider: false,
 }
 
 export const providersSlice = createSlice({
@@ -35,6 +36,9 @@ export const providersSlice = createSlice({
         setLoadingDeleteProvider: (state, action) => {
             state.loadingDeleteProvider = action.payload;
         },
+        setLoadingDownloadProvider: (state, action) => {
+            state.loadingDownloadProvider = action.payload;
+        },
     }
 })
 
@@ -45,7 +49,8 @@ export const {
     setLoadingProvider,
     setLoadingCreateProvider,
     setLoadingEditProvider,
-    setLoadingDeleteProvider
+    setLoadingDeleteProvider,
+    setLoadingDownloadProvider
 } = providersSlice.actions;
 
 export const providersReducer = providersSlice.reducer;

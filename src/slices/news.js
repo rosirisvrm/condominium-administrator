@@ -7,7 +7,8 @@ const initialState = {
     loadingNews: false,
     loadingCreateNews: false,
     loadingEditNews: false,
-    loadingDeleteNews: false
+    loadingDeleteNews: false,
+    loadingDownloadNews: false,
 }
 
 export const newsSlice = createSlice({
@@ -35,6 +36,9 @@ export const newsSlice = createSlice({
         setLoadingDeleteNews: (state, action) => {
             state.loadingDeleteNews = action.payload;
         },
+        setLoadingDownloadNews: (state, action) => {
+            state.loadingDownloadNews = action.payload;
+        },
     }
 })
 
@@ -45,7 +49,8 @@ export const {
     setLoadingNews,
     setLoadingCreateNews,
     setLoadingEditNews,
-    setLoadingDeleteNews
+    setLoadingDeleteNews,
+    setLoadingDownloadNews
 } = newsSlice.actions;
 
 export const newsReducer = newsSlice.reducer;

@@ -185,15 +185,14 @@ export const getStatusOptions = () => ([
 ]);
 
 export const postPayment = (body) => {
-    console.log('creando');
+    console.log('creating');
     console.log('body: ', body);
 
     return true;
 }
 
 export const putPayment = (id, body) => {
-    console.log('editando');
-    console.log('id: ', id);
+    console.log('editing: ', id);
     console.log('body: ', body);
 
     return true;
@@ -201,6 +200,24 @@ export const putPayment = (id, body) => {
 
 export const deletePayment = (id) => {
   console.log('deleting', id);
+
+  return true;
+}
+
+export const downloadPayment = () => {
+  console.log('downloading');
+
+  return true;
+}
+
+export const downloadInvoicesList = () => {
+  console.log('downloading');
+
+  return true;
+}
+
+export const downloadInvoice = () => {
+  console.log('downloading');
 
   return true;
 }
