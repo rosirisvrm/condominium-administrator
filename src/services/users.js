@@ -1,36 +1,40 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
-import { number } from 'yup';
 
-//  http request here 
 export const getUsers = () => [...Array(24)].map((_, index) => ({
     id: faker.datatype.uuid(),
-    avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
     name: faker.name.findName(),
-    address: faker.address.buildingNumber(),
-    phone: faker.phone.number('+48 91 ### ## ##'),
-    email: 'user@example.com',
+    identification: faker.random.numeric(8),
+    address: faker.address.cityName() + faker.address.streetAddress(),
+    phone: faker.phone.number('+58 412 ### ####'),
+    email: `${faker.random.word()}@${faker.random.word()}.com`,
     role: sample([
-      'Propietario',
-      'Junta de Condominio',
+        { label: 'Propietario', value: 0 },
+        { label: 'Junta de Condominio', value: 1 },
+        { label: 'Administrador', value: 2 },
     ]),
+    avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
 }));
 
-export const getUser = (id) => ({
-    id: number(id),
-    name: faker.name.findName(),
-    identification: faker.datatype.number(),
-    address: faker.address.buildingNumber() ,
-    phone: faker.phone.number('+48 91 ### ## ##'),
-    email: 'user@example.com',
-    role: {
-        label: sample([
-            'Propietario',
-            'Junta de Condominio'
+export const getUser = (id) => {
+    const password = faker.internet.password()
+    return ({
+        id,
+        name: faker.name.findName(),
+        identification: faker.random.numeric(8),
+        address: faker.address.cityName() + faker.address.streetAddress(),
+        phone: faker.phone.number('+58 412 ### ####'),
+        email: `${faker.random.word()}@${faker.random.word()}.com`,
+        role: sample([
+            { label: 'Propietario', value: 0 },
+            { label: 'Junta de Condominio', value: 1 },
+            { label: 'Administrador', value: 2 },
         ]),
-        value: sample(['Propietario', 'Junta de Condominio']) === 'Propietario' ? 0 : 1,
-    },
-});
+        avatarUrl: `/static/mock-images/avatars/avatar_${1}.jpg`,
+        password,
+        passwordConfirm: password,
+    });
+};
 
 export const getRoleOptions = () => ([
     { label: 'Propietario', value: 0 },

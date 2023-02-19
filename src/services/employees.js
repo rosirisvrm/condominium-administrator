@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 
-//  http request here 
 export const getEmployees = () => [...Array(24)].map(() => ({
     id: faker.datatype.uuid(),
     name: faker.name.findName(),

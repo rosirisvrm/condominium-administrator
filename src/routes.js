@@ -19,7 +19,7 @@ import {
   PayDetail, 
   ExpensesPaymentDetail 
 } from './pages/Accounting';
-import { Users, CreateUser, EditUser, UserDetail } from './pages/Users';
+import { Users, CreateUser, UserDetail } from './pages/Users';
 import { Roles } from './pages/Roles';
 import { CreateRole } from './pages/Roles/CreateRole';
 import { RoleDetail } from './pages/Roles/RoleDetail';
@@ -156,7 +156,7 @@ export default function Router() {
           path: 'usuarios/editar/:id', 
           element: (
             <AuthRoute>
-              <EditUser />
+              <CreateUser />
             </AuthRoute>
           )
         },

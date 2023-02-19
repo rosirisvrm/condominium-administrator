@@ -143,7 +143,7 @@ function Users() {
                 <TableCell align="left">{address}</TableCell>
                 <TableCell align="left">{phone}</TableCell>
                 <TableCell align="left">{email}</TableCell>
-                <TableCell align="left">{role}</TableCell>
+                <TableCell align="left">{role?.label}</TableCell>
                 <TableCell align="right">
                   <UserActions 
                     actions={['delete', 'edit', 'detail']} 
