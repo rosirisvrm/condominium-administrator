@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, InputAdornment } from '@mui/material';
+import { Container, Typography, Grid, InputAdornment, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
@@ -12,11 +12,13 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
-// import { RateCoinIndicator } from '../../components/RateCoinIndicator';
+import { RateCoinIndicator } from '../../components/RateCoinIndicator';
 //
 import useResponsive from '../../hooks/useResponsive';
+//
 import { getReceiverTypeOptions, getReceiverOptions, postPayment } from '../../services/accounting';
 import { getPaymentMethodOptions } from '../../services/customSettings';
+//
 import { setReceiverTypeOptions, setReceiverOptions, setLoadingCreatePayment } from '../../slices/accountingSlice';
 import { setPaymentMethodOptions } from '../../slices/customSettings';
 
@@ -35,14 +37,32 @@ function CreatePayment() {
   const receiverOptions = useSelector(state => state.accounting.receiverOptions)
   const paymentMethodOptions = useSelector(state => state.customSettings.paymentMethodOptions)
   const loadingCreatePayment = useSelector(state => state.accounting.loadingCreatePayment)
-
   const coin = useSelector(state => state.customSettings.coin)
+  const rate = useSelector(state => state.customSettings.rate)
 
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
-  const { control, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm({
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
+  const [fileName, setFileName] = React.useState('')
+  const [file, setFile] = React.useState(null)
+
+  const { 
+    control, 
+    handleSubmit, 
+    formState: { errors }, 
+    setValue, 
+    clearErrors, 
+    getValues 
+  } = useForm({
     defaultValues: {
       subject: '',
       receiverType: '',
@@ -78,13 +98,15 @@ function CreatePayment() {
     }
   }, [dispatch, user])
 
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-  const [fileName, setFileName] = React.useState('')
-  const [file, setFile] = React.useState(null)
+  useEffect(() => {
+    if(getValues('amount') && rate.value){
+      if(coin.label === 'VES'){
+        setValue('amount', getValues('amount') * rate.value)
+      }else{
+        setValue('amount', getValues('amount') / rate.value)
+      }
+    }
+  }, [rate, coin])
 
   const onSubmit = (event) => {
     dispatch(setLoadingCreatePayment(true))
@@ -141,26 +163,15 @@ function CreatePayment() {
     setFile(files[0])
   }
 
-  // const handleChangeCoin = (coin) => {
-  //   console.log('recibiendo coin', coin);
-  // }
-
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
-
   return (
     <Page title="Enviar Pago">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Enviar Pago
-        </Typography>
-        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4">
             Enviar Pago
           </Typography>
           <RateCoinIndicator />
-        </Stack> */}
+        </Stack>
 
         <FormCard>   
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -406,7 +417,6 @@ function CreatePayment() {
                   </ContainedButton>
                 </GridStyle>
               </Grid>
-
             </Grid>
           </form>
         </FormCard>

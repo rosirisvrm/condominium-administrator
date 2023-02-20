@@ -7,8 +7,8 @@ export const getCoinOptions = () => ([
 ]);
 
 export const getRate = () => ({
-    label: 'Tasa Oficial BCV',
-    value: 10.00,
+    label: 'Tasa Oficial',
+    value: 25.09,
 });
 
 export const getPaymentMethodOptions = () => ([

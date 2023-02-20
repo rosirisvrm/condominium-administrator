@@ -1,11 +1,10 @@
-import { useState } from 'react';
-// import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 // material
-import { MenuItem, TextField, Stack } from '@mui/material';
-import { styled } from '@mui/material/styles';
-// import { getCoinOptions, getRate } from '../services/customSettings';
-// import { setCoinOptions, setRate } from '../slices/customSettings';
+import { MenuItem, TextField, Stack, Box } from '@mui/material';
+import { styled, alpha } from '@mui/material/styles';
+import { getCoinOptions, getRate } from '../services/customSettings';
+import { setCoinOptions, setCoin as setCoinRedux, setRate } from '../slices/customSettings';
 
 // ----------------------------------------------------------------------
 
@@ -14,61 +13,60 @@ const TextFieldStyle = styled(TextField)(({ theme }) => ({
     borderRadius: 8
 }))
 
+const BoxStyle = styled(Box)(({ theme }) => ({
+    border: `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
+    backgroundColor: theme.palette.common.white,
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: 400,
+    color: theme.palette.text.primary,
+    padding: '8.5px 14px',
+}))
+
 // ----------------------------------------------------------------------
 
-RateCoinIndicator.propTypes = {
-    changeCoin: PropTypes.func
-};
+function RateCoinIndicator() {
 
-function RateCoinIndicator({ changeCoin }) {
+    const rate = useSelector(state => state.customSettings.rate)
+    const coinOptions = useSelector(state => state.customSettings.coinOptions)
+    const coinRedux = useSelector(state => state.customSettings.coin)
 
-    // const [rate, setRate] = useState(10.00)
-    const [coin, setCoin] = useState('')
+    const [coin, setCoin] = useState(coinRedux ? coinRedux.value : '')
 
-    const coinOptions = [
-        { label: 'USD', value: 0, symbol: '$', description: 'Dólar americano' },
-        { label: 'VES', value: 1, symbol: 'bs', description: 'Bolívar venezolano' },
-    ]
+    const dispatch = useDispatch()
 
-//   const rate = useSelector(state => state.customSettings.rate)
-//   console.log('rate ', rate);
-//   const coin = useSelector(state => state.customSettings.coin)
-//   console.log('coin ', coin);
-//   const coinOptions = useSelector(state => state.customSettings.coinOptions)
-//   console.log('coinOptions ', coinOptions);
+    useEffect(() => {
+        const fetchRate = async () => {
+            const res = await getRate();
+            dispatch(setRate(res))
+        }
+        fetchRate()
 
-//   const [loadingRate, setLoadingRate] = useState(false)
+        const fetchCoinOptions = async () => {
+            const res = await getCoinOptions();
+            dispatch(setCoinOptions(res))
+        }
+        fetchCoinOptions()
+    }, [dispatch])
 
-//   useEffect(() => {
-//     setLoadingRate(true)
-//     const fetchRate = async () => {
-//         const res = await getRate();
-//         console.log('recibiendo rate', res);
-//         setRate(res)
-//     }
-
-//     const fetchCoinOptions = async () => {
-//         const res = await getCoinOptions();
-//         setCoinOptions(res)
-//     }
-
-//     fetchRate()
-//     fetchCoinOptions()
-//     setLoadingRate(false)
-//   }, [])
-
-    const onChange = (event) => {
-        console.log('cambiando moneda')
+    const onChangeCoin = (event) => {
         setCoin(event.target.value)
-    
         const coinSelected = coinOptions.find(item => item.value === event.target.value)
-        console.log('coinSelected ', coinSelected);
-        changeCoin(coinSelected)
+        dispatch(setCoinRedux(coinSelected))
     }
 
     return (
         <Stack direction="row" alignItems="center" justifyContent="flex-end">
-            <TextFieldStyle select size='small' value={coin} onChange={onChange}>
+            <BoxStyle sx={{ mr: 2 }}>
+                {`${rate.label} ${rate.value}`}
+            </BoxStyle>
+
+            <TextFieldStyle 
+                select 
+                size='small' 
+                value={coin} 
+                onChange={onChangeCoin}
+            >
                 {coinOptions.map(option => (
                     <MenuItem key={option.value} value={option.value}>
                         {option.label}
