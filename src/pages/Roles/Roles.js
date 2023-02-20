@@ -21,7 +21,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar';
 import { UserActions } from '../../sections/@dashboard/user';
 //
 import { getRoles, deleteRole, downloadRole } from '../../services/roles';
-import { setRoles, setLoadingRolesList, setLoadingDeleteRole, setLoadingDownloadRole } from '../../slices/roles'
+import { setRoles, setLoadingRolesList, setLoadingDeleteRole, setLoadingDownloadRole } from '../../slices/roles';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ function Roles() {
     { id: 'status', label: 'Status', alignRight: false },
     { id: 'numberOfUsers', label: 'Cantidad de Usuarios', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
@@ -105,6 +105,34 @@ function Roles() {
     return 'warning';
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeleteRole(true))
+
+      const promises = selected.map(idSelected => deleteRole(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeleteRole(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   return (
     <Page title="Roles">
       <Container>
@@ -126,6 +154,8 @@ function Roles() {
           searchParam='name'
           download={download}
           loadingDownload={loadingDownloadRole}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeleteRole}
         >
           {row => {
             const { id, name, status, numberOfUsers } = row;

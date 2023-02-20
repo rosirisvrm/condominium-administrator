@@ -31,7 +31,7 @@ import {
   setLoadingNotificationsList, 
   setLoadingDeleteNotification, 
   setLoadingDownloadNotification 
-} from '../../slices/notifications'
+} from '../../slices/notifications';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ function Notifications() {
     { id: 'date', label: 'Fecha y hora de envío', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
@@ -117,6 +117,34 @@ function Notifications() {
     return 'success';
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeleteNotification(true))
+
+      const promises = selected.map(idSelected => deleteNotification(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeleteNotification(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   return (
     <Page title="Notificaciones">
       <Container>
@@ -143,6 +171,8 @@ function Notifications() {
           searchParam='title'
           download={download}
           loadingDownload={loadingDownloadNotification}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeleteNotification}
         >
           {row => {
             const { id, title, author, date, status, hour } = row;
@@ -171,9 +201,9 @@ function Notifications() {
                   {date && hour ? `${fDate(date)} ${fTime(hour)}` : ''}
                 </TableCell>
                 <TableCell align="left">
-                    <Label variant="ghost" color={color}>
-                        {sentenceCase(status.label)}
-                    </Label>
+                  <Label variant="ghost" color={color}>
+                    {sentenceCase(status.label)}
+                  </Label>
                 </TableCell>
                 <TableCell align="right">
                   <UserActions 

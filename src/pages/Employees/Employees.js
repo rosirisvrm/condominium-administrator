@@ -39,7 +39,7 @@ function Employees() {
     { id: 'email', label: 'Email', alignRight: false },
     { id: 'position', label: 'Cargo', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
@@ -97,6 +97,34 @@ function Employees() {
     }, [2000])
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeleteEmployee(true))
+
+      const promises = selected.map(idSelected => deleteEmployee(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeleteEmployee(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   return (
     <Page title="Empleados">
       <Container>
@@ -118,6 +146,8 @@ function Employees() {
           searchParam='name'
           download={download}
           loadingDownload={loadingDownloadEmployee}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeleteEmployee}
         >
           {row => {
             const { id, name, email, phone, position, identification } = row;

@@ -96,6 +96,34 @@ function News() {
     }, 2000)
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeleteNews(true))
+
+      const promises = selected.map(idSelected => deleteNews(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeleteNews(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   return (
     <Page title="Noticias">
       <Container>
@@ -117,6 +145,8 @@ function News() {
           searchParam='title'
           download={download}
           loadingDownload={loadingDownloadNews}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeleteNews}
         >
           {row => {
             const { id, title, author, postedAt } = row;

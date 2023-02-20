@@ -22,7 +22,7 @@ import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
 import { getExpenses, deletePayment, downloadPayment } from '../../services/accounting';
-import { setExpenses, setLoadingExpensesList, setLoadingDeletePayment, setLoadingDownloadPayment } from '../../slices/accountingSlice'
+import { setExpenses, setLoadingExpensesList, setLoadingDeletePayment, setLoadingDownloadPayment } from '../../slices/accountingSlice';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ function Expenses() {
     { id: 'date', label: 'Fecha', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
@@ -100,6 +100,34 @@ function Expenses() {
     }, [2000])
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeletePayment(true))
+
+      const promises = selected.map(idSelected => deletePayment(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeletePayment(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   const getStatusColor = (status) => {
     if(status?.value === 0){
         return 'warning';
@@ -133,6 +161,8 @@ function Expenses() {
           searchParam='subject'
           download={download}
           loadingDownload={loadingDownloadPayment}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeletePayment}
         >
           {row => {
             const { id, subject, amount, reference, date, status } = row;

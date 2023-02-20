@@ -38,7 +38,7 @@ function Providers() {
     { id: 'phone', label: 'Teléfono', alignRight: false },
     { id: 'email', label: 'Email', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false)
@@ -96,6 +96,34 @@ function Providers() {
     }, [2000])
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeleteProvider(true))
+
+      const promises = selected.map(idSelected => deleteProvider(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeleteProvider(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   return (
     <Page title="Proveedores">
       <Container>
@@ -117,6 +145,8 @@ function Providers() {
           searchParam='companyName'
           download={download}
           loadingDownload={loadingDownloadProvider}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeleteProvider}
         >
           {row => {
             const { id, companyName, email, phone, product } = row;

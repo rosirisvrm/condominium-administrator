@@ -68,7 +68,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
         <>
           {loadingBulkDelete ? 
             <CircularProgress size={24} /> :
-            <Tooltip title="Delete">
+            <Tooltip title="Eliminar">
               <IconButton onClick={bulkDelete}>
                 <Iconify icon="eva:trash-2-fill" />
               </IconButton>

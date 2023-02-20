@@ -22,7 +22,7 @@ import { UserActions } from '../../sections/@dashboard/user';
 //
 import { fDate } from '../../utils/formatTime';
 import { getPayments, deletePayment, downloadPayment } from '../../services/accounting';
-import { setPayments, setLoadingPaymentsList, setLoadingDeletePayment, setLoadingDownloadPayment } from '../../slices/accountingSlice'
+import { setPayments, setLoadingPaymentsList, setLoadingDeletePayment, setLoadingDownloadPayment } from '../../slices/accountingSlice';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ function Payments() {
     { id: 'date', label: 'Fecha', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
@@ -100,6 +100,34 @@ function Payments() {
     }, [2000])
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeletePayment(true))
+
+      const promises = selected.map(idSelected => deletePayment(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeletePayment(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   const getStatusColor = (status) => {
     if(status?.value === 0){
         return 'warning';
@@ -119,7 +147,12 @@ function Payments() {
           <Typography variant="h4" gutterBottom>
             Pagos
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/contabilidad/crear-pago" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button 
+            variant="contained" 
+            component={RouterLink} 
+            to="/dashboard/contabilidad/crear-pago" 
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
             Crear
           </Button>
         </Stack>
@@ -133,6 +166,8 @@ function Payments() {
           searchParam='subject'
           download={download}
           loadingDownload={loadingDownloadPayment}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeletePayment}
         >
           {row => {
             const { id, subject, amount, reference, date, status } = row;
