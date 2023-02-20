@@ -99,11 +99,11 @@ function CreatePayment() {
   }, [dispatch, user])
 
   useEffect(() => {
-    if(getValues('amount') && rate.value){
-      if(coin.label === 'VES'){
-        setValue('amount', getValues('amount') * rate.value)
+    if(getValues('amount') && rate?.value){
+      if(coin?.label === 'VES'){
+        setValue('amount', getValues('amount') * rate?.value)
       }else{
-        setValue('amount', getValues('amount') / rate.value)
+        setValue('amount', getValues('amount') / rate?.value)
       }
     }
   }, [rate, coin])

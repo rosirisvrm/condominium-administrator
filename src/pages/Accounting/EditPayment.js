@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Grid, InputAdornment } from '@mui/material';
+import { Container, Typography, Grid, InputAdornment, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../components/Page';
@@ -12,10 +12,10 @@ import { Input } from '../../components/Input';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { ContainedButton } from '../../components/ContainedButton';
 import { CustomSnackbar } from '../../components/CustomSnackbar';
-//
 import { Loader } from '../../components/Loader';
 import { DownloadButton } from '../../components/DownloadButton';
-// import { RateCoinIndicator } from '../../components/RateCoinIndicator';
+import { RateCoinIndicator } from '../../components/RateCoinIndicator';
+//
 import useResponsive from '../../hooks/useResponsive';
 // services
 import { 
@@ -24,7 +24,7 @@ import {
   putPayment, 
   getPayment 
 } from '../../services/accounting';
-import { getPaymentMethodOptions } from '../../services/customSettings';
+import { getPaymentMethodOptions, getCoinOptions } from '../../services/customSettings';
 // slices
 import { 
   setReceiverTypeOptions, 
@@ -33,7 +33,7 @@ import {
   setLoadingPayment, 
   setPayment 
 } from '../../slices/accountingSlice';
-import { setPaymentMethodOptions } from '../../slices/customSettings';
+import { setPaymentMethodOptions, setCoin } from '../../slices/customSettings';
 
 // ----------------------------------------------------------------------
 
@@ -54,14 +54,34 @@ function EditPayment() {
   const receiverOptions = useSelector(state => state.accounting.receiverOptions)
   const paymentMethodOptions = useSelector(state => state.customSettings.paymentMethodOptions)
   const loadingEditPayment = useSelector(state => state.accounting.loadingEditPayment)
-
   const coin = useSelector(state => state.customSettings.coin)
+  const rate = useSelector(state => state.customSettings.rate)
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
-  const { control, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm({
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
+  const [fileName, setFileName] = React.useState('')
+  const [file, setFile] = React.useState(null)
+
+  const { 
+    control, 
+    handleSubmit, 
+    formState: { errors }, 
+    setValue, 
+    clearErrors,
+    getValues,
+    getFieldState
+  } = useForm({
     defaultValues: {
       subject: '',
       receiverType: '',
@@ -110,6 +130,30 @@ function EditPayment() {
     fetchPayment()
   }, [dispatch, user, id])
 
+
+  useEffect(() => {
+    const fetchCoinOptions = async () => {
+      const res = await getCoinOptions()
+      if(res.length > 0){
+        const usdCoin = res.find(c => c?.label === 'USD')
+        if(usdCoin){
+          dispatch(setCoin(usdCoin))
+        }
+      }
+    }
+    fetchCoinOptions()
+  }, [dispatch])
+
+  useEffect(() => {
+    if(getValues('amount') && rate?.value){
+      if(coin?.label === 'VES'){
+        setValue('amount', getValues('amount') * rate?.value)
+      }else{
+        setValue('amount', getValues('amount') / rate?.value)
+      }
+    }
+  }, [rate, coin])
+
   const setFormValues = (payment) => {
     setValue("subject", payment?.subject || '')
     setValue("receiverType", payment?.receiverType ? payment.receiverType?.value : '')
@@ -135,18 +179,9 @@ function EditPayment() {
     }
   }
 
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-  const [fileName, setFileName] = React.useState('')
-  const [file, setFile] = React.useState(null)
-
   const onSubmit = (event) => {
     dispatch(setLoadingEditPayment(true))
 
-    console.log('submit');
     console.log('event ', event);
     console.log('payment ', payment);
 
@@ -204,16 +239,15 @@ function EditPayment() {
     console.log('descarga de archivo');
   };
 
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
-
   return (
     <Page title="Editar Pago">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Editar Pago
-        </Typography>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4">
+            Editar Pago
+          </Typography>
+          <RateCoinIndicator />
+        </Stack>
 
         {loadingPayment ?
           <Loader /> :
@@ -467,7 +501,6 @@ function EditPayment() {
                     </ContainedButton>
                   </GridStyle>
                 </Grid>
-
               </Grid>
             </form>
           </FormCard>

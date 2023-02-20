@@ -49,6 +49,10 @@ function RateCoinIndicator() {
         fetchCoinOptions()
     }, [dispatch])
 
+    useEffect(() => {
+        setCoin(coinRedux ? coinRedux.value : '')
+    }, [coinRedux])
+
     const onChangeCoin = (event) => {
         setCoin(event.target.value)
         const coinSelected = coinOptions.find(item => item.value === event.target.value)
