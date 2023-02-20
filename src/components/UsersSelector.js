@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Autocomplete, TextField, IconButton, TableCell, TableRow, Grid } from '@mui/material'
+import { Autocomplete, TextField, IconButton, TableCell, TableRow, Grid, Tooltip } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { OutlinedButton } from './OutlinedButton';
 import { BasicTable } from './BasicTable';
@@ -42,25 +42,25 @@ function UsersSelector({
         const newUsers = [... users, autocomplete]
         setUsers(newUsers)
         setAutocomplete(null)
-      }
+    }
     
-      const deleteUser = (index) => {
-        const newUsers = [... users]
-        newUsers.splice(index, 1)
-        setUsers(newUsers)
-      }
-    
-      const addRole = () => {
-        const newRoles = [... roles, autocomplete]
-        setRoles(newRoles)
-        setAutocomplete(null)
-      }
-    
-      const deleteRole = (index) => {
-        const newRoles = [... roles]
-        newRoles.splice(index, 1)
-        setRoles(newRoles)
-      }
+    const deleteUser = (index) => {
+    const newUsers = [... users]
+    newUsers.splice(index, 1)
+    setUsers(newUsers)
+    }
+
+    const addRole = () => {
+    const newRoles = [... roles, autocomplete]
+    setRoles(newRoles)
+    setAutocomplete(null)
+    }
+
+    const deleteRole = (index) => {
+    const newRoles = [... roles]
+    newRoles.splice(index, 1)
+    setRoles(newRoles)
+    }
 
     return(
         <>
@@ -107,9 +107,11 @@ function UsersSelector({
                                 <TableCell component="th" scope="row">{row.name}</TableCell>
                                 <TableCell>{row.address}</TableCell>
                                 <TableCell>
-                                <IconButton onClick={() => deleteUser(index)} sx={{ p: 0 }}>
-                                    <Iconify icon="eva:trash-2-outline" width={24} height={24} />
-                                </IconButton>
+                                    <Tooltip title='Eliminar'>
+                                        <IconButton onClick={() => deleteUser(index)} sx={{ p: 0 }}>
+                                            <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+                                        </IconButton>
+                                    </Tooltip>
                                 </TableCell>
                             </TableRow>
                             )}

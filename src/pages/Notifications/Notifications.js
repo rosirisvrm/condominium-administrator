@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { sentenceCase } from 'change-case';
@@ -70,7 +70,6 @@ function Notifications() {
 
     fetchNotifications()
   }, [dispatch, reload])
-
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
