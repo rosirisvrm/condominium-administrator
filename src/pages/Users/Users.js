@@ -39,13 +39,13 @@ function Users() {
     { id: 'level', label: 'Correo', alignRight: false },
     { id: 'status', label: 'Rol', alignRight: false },
     { id: '' },
-  ];
+  ]
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState(false)
   const [color, setColor] = useState('')
   const [reload, setReload] = useState('')
-
+  
   useEffect(() => {
     const fetchUsers = async () => {
       dispatch(setLoadingUsersList(true))
@@ -97,6 +97,34 @@ function Users() {
     }, [2000])
   }
 
+  const bulkDelete = () => {
+    if(selected.length > 1){
+      dispatch(setLoadingDeleteUser(true))
+
+      const promises = selected.map(idSelected => deleteUser(idSelected))
+
+      setTimeout(async () => {
+        let isError = false;
+
+        await Promise.allSettled(promises)
+          .then((results) => results.forEach((result) => {
+            console.log(result)
+            
+            if(result?.status !== 'fulfilled'){
+              isError = true
+            }
+          }));
+        
+        dispatch(setLoadingDeleteUser(false))
+
+        setColor(isError ? 'error' : 'success')
+        setOpen(true)
+        setReload(prev => !prev)
+        setSelected([])
+      }, 2000)
+    }
+  }
+
   return (
     <Page title="Usuarios">
       <Container>
@@ -118,6 +146,8 @@ function Users() {
           searchParam='name'
           download={download}
           loadingDownload={loadingDownloadUser}
+          bulkDelete={bulkDelete}
+          loadingBulkDelete={loadingDeleteUser}
         >
           {row => {
             const { id, name, address, email, phone, role } = row;

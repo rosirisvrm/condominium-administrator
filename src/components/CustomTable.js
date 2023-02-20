@@ -30,7 +30,9 @@ CustomTable.propTypes = {
     loading: PropTypes.bool,
     searchParam: PropTypes.string,
     download: PropTypes.func,
-    loadingDownload: PropTypes.bool
+    loadingDownload: PropTypes.bool,
+    bulkDelete: PropTypes.func,
+    loadingBulkDelete: PropTypes.bool
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -71,7 +73,9 @@ function CustomTable({
   loading, 
   searchParam,
   download,
-  loadingDownload
+  loadingDownload,
+  bulkDelete,
+  loadingBulkDelete
 }) {
 
   const renderFunc = children
@@ -125,7 +129,13 @@ function CustomTable({
       {loading ? 
         <Loader /> :
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar 
+            numSelected={selected.length} 
+            filterName={filterName} 
+            onFilterName={handleFilterByName}
+            bulkDelete={bulkDelete}
+            loadingBulkDelete={loadingBulkDelete}
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -175,7 +185,6 @@ function CustomTable({
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Stack>
-       
         </Card>
       }
     </>

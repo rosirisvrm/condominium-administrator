@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
 import { styled } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, CircularProgress } from '@mui/material';
 // component
 import Iconify from '../../../components/Iconify';
 
@@ -33,9 +33,11 @@ UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  bulkDelete: PropTypes.func,
+  loadingBulkDelete: PropTypes.bool
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName, bulkDelete, loadingBulkDelete }) {
   return (
     <RootStyle
       sx={{
@@ -47,7 +49,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
     >
       {numSelected > 0 ? (
         <Typography component="div" variant="subtitle1">
-          {numSelected} selected
+          {`${numSelected} ${numSelected > 1 ? 'seleccionados' : 'seleccionado'}`}
         </Typography>
       ) : (
         <SearchStyle
@@ -62,12 +64,17 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
         />
       )}
 
-      {numSelected > 0 && (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
+      {numSelected > 1 && (
+        <>
+          {loadingBulkDelete ? 
+            <CircularProgress size={24} /> :
+            <Tooltip title="Delete">
+              <IconButton onClick={bulkDelete}>
+                <Iconify icon="eva:trash-2-fill" />
+              </IconButton>
+            </Tooltip>
+          } 
+        </>
       )}
     </RootStyle>
   );
