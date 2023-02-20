@@ -1,6 +1,5 @@
-//  http request here 
 export const login = (data) => {
-    console.log('haciendo login');
+    console.log('login');
 
     console.log('data ', data);
 
@@ -29,5 +28,3 @@ export const logout = () => {
 
     return true;
 };
-
-

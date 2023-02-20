@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Card, Typography, CardHeader, CardContent, Box, Button, Divider } from '@mui/material';
+import { Card, Typography, CardHeader, CardContent, Box, Button, Divider, Link } from '@mui/material';
 import { Timeline, TimelineDot, TimelineItem, TimelineContent, TimelineSeparator, TimelineConnector } from '@mui/lab';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
@@ -83,7 +83,18 @@ function OrderItem({ item, isLast }) {
       </TimelineSeparator>
 
       <TimelineContent>
-        <Typography variant="subtitle2">{item?.subject || ''}</Typography>
+        <Link
+          color="inherit"
+          underline="hover" 
+          noWrap 
+          sx={{ cursor: 'pointer' }}
+          href={`/dashboard/contabilidad/detalle-pago/${item?.id}`} 
+          variant="subtitle2"
+        >
+          {item?.subject || ''}
+        </Link>
+        
+        <br />
 
         <Typography variant="caption" sx={{ color: 'text.secondary' }}>
           {item?.date ? fDateTime(item.date): ''}

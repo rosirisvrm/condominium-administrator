@@ -67,11 +67,18 @@ function NewsItem({ news }) {
         component="img" 
         alt={news?.title || ''} 
         src={news?.image || ''} 
-        sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} 
+        sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0, cursor: 'pointer' }} 
       />
 
       <Box sx={{ minWidth: 240, flexGrow: 1 }}>
-        <Link color="inherit" variant="subtitle2" underline="hover" noWrap>
+        <Link 
+          color="inherit" 
+          variant="subtitle2" 
+          underline="hover" 
+          noWrap 
+          sx={{ cursor: 'pointer' }}
+          href={`/dashboard/noticias/detalle/${news?.id}`}
+        >
           {news?.title || ''}
         </Link>
 
