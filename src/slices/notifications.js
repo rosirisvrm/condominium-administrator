@@ -9,6 +9,7 @@ const initialState = {
     loadingEditNotification: false,
     loadingDeleteNotification: false,
     loadingDownloadNotification: false,
+    loadingLayoutNotifications: false,
 }
 
 export const notificationSlice = createSlice({
@@ -39,6 +40,9 @@ export const notificationSlice = createSlice({
         setLoadingDownloadNotification: (state, action) => {
             state.loadingDownloadNotification = action.payload;
         },
+        setLoadingLayoutNotifications: (state, action) => {
+            state.loadingLayoutNotifications = action.payload;
+        },
     }
 })
 
@@ -50,7 +54,8 @@ export const {
     setLoadingCreateNotification,
     setLoadingEditNotification,
     setLoadingDeleteNotification,
-    setLoadingDownloadNotification
+    setLoadingDownloadNotification,
+    setLoadingLayoutNotifications
 } = notificationSlice.actions;
 
 export const notificationsReducer = notificationSlice.reducer;
