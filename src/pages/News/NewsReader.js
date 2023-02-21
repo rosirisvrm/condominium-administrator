@@ -10,14 +10,14 @@ import Iconify from '../../components/Iconify';
 import { FormCard } from '../../components/FormCard';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { Loader } from '../../components/Loader';
-import { DownloadFile } from '../../components/DownloadFile';
+import { DownloadButton } from '../../components/DownloadButton';
 import { fDate } from '../../utils/formatTime';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // services
 import { getNews } from '../../services/news';
 // slices
-import { setLoadingNews, setNews } from '../../slices/news';
+import { setLoadingNews, setNews, setLoadingDownloadNews } from '../../slices/news';
 
 // ----------------------------------------------------------------------
 
@@ -37,11 +37,13 @@ function NewsReader() {
 
   const news = useSelector(state => state.news.news)
   const loadingNews = useSelector(state => state.news.loadingNews)
+  const loadingDownloadNews = useSelector(state => state.news.loadingDownloadNews)
 
   const dispatch = useDispatch()
 
-  const smUp = useResponsive('up', 'sm');
-//   const mdUp = useResponsive('up', 'md');
+  //   const [file, setFile] = React.useState(null)
+
+  const smUp = useResponsive('up', 'sm')
 
   useEffect(() => {
     if(id){
@@ -51,35 +53,26 @@ function NewsReader() {
             setTimeout(async ()=> {
                 const res = await getNews(id)
                 dispatch(setNews(res))
-                // setFormValues()
                 dispatch(setLoadingNews(false))
             }, 1000)
         }
-
         fetchNews()
     }
   }, [dispatch, id])
-
-//   const [file, setFile] = React.useState(null)
-//   const [image, setImage] = React.useState(null)
-
+  
 //   const setFormValues = () => {
 //     // Falta setear file, image
 //     setFile({ name: news?.file || '' })
-//     setImage({ name: news?.image || '' })
 //   }
 
-//   const downloadImage = () => {
-//     console.log('descarga de imagen');
-//   };
-
   const downloadFile = () => {
-    console.log('descarga de archivo');
-  };
+    dispatch(setLoadingDownloadNews(true))
 
-//   let spacing = 2;
-//   if(smUp) spacing = 6;
-//   if(mdUp) spacing = 12;
+    setTimeout(() => {
+        // http request here
+        dispatch(setLoadingDownloadNews(false))
+    }, 2000)
+  };
 
   return (
     <Page title='Detalle de Noticia'>
@@ -131,15 +124,25 @@ function NewsReader() {
                             justifyContent="center"
                             alignItems="center"
                          >
-                           <img 
-                            width={200}
-                            height={150}
-                            src={news?.image}
-                            alt='News'
-                            style={{
-                                borderRadius: 12
-                            }}
-                           />
+                           {/* <img 
+                                width={200}
+                                height={150}
+                                src={news?.image}
+                                alt='News'
+                                style={{
+                                    borderRadius: 12
+                                }}
+                           /> */}
+                           <div 
+                                style={{
+                                    backgroundImage: `url(${news?.image})`,
+                                    width: '100%',
+                                    height: 300,
+                                    borderRadius: 12
+                                }}
+                           >
+                            {''}
+                           </div>
                         </Grid>
 
                         <Grid xs={12} item>
@@ -157,7 +160,11 @@ function NewsReader() {
                             justifyContent="center"
                             alignItems="center"
                         >
-                            <DownloadFile label='' download={downloadFile} buttonText='Archivo Adjunto' />
+                            <DownloadButton 
+                                onClick={downloadFile} 
+                                text='Archivo Adjunto'
+                                loading={loadingDownloadNews} 
+                            />
                         </Grid>
 
                         <Grid

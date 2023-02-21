@@ -19,7 +19,13 @@ import useResponsive from '../../hooks/useResponsive';
 // services
 import { putPayment, getPayment, getStatusOptions } from '../../services/accounting';
 // slices
-import { setLoadingEditPayment, setLoadingPayment, setPayment, setStatusOptions } from '../../slices/accountingSlice';
+import { 
+  setLoadingEditPayment, 
+  setLoadingPayment, 
+  setPayment, 
+  setStatusOptions,
+  setLoadingDownloadPayment
+} from '../../slices/accountingSlice';
 
 // ----------------------------------------------------------------------
 
@@ -51,11 +57,24 @@ function ExpensesPaymentDetail() {
   const payment = useSelector(state => state.accounting.payment)
   const loadingPayment = useSelector(state => state.accounting.loadingPayment)
   const loadingEditPayment = useSelector(state => state.accounting.loadingEditPayment)
+  const loadingDownloadPayment = useSelector(state => state.accounting.loadingDownloadPayment)
   const statusOptions = useSelector(state => state.accounting.statusOptions)
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
+
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
+  const [fileName, setFileName] = React.useState('')
+  const [file, setFile] = React.useState(null)
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -119,15 +138,7 @@ function ExpensesPaymentDetail() {
     // setFile(payment?.file || '')
     setFileName(payment?.file || '')
   }
-
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-  const [fileName, setFileName] = React.useState('')
-  const [file, setFile] = React.useState(null)
-
+  
   const onSubmit = (event) => {
     dispatch(setLoadingEditPayment(true))
 
@@ -160,12 +171,12 @@ function ExpensesPaymentDetail() {
   }
 
   const downloadFile = () => {
-    console.log('descarga de archivo');
-  };
+    dispatch(setLoadingDownloadPayment(true))
 
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
+    setTimeout(() => {
+      dispatch(setLoadingDownloadPayment(false))
+    }, 2000)
+  };
 
   // If not admin
   if(user.role.value !== 2){
@@ -293,7 +304,11 @@ function ExpensesPaymentDetail() {
                     </LabelStyle>
                     {fileName && 
                       <BoxStyle>
-                        <DownloadButton onClick={downloadFile} text='Descargar' />
+                        <DownloadButton 
+                          onClick={downloadFile} 
+                          text='Descargar'
+                          loading={loadingDownloadPayment}
+                        />
                       </BoxStyle>
                     } 
                   </Grid>

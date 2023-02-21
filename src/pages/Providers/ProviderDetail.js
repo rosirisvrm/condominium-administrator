@@ -17,7 +17,7 @@ import useResponsive from '../../hooks/useResponsive';
 // services
 import { getProvider } from '../../services/providers';
 // slices
-import { setLoadingProvider, setProvider } from '../../slices/providers';
+import { setLoadingProvider, setProvider, setLoadingDownloadProvider } from '../../slices/providers';
 
 // ----------------------------------------------------------------------
 
@@ -45,8 +45,19 @@ function ProviderDetail() {
 
   const provider = useSelector(state => state.providers.provider)
   const loadingProvider = useSelector(state => state.providers.loadingProvider)
+  const loadingDownloadProvider = useSelector(state => state.providers.loadingDownloadProvider)
 
   const dispatch = useDispatch()
+
+  const [fileName, setFileName] = React.useState('')
+//   const [file, setFile] = React.useState(null)
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
 
   const { control, setValue, watch } = useForm({
     defaultValues: {
@@ -79,17 +90,10 @@ function ProviderDetail() {
                 dispatch(setLoadingProvider(false))
             }, 1000)
         }
-
         fetchProvider()
     }
 
   }, [dispatch, id])
-
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [fileName, setFileName] = React.useState('')
-//   const [file, setFile] = React.useState(null)
 
   const setFormValues = () => {
     setValue("companyName", provider?.companyName || '')
@@ -111,12 +115,12 @@ function ProviderDetail() {
     setFileName(provider?.file)
   }
 
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
-
   const downloadFile = () => {
-    console.log('descarga de archivo');
+    dispatch(setLoadingDownloadProvider(true))
+
+    setTimeout(() => {
+        dispatch(setLoadingDownloadProvider(false))
+    }, 2000)
   };
 
   return (
@@ -217,7 +221,11 @@ function ProviderDetail() {
                                 </LabelStyle>
                                 {fileName && 
                                     <BoxStyle>
-                                        <DownloadButton onClick={downloadFile} text='Descargar' />
+                                        <DownloadButton 
+                                            onClick={downloadFile} 
+                                            text='Descargar' 
+                                            loading={loadingDownloadProvider} 
+                                        />
                                     </BoxStyle>
                                 } 
                             </Grid>

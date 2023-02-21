@@ -17,7 +17,7 @@ import useResponsive from '../../hooks/useResponsive';
 // services
 import { getEmployee } from '../../services/employees';
 // slices
-import { setLoadingEmployee, setEmployee } from '../../slices/employees';
+import { setLoadingEmployee, setEmployee, setLoadingDownloadEmployee } from '../../slices/employees';
 
 // ----------------------------------------------------------------------
 
@@ -45,8 +45,19 @@ function EmployeeDetail() {
 
   const employee = useSelector(state => state.employees.employee)
   const loadingEmployee = useSelector(state => state.employees.loadingEmployee)
+  const loadingDownloadEmployee = useSelector(state => state.employees.loadingDownloadEmployee)
 
   const dispatch = useDispatch()
+
+  const [fileName, setFileName] = React.useState('')
+//   const [file, setFile] = React.useState(null)
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
 
   const { control, setValue, watch } = useForm({
     defaultValues: {
@@ -81,16 +92,9 @@ function EmployeeDetail() {
                 dispatch(setLoadingEmployee(false))
             }, 1000)
         }
-
         fetchEmployee()
     }
   }, [dispatch, id])
-
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [fileName, setFileName] = React.useState('')
-//   const [file, setFile] = React.useState(null)
 
   const setFormValues = () => {
     setValue("name", employee?.name || '')
@@ -115,12 +119,12 @@ function EmployeeDetail() {
   }
 
   const downloadFile = () => {
-    console.log('descarga de archivo');
+    dispatch(setLoadingDownloadEmployee(true))
+    
+    setTimeout(() => {
+        dispatch(setLoadingDownloadEmployee(false))
+    }, 2000)
   };
-
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
 
   return (
     <Page title='Detalle de Empleado'>
@@ -245,7 +249,11 @@ function EmployeeDetail() {
                                 </LabelStyle>
                                 {fileName && 
                                     <BoxStyle>
-                                        <DownloadButton onClick={downloadFile} text='Descargar' />
+                                        <DownloadButton 
+                                            onClick={downloadFile} 
+                                            text='Descargar'
+                                            loading={loadingDownloadEmployee}
+                                        />
                                     </BoxStyle>
                                 } 
                             </Grid>
