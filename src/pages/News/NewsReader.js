@@ -124,7 +124,7 @@ function NewsReader() {
                             justifyContent="center"
                             alignItems="center"
                          >
-                           {/* <img 
+                           <img 
                                 width={200}
                                 height={150}
                                 src={news?.image}
@@ -132,8 +132,8 @@ function NewsReader() {
                                 style={{
                                     borderRadius: 12
                                 }}
-                           /> */}
-                           <div 
+                           />
+                           {/* <div 
                                 style={{
                                     backgroundImage: `url(${news?.image})`,
                                     width: '100%',
@@ -142,7 +142,7 @@ function NewsReader() {
                                 }}
                            >
                             {''}
-                           </div>
+                           </div> */}
                         </Grid>
 
                         <Grid xs={12} item>

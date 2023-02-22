@@ -67,7 +67,7 @@ function NewsItem({ news }) {
         component="img" 
         alt={news?.title || ''} 
         src={news?.image || ''} 
-        sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0, cursor: 'pointer' }} 
+        sx={{ width: 70, height: 48, borderRadius: 1.5, flexShrink: 0, cursor: 'pointer' }} 
       />
 
       <Box sx={{ minWidth: 240, flexGrow: 1 }}>

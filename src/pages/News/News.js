@@ -50,7 +50,7 @@ function News() {
       dispatch(setLoadingNewsList(true))
 
       setTimeout(async () => {
-        const res = await getNewsList(5)
+        const res = await getNewsList({ perPage: 5 })
         dispatch(setNewsList(res))
         dispatch(setLoadingNewsList(false))
       }, 1000)
