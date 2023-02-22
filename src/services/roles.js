@@ -8,7 +8,7 @@ export const getRoles = () => ([
     description: faker.lorem.sentence(),
     status: sample([
       { label: 'Activo', value: 0 },
-      { label: 'Inactivo', value: 1 },
+      // { label: 'Inactivo', value: 1 },
     ]),
     numberOfUsers: 1,
   },
@@ -18,7 +18,7 @@ export const getRoles = () => ([
     description: faker.lorem.sentence(),
     status: sample([
       { label: 'Activo', value: 0 },
-      { label: 'Inactivo', value: 1 },
+      // { label: 'Inactivo', value: 1 },
     ]),
     numberOfUsers: 3,
   },
@@ -28,7 +28,7 @@ export const getRoles = () => ([
     description: faker.lorem.sentence(),
     status: sample([
       { label: 'Activo', value: 0 },
-      { label: 'Inactivo', value: 1 },
+      // { label: 'Inactivo', value: 1 },
     ]),
     numberOfUsers: faker.random.numeric(2),
   },
@@ -40,7 +40,7 @@ export const getRole = () => ({
   description: faker.lorem.sentence(),
   status: sample([
     { label: 'Activo', value: 0 },
-    { label: 'Inactivo', value: 1 },
+    // { label: 'Inactivo', value: 1 },
   ]),
   numberOfUsers: faker.random.numeric(1),
   permissions: [...Array(6)].map(() => ({

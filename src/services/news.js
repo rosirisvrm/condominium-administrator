@@ -1,24 +1,7 @@
 import { faker } from '@faker-js/faker';
+import { mockNews } from '../_mock/news';
 
-export const getNewsList = ({ perPage = 24 } = {}) => [...Array(perPage)].map((_, index) => ({
-    id: faker.datatype.uuid(),
-    title: faker.lorem.sentence(5),
-    sumary: faker.lorem.paragraph(),
-    content: faker.lorem.paragraph(),
-    image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
-    file: faker.system.filePath(),
-    postedAt: faker.date.recent(),
-    // sections: [...Array(3)].map(() => ({
-    //     id: faker.datatype.uuid(),
-    //     title: faker.lorem.sentence(5),
-    //     content: faker.lorem.paragraph(),
-    //     file: faker.system.filePath(),
-    // })),
-    author: {
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-    }
-}));
+export const getNewsList = ({ perPage = 24 } = {}) => [...mockNews(perPage)]
 
 export const getNews = (id) => ({
     id,

@@ -62,7 +62,7 @@ function Notifications() {
       dispatch(setLoadingNotificationsList(true))
 
       setTimeout(async () => {
-        const res = await getNotificationsList()
+        const res = await getNotificationsList(7)
         dispatch(setNotificationsList(res))
         dispatch(setLoadingNotificationsList(false))
       }, 1000)

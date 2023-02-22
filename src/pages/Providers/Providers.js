@@ -50,7 +50,7 @@ function Providers() {
       dispatch(setLoadingProvidersList(true))
 
       setTimeout(async () => {
-        const res = await getProviders()
+        const res = await getProviders(16)
         dispatch(setProviders(res))
         dispatch(setLoadingProvidersList(false))
       }, 1000)

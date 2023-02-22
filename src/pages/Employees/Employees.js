@@ -51,7 +51,7 @@ function Employees() {
       dispatch(setLoadingEmployeesList(true))
 
       setTimeout(async () => {
-        const res = await getEmployees()
+        const res = await getEmployees(8)
         dispatch(setEmployees(res))
         dispatch(setLoadingEmployeesList(false))
       }, 1000)

@@ -1,30 +1,19 @@
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/es_MX';
 import { sample } from 'lodash';
+import { mockUsers } from '../_mock/users';
 
-export const getUsers = () => [...Array(24)].map((_, index) => ({
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    identification: faker.random.numeric(8),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-    phone: faker.phone.number('+58 412 ### ####'),
-    email: `${faker.random.word()}@${faker.random.word()}.com`,
-    role: sample([
-        { label: 'Propietario', value: 0 },
-        { label: 'Junta de Condominio', value: 1 },
-        { label: 'Administrador', value: 2 },
-    ]),
-    avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
-}));
+export const getUsers = () => [...mockUsers(10)];
 
 export const getUser = (id) => {
     const password = faker.internet.password()
+    const name = faker.name.findName()
     return ({
         id,
-        name: faker.name.findName(),
+        name,
         identification: faker.random.numeric(8),
-        address: faker.address.cityName() + faker.address.streetAddress(),
+        address: faker.address.secondaryAddress(),
         phone: faker.phone.number('+58 412 ### ####'),
-        email: `${faker.random.word()}@${faker.random.word()}.com`,
+        email: faker.internet.email(name, '', 'gmail.com'),
         role: sample([
             { label: 'Propietario', value: 0 },
             { label: 'Junta de Condominio', value: 1 },

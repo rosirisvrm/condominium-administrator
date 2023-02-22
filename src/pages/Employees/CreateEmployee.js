@@ -47,6 +47,18 @@ function CreateEmployee() {
 
   const navigate = useNavigate()
 
+  const [open, setOpen] = React.useState(false)
+  const [color, setColor] = React.useState('')
+  const [fileName, setFileName] = React.useState('')
+  const [file, setFile] = React.useState(null)
+
+  const smUp = useResponsive('up', 'sm');
+  const mdUp = useResponsive('up', 'md');
+
+  let spacing = 2;
+  if(smUp) spacing = 6;
+  if(mdUp) spacing = 12;
+
   const { control, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
       name: '',
@@ -80,7 +92,6 @@ function CreateEmployee() {
                 dispatch(setLoadingEmployee(false))
             }, 1000)
         }
-
         fetchEmployee()
     }
 
@@ -90,7 +101,6 @@ function CreateEmployee() {
             dispatch(setPaymentMethodTypeOptions(res))
         }, 1000)
     }
-
     fetchPaymentMethodTypes()
 
     const fetchBankOptions = async () => {
@@ -99,9 +109,7 @@ function CreateEmployee() {
             dispatch(setBankOptions(res))
         }, 1000)
     }
-
     fetchBankOptions()
-
 
     const fetchIdentificationTypes = async () => {
         setTimeout(async ()=> {
@@ -109,18 +117,8 @@ function CreateEmployee() {
             dispatch(setIdentificationTypeOptions(res))
         }, 1000)
     }
-
     fetchIdentificationTypes()
-
   }, [dispatch, id])
-
-  const smUp = useResponsive('up', 'sm');
-  const mdUp = useResponsive('up', 'md');
-
-  const [open, setOpen] = React.useState(false)
-  const [color, setColor] = React.useState('')
-  const [fileName, setFileName] = React.useState('')
-  const [file, setFile] = React.useState(null)
 
   const onSubmit = (event) => {
     if(!id){
@@ -129,7 +127,6 @@ function CreateEmployee() {
         dispatch(setLoadingEditEmployee(true))
     }
 
-    console.log('submit');
     console.log('event ', event);
     console.log('employee ', employee);
 
@@ -192,10 +189,6 @@ function CreateEmployee() {
     setFileName(files[0]?.name || '')
     setFile(files[0])
   }
-
-  let spacing = 2;
-  if(smUp) spacing = 6;
-  if(mdUp) spacing = 12;
 
   return (
     <Page title={`${!id ? 'Crear' : 'Editar'} Empleado`}>
