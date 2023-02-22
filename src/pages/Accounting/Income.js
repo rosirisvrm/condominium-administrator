@@ -46,7 +46,7 @@ function Income() {
       dispatch(setLoadingIncomeList(true))
 
       setTimeout(async () => {
-        const res = await getIncome()
+        const res = await getIncome({ perPage: 50 })
         dispatch(setIncome(res))
         dispatch(setLoadingIncomeList(false))
       }, 1000)

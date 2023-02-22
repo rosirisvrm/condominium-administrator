@@ -1,79 +1,13 @@
 import { faker } from '@faker-js/faker';
-import { sample } from 'lodash';
+import { mockExpenses, mockPayments, mockIncome, mockInvoices } from '../_mock/accounting';
 
-export const getExpenses = () => ([...Array(24)].map(() => ({
-    id: faker.datatype.uuid(),
-    subject: faker.lorem.sentence(4),
-    amount: faker.finance.amount(),
-    reference: faker.datatype.number(),
-    status: sample([
-      { label: 'Pendiente', value: 0 },
-      { label: 'Aprobado', value: 1 },
-      { label: 'Rechazado', value: 2 },
-    ]),
-    date: faker.date.past(),
-    user: {
-      id: faker.datatype.uuid(),
-      name: faker.name.findName(),
-      address: faker.address.cityName() + faker.address.streetAddress(),
-    }
-  }))
-);
+export const getExpenses = ({ perPage = 24 } = {}) => [...mockExpenses(perPage)];
 
-export const getIncome = () => ([...Array(24)].map(() => ({
-    id: faker.datatype.uuid(),
-    subject: faker.lorem.sentence(4),
-    amount: faker.finance.amount(),
-    reference: faker.datatype.number(),
-    status: sample([
-      { label: 'Pendiente', value: 0 },
-      { label: 'Aprobado', value: 1 },
-      { label: 'Rechazado', value: 2 },
-    ]),
-    date: faker.date.past(),
-    userId: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-  }))
-);
+export const getIncome = ({ perPage = 24 } = {}) => [...mockIncome(perPage)];
 
-export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map(() => ({
-  id: faker.datatype.uuid(),
-  subject: faker.lorem.sentence(4),
-  amount: faker.finance.amount(),
-  reference: faker.datatype.number(),
-  status: sample([
-    { label: 'Pendiente', value: 0 },
-    { label: 'Aprobado', value: 1 },
-    { label: 'Rechazado', value: 2 },
-  ]),
-  date: faker.date.past(),
-  user: {
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-  }
-})));
+export const getPayments = ({ perPage = 24 } = {}) => [... mockPayments(perPage)];
 
-
-export const getInvoices = () => ([...Array(24)].map(() => ({
-  id: faker.datatype.uuid(),
-  subject: faker.lorem.sentence(4),
-  amount: faker.finance.amount(),
-  reference: faker.datatype.number(),
-  status: {
-    value: 1,
-    label: 'Aprobado',
-  },
-  date: faker.date.past(),
-  user: {
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-  },
-  invoiceNumber: faker.datatype.number(),
-}))
-);
+export const getInvoices = ({ perPage = 24 } = {}) => [...mockInvoices(perPage)];
 
 export const getPayment = (id) => ({
     id,
@@ -117,9 +51,6 @@ export const getReceiverTypeOptions = () => ([
 ]);
 
 export const getReceiverOptions = (type) => {
-  //  http request here 
-  // console.log('receiver type', type);
-
     // Employees
     if(type === 0){
 

@@ -62,7 +62,7 @@ function RateCoinIndicator() {
     return (
         <Stack direction="row" alignItems="center" justifyContent="flex-end">
             <BoxStyle sx={{ mr: 2 }}>
-                {`${rate.label} ${rate.value}`}
+                {`${rate?.label || ''} ${rate?.value || ''}`}
             </BoxStyle>
 
             <TextFieldStyle 

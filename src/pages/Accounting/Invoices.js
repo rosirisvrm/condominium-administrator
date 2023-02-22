@@ -30,7 +30,7 @@ import {
 function Invoices() {
 
   const invoicesList = useSelector(state => state.accounting.invoicesList)
-  const loadingInvoiceList = useSelector(state => state.accounting.loadingInvoiceList)
+  const loadingInvoicesList = useSelector(state => state.accounting.loadingInvoicesList)
   const loadingDownloadInvoicesList = useSelector(state => state.accounting.loadingDownloadInvoicesList)
   const loadingDownloadInvoice = useSelector(state => state.accounting.loadingDownloadInvoice)
   
@@ -46,7 +46,7 @@ function Invoices() {
   const [idInvoice, setIdInvoice] = useState()
 
   useEffect(() => {
-    const fetchIncome = async () => {
+    const fetchInvoices = async () => {
       dispatch(setLoadingInvoicesList(true))
 
       setTimeout(async () => {
@@ -56,7 +56,7 @@ function Invoices() {
       }, 1000)
     }
 
-    fetchIncome()
+    fetchInvoices()
   }, [dispatch])
 
   const handleClick = (event, name) => {
@@ -107,7 +107,7 @@ function Invoices() {
           elementList={invoicesList} 
           selected={selected} 
           setSelected={setSelected}
-          loading={loadingInvoiceList}
+          loading={loadingInvoicesList}
           searchParam='subject'
           download={download}
           loadingDownload={loadingDownloadInvoicesList}

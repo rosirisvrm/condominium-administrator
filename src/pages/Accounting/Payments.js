@@ -54,7 +54,7 @@ function Payments() {
       dispatch(setLoadingPaymentsList(true))
 
       setTimeout(async () => {
-        const res = await getPayments()
+        const res = await getPayments({ perPage: 30 })
         dispatch(setPayments(res))
         dispatch(setLoadingPaymentsList(false))
       }, 1000)
