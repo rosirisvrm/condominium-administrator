@@ -62,12 +62,11 @@ function Notifications() {
       dispatch(setLoadingNotificationsList(true))
 
       setTimeout(async () => {
-        const res = await getNotificationsList(7)
+        const res = await getNotificationsList({perPage: 7 })
         dispatch(setNotificationsList(res))
         dispatch(setLoadingNotificationsList(false))
       }, 1000)
     }
-
     fetchNotifications()
   }, [dispatch, reload])
 

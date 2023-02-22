@@ -11,7 +11,7 @@ import { Loader } from '../../../components/Loader';
 
 // ----------------------------------------------------------------------
 
-AppOrderTimeline.propTypes = {
+AppPaymentTimeline.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
   list: PropTypes.array.isRequired,
@@ -20,7 +20,7 @@ AppOrderTimeline.propTypes = {
   loading: PropTypes.bool
 };
 
-export default function AppOrderTimeline({ title, subheader, list, path, textButton, loading, ...other }) {
+export default function AppPaymentTimeline({ title, subheader, list, path, textButton, loading, ...other }) {
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />

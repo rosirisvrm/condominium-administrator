@@ -1,21 +1,21 @@
 import { faker } from '@faker-js/faker/locale/es_MX';
 
 const TITLES = [
-    'Nuevas sanciones por incumplimiento de mensualidad',
+    'Resumen de Asamblea de Propietarios',
     'Aumento en el monto de la mensualidad',
     'Piscina cerrada por un mes',
     'Avería de portón principal de la residencia',
     'Términos acordados para el mantenimiento de tanques',
-    'Resumen de Asamblea de Propietarios',
+    'Nuevas sanciones por incumplimiento de mensualidad',
 ]
 
 const DESCRIPTIONS = [
-    'Se informa sobre las restricciones por morosidad',
+    'Se presentan los puntos tratados y las decisiones tomadas en la última asamblea',
     'Se informa sobre el nuevo monto de la mensualidad para mantenimiento de áreas comunes',
     'El uso de la piscina se pausa por un mes por reparación de motor',
     'Se explican las razones de avería del portón',
     'Se presenta el horario acordado para mantenimiento de los tanques',
-    'Se presentan los puntos tratados y las decisiones tomadas en la última asamblea',
+    'Se informa sobre las restricciones por morosidad',
 ]
 
 function mockNews(length = 24) {

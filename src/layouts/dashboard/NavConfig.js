@@ -27,15 +27,17 @@ const navConfig = [
         path: '/dashboard/contabilidad/ingresos',
       },
       {
-        title: 'Pagos',
-        path: '/dashboard/contabilidad/pagos',
-      },
-      {
         title: 'Facturas y Recibos',
         path: '/dashboard/contabilidad/facturas',
       }
     ]
   },
+  // {
+  //   title: 'pagos',
+  //   path: '/dashboard/pagos',
+  //   icon: getIcon('ic:baseline-payments'),
+  //   outlineIcon: getIcon('ic:outline-payments'),
+  // },
   {
     title: 'usuarios',
     path: '/dashboard/usuarios',

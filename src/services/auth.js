@@ -15,8 +15,8 @@ export const login = (data) => {
             label: 'Administrador'
         },
         email: 'rosirisvrm@gmail.com',
-        phone: 1254126,
-        address: 'Pzo',
+        phone: '+58 416 267 2828',
+        address: 'Edificio 1',
         photoURL: '/static/mock-images/avatars/avatar_default.jpg',
     }
 };

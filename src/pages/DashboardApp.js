@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // components
 import Page from '../components/Page';
 // sections
-import { AppNewsUpdate, AppOrderTimeline } from '../sections/@dashboard/app';
+import { AppNewsUpdate, AppPaymentTimeline } from '../sections/@dashboard/app';
 // services
 import { getNewsList } from '../services/news';
 import { getPayments } from '../services/accounting';
@@ -34,7 +34,6 @@ function DashboardApp() {
         dispatch(setLoadingNewsList(false))
       }, 2000)
     }
-
     fetchNews()
 
     const fetchPayments = async () => {
@@ -46,7 +45,6 @@ function DashboardApp() {
         dispatch(setLoadingPaymentsList(false))
       }, 2000)
     }
-
     fetchPayments()
   }, [dispatch])
 
@@ -70,7 +68,7 @@ function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppOrderTimeline
+            <AppPaymentTimeline
               title="Pagos Recientes"
               list={payments}
               path='/dashboard/contabilidad/pagos'

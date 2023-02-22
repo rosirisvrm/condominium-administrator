@@ -53,12 +53,12 @@ export default function NotificationsPopover() {
       dispatch(setLoadingLayoutNotifications(true))
 
       setTimeout(async () => {
-        const res = await getNotificationsList({ perPage: 10 })
+        const res = await getNotificationsList({ perPage: 7 })
         dispatch(setNotificationsList(res))
         dispatch(setLoadingLayoutNotifications(false))
       }, 2000)
     }
-
+    
     fetchNotifications()
 
     setInterval(fetchNotifications, 60000);
@@ -242,7 +242,7 @@ function renderContent(notification, theme) {
     return {
       avatar: (
         <Avatar sx={{ color: theme.palette.primary.main, bgcolor: 'background.neutral' }}>
-          <Iconify icon='mdi:newspaper-variant' width={20} height={20} />
+          <Iconify icon='mdi:newspaper-variant' width={24} height={24} />
         </Avatar>
       ),
       title,
@@ -252,7 +252,7 @@ function renderContent(notification, theme) {
     return {
       avatar: (
         <Avatar sx={{ color: theme.palette.primary.main, bgcolor: 'background.neutral' }}>
-          <Iconify icon='icon-park-solid:doc-success' width={20} height={20} />
+          <Iconify icon='icon-park-solid:doc-success' width={24} height={24} />
         </Avatar>
       ),
       title,
@@ -262,7 +262,7 @@ function renderContent(notification, theme) {
     return {
       avatar: (
         <Avatar sx={{ color: theme.palette.success.main, bgcolor: 'background.neutral' }}>
-          <Iconify icon='material-symbols:check-circle-rounded' width={20} height={20} />
+          <Iconify icon='material-symbols:check-circle-rounded' width={24} height={24} />
         </Avatar>
       ),
       title,
@@ -272,7 +272,7 @@ function renderContent(notification, theme) {
     return {
       avatar: (
         <Avatar sx={{ color: theme.palette.error.main, bgcolor: 'background.neutral'}}>
-          <Iconify icon='fluent-mdl2:status-error-full' width={20} height={20} />
+          <Iconify icon='fluent-mdl2:status-error-full' width={24} height={24} />
         </Avatar>
       ),
       title,
@@ -282,7 +282,7 @@ function renderContent(notification, theme) {
     return {
       avatar: (
         <Avatar sx={{ color: theme.palette.warning.main, bgcolor: 'background.neutral' }}>
-          <Iconify icon='mdi:warning-circle' width={20} height={20} />
+          <Iconify icon='mdi:warning-circle' width={24} height={24} />
         </Avatar>
       ),
       title,
@@ -292,7 +292,7 @@ function renderContent(notification, theme) {
     return {
       avatar: (
         <Avatar sx={{ color: theme.palette.warning.main, bgcolor: 'background.neutral' }}>
-          <Iconify icon='mdi:clock-alert-outline' width={20} height={20} />,
+          <Iconify icon='mdi:clock-alert-outline' width={24} height={24} />,
         </Avatar>
       ),
       title,

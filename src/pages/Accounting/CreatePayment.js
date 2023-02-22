@@ -403,7 +403,7 @@ function CreatePayment() {
                 <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
                   <OutlinedButton 
                     isRouterLink 
-                    path="/dashboard/contabilidad/pagos"
+                    path="/dashboard/pagos"
                     defaultPadding
                     defaultMarginRight={smUp}
                   >

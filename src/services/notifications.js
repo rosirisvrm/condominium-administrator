@@ -1,35 +1,8 @@
-import { faker } from '@faker-js/faker/locale/es_MX';
-import { sample } from 'lodash';
-import { mockNotifications, TITLES, DESCRIPTIONS } from '../_mock/notifications';
+import { mockNotifications, mockNotification } from '../_mock/notifications';
 
 export const getNotificationsList = ({ perPage = 24 } = {}) => [...mockNotifications(perPage)]
 
-export const getNotification = (id) => ({
-    id,
-    title: TITLES[0],
-    text: DESCRIPTIONS[0],
-    date: faker.date.recent(),
-    hour: faker.date.recent(),
-    users: [...Array(3)].map(() => ({
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-        address: faker.address.cityName() + faker.address.streetAddress(),
-    })),
-    author: {
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-    },
-    status: sample([
-        {
-            label: 'Programada',
-            value: 0
-        },
-        {
-            label: 'Enviada',
-            value: 1
-        }
-    ])
-});
+export const getNotification = (id) => ({ ...mockNotification(id) });
 
 export const postNotification = (body) => {
     console.log('creating');

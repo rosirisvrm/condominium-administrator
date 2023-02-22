@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { mockExpenses, mockPayments, mockIncome, mockInvoices } from '../_mock/accounting';
+import { mockExpenses, mockPayments, mockIncome, mockInvoices, mockPayment } from '../_mock/accounting';
 
 export const getExpenses = ({ perPage = 24 } = {}) => [...mockExpenses(perPage)];
 
@@ -9,41 +9,7 @@ export const getPayments = ({ perPage = 24 } = {}) => [... mockPayments(perPage)
 
 export const getInvoices = ({ perPage = 24 } = {}) => [...mockInvoices(perPage)];
 
-export const getPayment = (id) => ({
-    id,
-    subject: faker.lorem.sentence(4),
-    amount: faker.finance.amount(),
-    reference: faker.datatype.number(),
-    status: {
-      value: parseInt(faker.random.numeric(1, { 
-        bannedDigits: ['3', '4', '5', '6', '7', '8', '9'], 
-        allowLeadingZeros: true
-      }), 10),
-      label: 'Pendiente',
-    },
-    date: faker.date.past(),
-    user: {
-      id: faker.datatype.uuid(),
-      name: faker.name.findName(),
-      address: faker.address.cityName() + faker.address.streetAddress(),
-    },
-    receiverType: { label: 'Empleado', value: 0 },
-    receiver: {
-      label: 'Antony',
-      value: 1,
-      id: 1,
-      name: faker.name.findName(),
-      identification: faker.datatype.number(),
-      address: faker.address.cityName() + faker.address.streetAddress(),
-      phone: faker.phone.number('+58 412 ### ####'),
-      email: `${faker.random.word()}@${faker.random.word()}.com`,
-      paymentMethod: 'Pago Móvil Banco Banesco'
-    },
-    paymentMethod: { label: 'Efectivo', value: 4 },
-    file: `/static/mock-images/products/product_${0}.jpg`,
-    description: faker.finance.transactionDescription(),
-    rate: faker.finance.amount(),
-});
+export const getPayment = (id) => ({ ...mockPayment(id) });
 
 export const getReceiverTypeOptions = () => ([
     { label: 'Empleado', value: 0 },

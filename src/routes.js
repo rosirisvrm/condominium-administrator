@@ -83,14 +83,6 @@ export default function Router() {
               )
             },
             { 
-              path: 'pagos', 
-              element: (
-                <AuthRoute>
-                  <Payments />
-                </AuthRoute>
-              )
-            },
-            { 
               path: 'facturas', 
               element: (
                 <AuthRoute>
@@ -131,6 +123,16 @@ export default function Router() {
               )
             },
           ] 
+        },
+
+        // Payments
+        { 
+          path: 'pagos', 
+          element: (
+            <AuthRoute>
+              <Payments />
+            </AuthRoute>
+          )
         },
         
 // ----------------------------------------------------------------------

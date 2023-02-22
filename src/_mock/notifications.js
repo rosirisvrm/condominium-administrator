@@ -2,23 +2,33 @@ import { faker } from '@faker-js/faker/locale/es_MX';
 import { sample } from 'lodash';
 
 const TITLES = [
-    'Evento de carnaval',
+    'Nueva noticia publicada',
     'Pago rechazado',
-    'Mantenimiento eléctrico',
     'Pago realizado exitosamente',
     'Mensualidad vencida',
-    'Asamblea de propietarios',
-    'Próximo vencimiento mensualidad'
+    'Nueva noticia publicada',
+    'Próximo vencimiento mensualidad',
+    'Pago aprobado',
 ]
 
 const DESCRIPTIONS = [
-    'Estás invitado al evento de carnaval del condominio',
-    'El pago realizado con asunto Pago Mensualidad de diciembre fue rechazado',
-    'Toma tus previsiones ante el mantenimiento planificado',
+    'Términos acordados para el mantenimiento de tanques de agua',
+    'El pago realizado con asunto Pago Mensualidad de enero fue rechazado',
     'Ha realizado un pago con asunto Pago mensualidad de enero',
     'Por favor cancela y cumple con los pagos de tu condominio',
-    'Asiste y participa en las decisiones de tu condominio',
-    'Cancele para estar solvente con su condominio'
+    'Avería de portón principal de la residencia',
+    'Cancele para estar solvente con su condominio',
+    'El pago realizado con asunto Pago Mensualidad de diciembre fue aprobado',
+]
+
+const TYPES = [
+    'published_news',
+    'payment_rejected',
+    'payment_sent',
+    'payment_date_due',
+    'published_news',
+    'payment_date_due_soon',
+    'payment_approved',
 ]
 
 function mockNotifications(perPage = 24) {
@@ -50,15 +60,37 @@ function mockNotifications(perPage = 24) {
         ]),
         isUnRead: sample([true, false]),
         avatar: null,
-        type: sample([
-            'published_news',
-            'payment_sent',
-            'payment_approved',
-            'payment_rejected',
-            'payment_date_due',
-            'payment_date_due_soon'
-        ])
+        type: TYPES[index]
     }))
 }
 
-export { mockNotifications, TITLES, DESCRIPTIONS };
+function mockNotification(id) {
+    return ({
+        id,
+        title: TITLES[0],
+        text: DESCRIPTIONS[0],
+        date: faker.date.recent(),
+        hour: faker.date.recent(),
+        users: [...Array(3)].map(() => ({
+            id: faker.datatype.uuid(),
+            name: faker.name.findName(),
+            address: faker.address.cityName() + faker.address.streetAddress(),
+        })),
+        author: {
+            id: faker.datatype.uuid(),
+            name: faker.name.findName(),
+        },
+        status: sample([
+            {
+                label: 'Programada',
+                value: 0
+            },
+            {
+                label: 'Enviada',
+                value: 1
+            }
+        ])
+    })
+}
+
+export { mockNotifications, mockNotification };
