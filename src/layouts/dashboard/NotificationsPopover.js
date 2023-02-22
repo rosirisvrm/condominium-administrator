@@ -61,7 +61,7 @@ export default function NotificationsPopover() {
 
     fetchNotifications()
 
-    setInterval(fetchNotifications, 20000);
+    setInterval(fetchNotifications, 60000);
   }, [dispatch])
 
   const handleOpen = (event) => {
