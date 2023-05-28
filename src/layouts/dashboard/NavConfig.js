@@ -42,24 +42,24 @@ const navConfig = [
     icon: getIcon('ph:users-fill'),
     outlineIcon: getIcon('ph:users'),
   },
-  {
-    title: 'roles',
-    path: '/dashboard/roles',
-    icon: getIcon('mdi:account-group'),
-    outlineIcon: getIcon('mdi:account-group-outline'),
-  },
-  {
-    title: 'empleados',
-    path: '/dashboard/empleados',
-    icon: getIcon('mdi:toolbox'),
-    outlineIcon: getIcon('mdi:toolbox-outline'),
-  },
-  {
-    title: 'proveedores',
-    path: '/dashboard/proveedores',
-    icon: getIcon('mdi:truck-delivery'),
-    outlineIcon: getIcon('mdi:truck-delivery-outline'),
-  },
+  // {
+  //   title: 'roles',
+  //   path: '/dashboard/roles',
+  //   icon: getIcon('mdi:account-group'),
+  //   outlineIcon: getIcon('mdi:account-group-outline'),
+  // },
+  // {
+  //   title: 'empleados',
+  //   path: '/dashboard/empleados',
+  //   icon: getIcon('mdi:toolbox'),
+  //   outlineIcon: getIcon('mdi:toolbox-outline'),
+  // },
+  // {
+  //   title: 'proveedores',
+  //   path: '/dashboard/proveedores',
+  //   icon: getIcon('mdi:truck-delivery'),
+  //   outlineIcon: getIcon('mdi:truck-delivery-outline'),
+  // },
   {
     title: 'noticias',
     path: '/dashboard/noticias',

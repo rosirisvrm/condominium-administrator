@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
+import { payments } from '../mock/accounting';
 
 export const getExpenses = () => ([...Array(24)].map(() => ({
     id: faker.datatype.uuid(),
@@ -56,24 +57,7 @@ export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map((
 })));
 
 
-export const getInvoices = () => ([...Array(24)].map(() => ({
-  id: faker.datatype.uuid(),
-  subject: faker.lorem.sentence(4),
-  amount: faker.finance.amount(),
-  reference: faker.datatype.number(),
-  status: {
-    value: 1,
-    label: 'Aprobado',
-  },
-  date: faker.date.past(),
-  user: {
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-  },
-  invoiceNumber: faker.datatype.number(),
-}))
-);
+export const getInvoices = () => [...payments];
 
 export const getPayment = (id) => ({
     id,
@@ -218,6 +202,20 @@ export const downloadInvoicesList = () => {
 
 export const downloadInvoice = (id) => {
   console.log('downloading: ', id);
+
+  const PDF_FILE_URL = 'http://localhost:3000/static/mock-files/factura-condominio.pdf';
+
+  fetch(PDF_FILE_URL)
+    .then(response => response.blob())
+    .then(blob => {
+      const blobURL = window.URL.createObjectURL(new Blob([blob]))
+      const aTag = document.createElement('a');
+      aTag.href = blobURL;
+      aTag.setAttribute('download', 'factura-condominio.pdf');
+      document.body.appendChild(aTag);
+      aTag.click();
+      aTag.remove();
+    })
 
   return true;
 }

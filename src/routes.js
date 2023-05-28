@@ -20,11 +20,11 @@ import {
   ExpensesPaymentDetail 
 } from './pages/Accounting';
 import { Users, CreateUser, UserDetail } from './pages/Users';
-import { Roles } from './pages/Roles';
-import { CreateRole } from './pages/Roles/CreateRole';
-import { RoleDetail } from './pages/Roles/RoleDetail';
-import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
-import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
+// import { Roles } from './pages/Roles';
+// import { CreateRole } from './pages/Roles/CreateRole';
+// import { RoleDetail } from './pages/Roles/RoleDetail';
+// import { Employees, CreateEmployee, EmployeeDetail } from './pages/Employees';
+// import { Providers, CreateProvider, ProviderDetail } from './pages/Providers';
 import { News } from './pages/News/News';
 import { CreateNews } from './pages/News/CreateNews';
 import { NewsReader } from './pages/News/NewsReader';
@@ -171,111 +171,111 @@ export default function Router() {
 
 // ----------------------------------------------------------------------
 
-        // Roles
-        { 
-          path: 'roles', 
-          element: (
-            <AuthRoute>
-              <Roles />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'roles/crear', 
-          element: (
-            <AuthRoute>
-              <CreateRole />
-            </AuthRoute>
-          ) 
-        },
-        { 
-          path: 'roles/editar/:id', 
-          element: (
-            <AuthRoute>
-              <CreateRole />
-            </AuthRoute>
-          ) 
-        },
-        { 
-          path: 'roles/detalle/:id', 
-          element: (
-            <AuthRoute>
-              <RoleDetail />
-            </AuthRoute>
-          ) 
-        },
+        // // Roles
+        // { 
+        //   path: 'roles', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Roles />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'roles/crear', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateRole />
+        //     </AuthRoute>
+        //   ) 
+        // },
+        // { 
+        //   path: 'roles/editar/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateRole />
+        //     </AuthRoute>
+        //   ) 
+        // },
+        // { 
+        //   path: 'roles/detalle/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <RoleDetail />
+        //     </AuthRoute>
+        //   ) 
+        // },
 
 // ----------------------------------------------------------------------
 
-        // Employees
-        { 
-          path: 'empleados', 
-          element: (
-            <AuthRoute>
-              <Employees />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'empleados/crear', 
-          element: (
-            <AuthRoute>
-              <CreateEmployee />
-            </AuthRoute>
-          ) 
-        },
-        { 
-          path: 'empleados/editar/:id', 
-          element: (
-            <AuthRoute>
-              <CreateEmployee />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'empleados/detalle/:id', 
-          element: (
-            <AuthRoute>
-              <EmployeeDetail />
-            </AuthRoute>
-          )
-        },
+        // // Employees
+        // { 
+        //   path: 'empleados', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Employees />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'empleados/crear', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateEmployee />
+        //     </AuthRoute>
+        //   ) 
+        // },
+        // { 
+        //   path: 'empleados/editar/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateEmployee />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'empleados/detalle/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <EmployeeDetail />
+        //     </AuthRoute>
+        //   )
+        // },
 
 // ----------------------------------------------------------------------
 
-        // Providers
-        { 
-          path: 'proveedores', 
-          element: (
-            <AuthRoute>
-              <Providers />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'proveedores/crear', 
-          element: (
-            <AuthRoute>
-              <CreateProvider />
-            </AuthRoute>
-          ) 
-        },
-        { 
-          path: 'proveedores/editar/:id', 
-          element: (
-            <AuthRoute>
-              <CreateProvider />
-            </AuthRoute>
-          )
-        },
-        { 
-          path: 'proveedores/detalle/:id', 
-          element: (
-            <AuthRoute>
-              <ProviderDetail />
-            </AuthRoute>
-          )
-        },
+        // // Providers
+        // { 
+        //   path: 'proveedores', 
+        //   element: (
+        //     <AuthRoute>
+        //       <Providers />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'proveedores/crear', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateProvider />
+        //     </AuthRoute>
+        //   ) 
+        // },
+        // { 
+        //   path: 'proveedores/editar/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <CreateProvider />
+        //     </AuthRoute>
+        //   )
+        // },
+        // { 
+        //   path: 'proveedores/detalle/:id', 
+        //   element: (
+        //     <AuthRoute>
+        //       <ProviderDetail />
+        //     </AuthRoute>
+        //   )
+        // },
 
 // ----------------------------------------------------------------------
 

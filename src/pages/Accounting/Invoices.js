@@ -90,7 +90,7 @@ function Invoices() {
     setTimeout(async () => {
       await downloadInvoice(id)
       dispatch(setLoadingDownloadInvoice(false))
-    }, [2000])
+    }, [3000])
   }
 
   return (
@@ -139,7 +139,7 @@ function Invoices() {
                   {(loadingDownloadInvoice && idInvoice === id) ? 
                     <CircularProgress size={24} /> :
                     <Tooltip title='Descargar'>
-                      <IconButton onClick={() => downloadItem(id)}>
+                      <IconButton onClick={() => downloadItem(id)} color='primary'>
                         <Iconify icon='material-symbols:sim-card-download' width={20} height={20} />
                       </IconButton>
                     </Tooltip>
