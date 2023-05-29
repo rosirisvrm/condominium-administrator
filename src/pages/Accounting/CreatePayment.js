@@ -21,6 +21,7 @@ import { getPaymentMethodOptions } from '../../services/customSettings';
 //
 import { setReceiverTypeOptions, setReceiverOptions, setLoadingCreatePayment } from '../../slices/accountingSlice';
 import { setPaymentMethodOptions } from '../../slices/customSettings';
+import { setNewRegister } from '../../slices/routes';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ const GridStyle = styled(Grid)(({ theme }) => ({
 function CreatePayment() {
 
   const user = useSelector(state => state.auth.user)
-  const receiverTypeOptions = useSelector(state => state.accounting.receiverTypeOptions)
+  // const receiverTypeOptions = useSelector(state => state.accounting.receiverTypeOptions)
   const receiverOptions = useSelector(state => state.accounting.receiverOptions)
   const paymentMethodOptions = useSelector(state => state.customSettings.paymentMethodOptions)
   const loadingCreatePayment = useSelector(state => state.accounting.loadingCreatePayment)
@@ -122,14 +123,15 @@ function CreatePayment() {
     setTimeout(() => {
       const createPayment = async () => {
         const res = await postPayment(body)
-  
+        dispatch(setNewRegister(body))
+        
         dispatch(setLoadingCreatePayment(false))
         setColor(res ? 'success' : 'error')
         setOpen(true);
 
         if(res){
           setTimeout(() => {
-            navigate('/dashboard/contabilidad/pagos')
+            navigate('/dashboard/contabilidad/egresos')
           }, 2000)
         }
       }
@@ -170,7 +172,7 @@ function CreatePayment() {
           <Typography variant="h4">
             Enviar Pago
           </Typography>
-          {/* <RateCoinIndicator /> */}
+          <RateCoinIndicator />
         </Stack>
 
         <FormCard>   
@@ -180,7 +182,7 @@ function CreatePayment() {
               {/* If admin */}
               {(user.role.value === 2) && <>
                 <Grid container item spacing={spacing}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12}>
                     <Input
                       name='subject'
                       label='Asunto'
@@ -196,7 +198,7 @@ function CreatePayment() {
                       error={errors.subject}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  {/* <Grid item xs={12} sm={6}>
                     <Input
                       name='receiverType'
                       label='Tipo de Destinatario (Empleado/Proveedor)'
@@ -213,10 +215,10 @@ function CreatePayment() {
                       error={errors.receiverType}
                       callback={handlerSelectReceiverType}
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
                 
-                <Grid container item spacing={spacing}>
+                {/* <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>
                     <Input
                       name='receiver'
@@ -253,7 +255,7 @@ function CreatePayment() {
                       disabled
                     />
                   </Grid>
-                </Grid>
+                </Grid> */}
               </>}
 
               {/* If not admin */}
@@ -403,7 +405,7 @@ function CreatePayment() {
                 <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
                   <OutlinedButton 
                     isRouterLink 
-                    path="/dashboard/contabilidad/pagos"
+                    path="/dashboard/contabilidad/egresos"
                     defaultPadding
                     defaultMarginRight={smUp}
                   >

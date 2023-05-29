@@ -32,6 +32,7 @@ function Expenses() {
   const loadingExpensesList = useSelector(state => state.accounting.loadingExpensesList)
   const loadingDeletePayment = useSelector(state => state.accounting.loadingDeletePayment)
   const loadingDownloadPayment = useSelector(state => state.accounting.loadingDownloadPayment)
+  const newRegister = useSelector(state => state.routes.newRegister)
   
   const dispatch = useDispatch()
 
@@ -54,7 +55,8 @@ function Expenses() {
       dispatch(setLoadingExpensesList(true))
 
       setTimeout(async () => {
-        const res = await getExpenses()
+        const res = await getExpenses(newRegister || null)
+        
         dispatch(setExpenses(res))
         dispatch(setLoadingExpensesList(false))
       }, 1000)

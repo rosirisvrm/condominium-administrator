@@ -50,7 +50,7 @@ function RateCoinIndicator() {
     }, [dispatch])
 
     useEffect(() => {
-        setCoin(coinRedux ? coinRedux.value : '')
+        setCoin(coinRedux ? coinRedux?.value : '')
     }, [coinRedux])
 
     const onChangeCoin = (event) => {
@@ -62,7 +62,7 @@ function RateCoinIndicator() {
     return (
         <Stack direction="row" alignItems="center" justifyContent="flex-end">
             <BoxStyle sx={{ mr: 2 }}>
-                {`${rate.label} ${rate.value}`}
+                {`${rate?.label} ${rate?.value}`}
             </BoxStyle>
 
             <TextFieldStyle 
@@ -73,7 +73,7 @@ function RateCoinIndicator() {
             >
                 {coinOptions.map(option => (
                     <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                        {option?.label}
                     </MenuItem>
                 ))}
             </TextFieldStyle>

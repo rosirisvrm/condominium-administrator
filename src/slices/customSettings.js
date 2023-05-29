@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    coin: null,
+    coin: { label: 'USD', value: 0, symbol: '$', description: 'Dólar americano' },
     coinOptions: [],
-    rate: null,
+    rate: { label: 'Tasa Oficial', value: 26.34 },
     paymentMethodOptions: [],
     loadingPaymentMethods: false,
     paymentMethodTypeOptions: [],

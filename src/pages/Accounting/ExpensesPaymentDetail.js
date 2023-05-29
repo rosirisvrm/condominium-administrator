@@ -186,7 +186,7 @@ function ExpensesPaymentDetail() {
               <Grid container spacing={2}>
 
                 <Grid container item spacing={spacing}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                         <Input
                             name='subject'
                             label='Asunto'
@@ -195,7 +195,7 @@ function ExpensesPaymentDetail() {
                             disabled
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                         <Input
                             name='receiverType'
                             label='Tipo de Destinatario (Empleado/Proveedor)'
@@ -203,10 +203,10 @@ function ExpensesPaymentDetail() {
                             type='text'
                             control={control}
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
                 
-                <Grid container item spacing={spacing}>
+                {/* <Grid container item spacing={spacing}>
                     <Grid item xs={12} sm={6}>
                         <Input
                             name='receiver'
@@ -225,7 +225,7 @@ function ExpensesPaymentDetail() {
                             disabled
                         />
                     </Grid>
-                </Grid>         
+                </Grid>          */}
 
                 <Grid container item spacing={spacing}>
                   <Grid item xs={12} sm={6}>

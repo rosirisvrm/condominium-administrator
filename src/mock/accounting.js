@@ -1,5 +1,59 @@
 import { faker } from '@faker-js/faker';
-// import { sample } from 'lodash';
+
+export const expenses = [
+  {
+    id: '0',
+    subject: 'Pago proveedor luces entrada',
+    amount: 100,
+    reference: 118725,
+    status: { label: 'Pendiente', value: 0 },
+    date: faker.date.recent(),
+    user: {
+      id: '0',
+      name: 'Rosiris Romero',
+      address: 'Manzana 15 - 1',
+    }
+  },
+  {
+    id: '1',
+    subject: 'Pago reparación portón',
+    amount: 20,
+    reference: 9126352,
+    status: { label: 'Pendiente', value: 0 },
+    date: faker.date.recent(),
+    user: {
+      id: '0',
+      name: 'Rosiris Romero',
+      address: 'Manzana 15 - 1',
+    }
+  },
+  {
+    id: '2',
+    subject: 'Pago conserje mes de mayo',
+    amount: 50,
+    reference: 1424372,
+    status: { label: 'Completado', value: 1 },
+    date: faker.date.recent(),
+    user: {
+      id: '0',
+      name: 'Rosiris Romero',
+      address: 'Manzana 15 - 1',
+    }
+  },
+  {
+    id: '3',
+    subject: 'Pago jardinero',
+    amount: 30,
+    reference: 5262813,
+    status: { label: 'Completado', value: 1 },
+    date: faker.date.recent(),
+    user: {
+      id: '0',
+      name: 'Rosiris Romero',
+      address: 'Manzana 15 - 1',
+    }
+  }
+]
 
 export const paymentsApproved = [
     {

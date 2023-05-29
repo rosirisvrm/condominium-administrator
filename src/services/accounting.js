@@ -1,25 +1,31 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
-import { paymentsApproved, paymentsPending, invoices } from '../mock/accounting';
+import { expenses, paymentsApproved, paymentsPending, invoices } from '../mock/accounting';
 
-export const getExpenses = () => ([...Array(24)].map(() => ({
-    id: faker.datatype.uuid(),
-    subject: faker.lorem.sentence(4),
-    amount: faker.finance.amount(),
-    reference: faker.datatype.number(),
-    status: sample([
-      { label: 'Pendiente', value: 0 },
-      { label: 'Aprobado', value: 1 },
-      { label: 'Rechazado', value: 2 },
-    ]),
-    date: faker.date.past(),
-    user: {
-      id: faker.datatype.uuid(),
-      name: faker.name.findName(),
-      address: faker.address.cityName() + faker.address.streetAddress(),
-    }
-  }))
-);
+export const getExpenses = (newRegister) => {
+
+  if(newRegister){
+    const newExpenses = [...expenses]
+
+    newExpenses.unshift({
+      id: '4',
+      subject: newRegister.subject,
+      amount: newRegister.amount,
+      reference: newRegister.reference,
+      status: { label: 'Pendiente', value: 0 },
+      date: newRegister.date,
+      user: {
+        id: '0',
+        name: 'Rosiris Romero',
+        address: 'Manzana 15 - 1',
+      }
+    })
+
+    return newExpenses;
+  }
+
+  return [...expenses]
+};
 
 export const getIncome = (state) => state === 'approved' ? [...paymentsApproved] : [...paymentsPending];
 

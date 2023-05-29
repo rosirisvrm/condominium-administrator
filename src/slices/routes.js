@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    previous: ''
+    previous: '',
+    newRegister: null,
 }
 
 export const routesSlice = createSlice({
@@ -11,11 +12,15 @@ export const routesSlice = createSlice({
         setPrevious: (state, action) => {
             state.previous = action.payload;
         },
+        setNewRegister: (state, action) => {
+            state.newRegister = action.payload;
+        },
     }
 })
 
 export const { 
-    setPrevious
+    setPrevious,
+    setNewRegister
 } = routesSlice.actions;
 
 export const routesReducer = routesSlice.reducer;
