@@ -95,7 +95,7 @@ function Profile() {
   }, [dispatch, image, readImage])
 
   const setFormValues = () => {
-    setValue("name", auth?.name || '')
+    setValue("name", `${auth?.name || ''} ${auth?.lastname || ''}`)
     setValue("identification", auth?.identification || '')
     setValue("address", auth?.address || '')
     setValue("role", auth?.role ? auth.role.label : '')

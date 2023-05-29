@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 // @mui
 import { Container, Typography, Grid, InputAdornment, Box } from '@mui/material';
@@ -21,6 +21,7 @@ import useResponsive from '../../hooks/useResponsive';
 import { putPayment, getPayment, getStatusOptions } from '../../services/accounting';
 // slices
 import { setLoadingEditPayment, setLoadingPayment, setPayment, setStatusOptions } from '../../slices/accountingSlice';
+import { setPrevious } from '../../slices/routes';
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,10 @@ function PayDetail() {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
+
+  const location = useLocation()
+
+  console.log('location', location);
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -148,9 +153,11 @@ function PayDetail() {
         setColor(res ? 'success' : 'error')
         setOpen(true);
 
+        dispatch(setPrevious(location?.pathname || ''))
+
         if(res){
           setTimeout(() => {
-            navigate('/dashboard/contabilidad/pagos')
+            navigate('/dashboard/contabilidad/ingresos')
           }, 2000)
         }
       }
@@ -161,6 +168,20 @@ function PayDetail() {
 
   const downloadFile = () => {
     console.log('descarga de archivo');
+
+    setTimeout(() => {
+      fetch(payment?.file)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobURL = window.URL.createObjectURL(new Blob([blob]))
+        const aTag = document.createElement('a');
+        aTag.href = blobURL;
+        aTag.setAttribute('download', 'comprobante-pago.jpg');
+        document.body.appendChild(aTag);
+        aTag.click();
+        aTag.remove();
+      })
+    }, [2000])
   };
 
   let spacing = 2;
@@ -332,7 +353,7 @@ function PayDetail() {
                   <GridStyle container item xs={12} sm={3} md={2} justifyContent={smUp ? 'flex-end' : 'center'} mb={!smUp ? 2 : 0}>
                     <OutlinedButton 
                       isRouterLink 
-                      path="/dashboard/contabilidad/pagos"
+                      path="/dashboard/contabilidad/ingresos"
                       defaultPadding
                       defaultMarginRight={smUp}
                     >

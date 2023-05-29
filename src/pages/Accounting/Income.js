@@ -26,6 +26,8 @@ function Income() {
   const incomeList = useSelector(state => state.accounting.incomeList)
   const loadingIncomeList = useSelector(state => state.accounting.loadingIncomeList)
   const loadingDownloadPayment = useSelector(state => state.accounting.loadingDownloadPayment)
+
+  const previousRoute = useSelector(state => state.routes.previous)
   
   const dispatch = useDispatch()
 
@@ -46,7 +48,7 @@ function Income() {
       dispatch(setLoadingIncomeList(true))
 
       setTimeout(async () => {
-        const res = await getIncome()
+        const res = await getIncome(previousRoute ? 'approved' : 'pending')
         dispatch(setIncome(res))
         dispatch(setLoadingIncomeList(false))
       }, 1000)

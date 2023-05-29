@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
-import { payments } from '../mock/accounting';
+import { paymentsApproved, paymentsPending, invoices } from '../mock/accounting';
 
 export const getExpenses = () => ([...Array(24)].map(() => ({
     id: faker.datatype.uuid(),
@@ -21,22 +21,7 @@ export const getExpenses = () => ([...Array(24)].map(() => ({
   }))
 );
 
-export const getIncome = () => ([...Array(24)].map(() => ({
-    id: faker.datatype.uuid(),
-    subject: faker.lorem.sentence(4),
-    amount: faker.finance.amount(),
-    reference: faker.datatype.number(),
-    status: sample([
-      { label: 'Pendiente', value: 0 },
-      { label: 'Aprobado', value: 1 },
-      { label: 'Rechazado', value: 2 },
-    ]),
-    date: faker.date.past(),
-    userId: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-  }))
-);
+export const getIncome = (state) => state === 'approved' ? [...paymentsApproved] : [...paymentsPending];
 
 export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map(() => ({
   id: faker.datatype.uuid(),
@@ -56,30 +41,30 @@ export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map((
   }
 })));
 
-
-export const getInvoices = () => [...payments];
+export const getInvoices = () => [...invoices];
 
 export const getPayment = (id) => ({
     id,
-    subject: faker.lorem.sentence(4),
-    amount: faker.finance.amount(),
-    reference: faker.datatype.number(),
+    subject: 'Pago de mensualidad de mayo 2023',
+    amount: 5,
+    reference: '23823561',
     status: {
-      value: parseInt(faker.random.numeric(1, { 
-        bannedDigits: ['3', '4', '5', '6', '7', '8', '9'], 
-        allowLeadingZeros: true
-      }), 10),
+      value: 0,
       label: 'Pendiente',
     },
-    date: faker.date.past(),
+    date: '20-05-2023',
     user: {
       id: faker.datatype.uuid(),
-      name: faker.name.findName(),
-      address: faker.address.cityName() + faker.address.streetAddress(),
+      name: 'Carlos Gutiérrez',
+      address: 'Manzana 12 - 4',
     },
+    userId: faker.datatype.uuid(),
+    name: 'Carlos Gutiérrez',
+    address: 'Manzana 12 - 4',
+    invoiceNumber: '000263',
     receiverType: { label: 'Empleado', value: 0 },
     receiver: {
-      label: 'Antony',
+      label: 'Antony Medina',
       value: 1,
       id: 1,
       name: faker.name.findName(),
@@ -89,10 +74,10 @@ export const getPayment = (id) => ({
       email: `${faker.random.word()}@${faker.random.word()}.com`,
       paymentMethod: 'Pago Móvil Banco Banesco'
     },
-    paymentMethod: { label: 'Efectivo', value: 4 },
-    file: `/static/mock-images/products/product_${0}.jpg`,
-    description: faker.finance.transactionDescription(),
-    rate: faker.finance.amount(),
+    paymentMethod: { label: 'Transferencia Banco Mercantil', value: 0 },
+    file: `http://localhost:3000/static/mock-images/products/comprobante-pago.jpg`,
+    description: 'Pago de mensualidad pendiente',
+    rate: 26.34,
 });
 
 export const getReceiverTypeOptions = () => ([

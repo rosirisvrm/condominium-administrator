@@ -13,6 +13,7 @@ import { eventsModuleReducer } from "src/slices/eventsModule";
 import { visitsReducer } from "src/slices/visits";
 import { notificationsReducer } from "src/slices/notifications";
 import { paymentMethodsReducer } from "src/slices/paymentMethods";
+import { routesReducer } from "../slices/routes";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
     visits: visitsReducer,
     notifications: notificationsReducer,
     paymentMethods: paymentMethodsReducer,
+    routes: routesReducer,
 })
 
 export { rootReducer };

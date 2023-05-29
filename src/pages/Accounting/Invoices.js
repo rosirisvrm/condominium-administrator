@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sentenceCase } from 'change-case';
 // material
 import {
   Stack,
@@ -14,8 +15,9 @@ import {
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
-import { CustomTable } from '../../components/CustomTable';
 import Iconify from '../../components/Iconify';
+import Label from '../../components/Label';
+import { CustomTable } from '../../components/CustomTable';
 //
 import { getInvoices, downloadInvoicesList, downloadInvoice } from '../../services/accounting';
 import { 
@@ -30,7 +32,7 @@ import {
 function Invoices() {
 
   const invoicesList = useSelector(state => state.accounting.invoicesList)
-  const loadingInvoiceList = useSelector(state => state.accounting.loadingInvoiceList)
+  const loadingInvoicesList = useSelector(state => state.accounting.loadingInvoicesList)
   const loadingDownloadInvoicesList = useSelector(state => state.accounting.loadingDownloadInvoicesList)
   const loadingDownloadInvoice = useSelector(state => state.accounting.loadingDownloadInvoice)
   
@@ -38,6 +40,8 @@ function Invoices() {
 
   const tableHead = [
     { id: 'subject', label: 'Asunto de Pago', alignRight: false },
+    { id: 'name', label: 'Nombre', alignRight: false },
+    { id: 'state', label: 'Estado de Pago', alignRight: false },
     { id: 'invoiceNumber', label: 'Número de Factura', alignRight: false },
     { id: 'id', label: 'Descargar Factura' },
   ]
@@ -53,7 +57,7 @@ function Invoices() {
         const res = await getInvoices()
         dispatch(setInvoices(res))
         dispatch(setLoadingInvoicesList(false))
-      }, 1000)
+      }, 2000)
     }
 
     fetchIncome()
@@ -90,7 +94,19 @@ function Invoices() {
     setTimeout(async () => {
       await downloadInvoice(id)
       dispatch(setLoadingDownloadInvoice(false))
-    }, [3000])
+    }, [2000])
+  }
+
+  const getStatusColor = (status) => {
+    if(status?.value === 0){
+        return 'warning';
+    }
+
+    if(status?.value === 1){
+      return 'success';
+    }
+    
+    return 'error';
   }
 
   return (
@@ -107,14 +123,15 @@ function Invoices() {
           elementList={invoicesList} 
           selected={selected} 
           setSelected={setSelected}
-          loading={loadingInvoiceList}
+          loading={loadingInvoicesList}
           searchParam='subject'
           download={download}
           loadingDownload={loadingDownloadInvoicesList}
         >
           {row => {
-            const { id, subject, invoiceNumber } = row;
+            const { id, subject, name, status, invoiceNumber } = row;
             const isItemSelected = selected.indexOf(id) !== -1;
+            const color = getStatusColor(status);
 
             return (
               <TableRow
@@ -133,8 +150,13 @@ function Invoices() {
                     {subject}
                   </Typography>
                 </TableCell>
+                <TableCell align="left">{name}</TableCell>
+                <TableCell align="left">
+                  <Label variant="ghost" color={color}>
+                    {sentenceCase(status.label)}
+                  </Label>
+                </TableCell>
                 <TableCell align="left">{invoiceNumber}</TableCell>
-                {/* <TableCell align="left">{status?.label || ''}</TableCell> */}
                 <TableCell align="left">
                   {(loadingDownloadInvoice && idInvoice === id) ? 
                     <CircularProgress size={24} /> :

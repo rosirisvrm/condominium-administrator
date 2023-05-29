@@ -10,15 +10,15 @@ export const login = (data) => {
         id: 1,
         name: 'Rosiris',
         lastname: 'Romero',
-        identification: 87786433,
+        identification: 26355711,
         role: {
             value: 2,
             label: 'Administrador'
         },
         email: 'rosirisvrm@gmail.com',
-        phone: 1254126,
-        address: 'Pzo',
-        photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+        phone: '04121761190',
+        address: 'Manzana 12 - 9',
+        photoURL: '/static/mock-images/avatars/avatar.jpg',
     }
 };
 

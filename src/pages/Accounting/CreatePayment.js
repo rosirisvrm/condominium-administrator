@@ -170,7 +170,7 @@ function CreatePayment() {
           <Typography variant="h4">
             Enviar Pago
           </Typography>
-          <RateCoinIndicator />
+          {/* <RateCoinIndicator /> */}
         </Stack>
 
         <FormCard>   
