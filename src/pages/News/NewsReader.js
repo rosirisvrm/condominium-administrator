@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 // @mui
@@ -41,6 +41,9 @@ function NewsReader() {
   const dispatch = useDispatch()
 
   const smUp = useResponsive('up', 'sm');
+
+  const [loadingFile, setLoadingFile] = useState(false)
+
 //   const mdUp = useResponsive('up', 'md');
 
   useEffect(() => {
@@ -75,6 +78,23 @@ function NewsReader() {
 
   const downloadFile = () => {
     console.log('descarga de archivo');
+    setLoadingFile(true)
+
+    setTimeout(() => {
+
+        fetch(news?.file)
+            .then(response => response.blob())
+            .then(blob => {
+                const blobURL = window.URL.createObjectURL(new Blob([blob]))
+                const aTag = document.createElement('a');
+                aTag.href = blobURL;
+                aTag.setAttribute('download', 'reglamento-condominio.pdf');
+                document.body.appendChild(aTag);
+                aTag.click();
+                aTag.remove();
+            })
+        setLoadingFile(false)
+    }, 2000)
   };
 
 //   let spacing = 2;
@@ -157,7 +177,7 @@ function NewsReader() {
                             justifyContent="center"
                             alignItems="center"
                         >
-                            <DownloadFile label='' download={downloadFile} buttonText='Archivo Adjunto' />
+                            <DownloadFile label='' download={downloadFile} buttonText='Archivo Adjunto' loading={loadingFile} />
                         </Grid>
 
                         <Grid

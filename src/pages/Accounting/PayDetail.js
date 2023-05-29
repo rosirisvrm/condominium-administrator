@@ -132,6 +132,7 @@ function PayDetail() {
   const [color, setColor] = React.useState('')
   const [fileName, setFileName] = React.useState('')
   const [file, setFile] = React.useState(null)
+  const [loadingFile, setLoadingFile] = React.useState(null)
 
   const onSubmit = (event) => {
     dispatch(setLoadingEditPayment(true))
@@ -168,6 +169,7 @@ function PayDetail() {
 
   const downloadFile = () => {
     console.log('descarga de archivo');
+    setLoadingFile(true)
 
     setTimeout(() => {
       fetch(payment?.file)
@@ -181,6 +183,7 @@ function PayDetail() {
         aTag.click();
         aTag.remove();
       })
+      setLoadingFile(false)
     }, [2000])
   };
 
@@ -312,7 +315,7 @@ function PayDetail() {
                     </LabelStyle>
                     {fileName && 
                       <BoxStyle>
-                        <DownloadButton onClick={downloadFile} text='Descargar' />
+                        <DownloadButton onClick={downloadFile} text='Descargar' loading={loadingFile} />
                       </BoxStyle>
                     } 
                   </Grid>

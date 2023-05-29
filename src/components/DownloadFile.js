@@ -23,15 +23,16 @@ DownloadFile.propTypes = {
     label: PropTypes.string,
     download: PropTypes.func,
     buttonText: PropTypes.string,
+    loading: PropTypes.bool,
 }
 
-function DownloadFile({ label = 'Archivo', download, buttonText = 'Descargar' }){
+function DownloadFile({ label = 'Archivo', download, buttonText = 'Descargar', loading }){
 
     return(
         <>
             <LabelStyle>{label}</LabelStyle>
             <BoxStyle>
-                <DownloadButton onClick={download} text={buttonText} />
+                <DownloadButton onClick={download} text={buttonText} loading={loading} />
             </BoxStyle>
         </>
     );
