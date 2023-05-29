@@ -41,6 +41,8 @@ function Notifications() {
   const loadingNotificationsList = useSelector(state => state.notifications.loadingNotificationsList)
   const loadingDeleteNotification = useSelector(state => state.notifications.loadingDeleteNotification)
   const loadingDownloadNotification = useSelector(state => state.notifications.loadingDownloadNotification)
+
+  const newNotification = useSelector(state => state.routes.newNotification)
   
   const dispatch = useDispatch()
 
@@ -62,7 +64,7 @@ function Notifications() {
       dispatch(setLoadingNotificationsList(true))
 
       setTimeout(async () => {
-        const res = await getNotificationsList()
+        const res = await getNotificationsList(newNotification || null)
         dispatch(setNotificationsList(res))
         dispatch(setLoadingNotificationsList(false))
       }, 1000)

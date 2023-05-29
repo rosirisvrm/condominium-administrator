@@ -36,8 +36,11 @@ import {
     setNotification, 
     setLoadingEditNotification
 } from '../../slices/notifications';
-import { getRolesOptions, getUsersOptions } from '../../services/surveys';
-import { setRolesOptions, setUsersOptions } from '../../slices/surveys';
+import { getRolesOptions } from '../../services/surveys';
+import { setRolesOptions } from '../../slices/surveys';
+import { getUsers } from '../../services/users';
+import { setUsers as setUsersRedux } from '../../slices/usersSlice';
+import { setNewNotification } from '../../slices/routes';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +59,7 @@ function CreateNotification() {
   const loadingCreateNotification = useSelector(state => state.notifications.loadingCreateNotification)
   const loadingEditNotification = useSelector(state => state.notifications.loadingEditNotification)
   const rolesOptions = useSelector(state => state.surveys.rolesOptions)
-  const usersOptions = useSelector(state => state.surveys.usersOptions)
+  const usersOptions = useSelector(state => state.users.usersList)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -73,7 +76,8 @@ function CreateNotification() {
     control, 
     handleSubmit, 
     formState: { errors }, 
-    setValue, 
+    setValue,
+    getValues,
     watch 
 } = useForm({
     defaultValues: {
@@ -107,8 +111,8 @@ function CreateNotification() {
     fetchRolesOptions()
   
     const fetchUsersOptions = async () => {
-        const res = await getUsersOptions()
-        dispatch(setUsersOptions(res))
+        const res = await getUsers()
+        dispatch(setUsersRedux(res))
     }
     fetchUsersOptions()
   }, [dispatch, id])
@@ -125,19 +129,32 @@ function CreateNotification() {
     }
   }
 
-  const onSubmit = (event) => {
+  const onSubmit = (event = null) => {
     if(!id){
         dispatch(setLoadingCreateNotification(true))
     }else{
         dispatch(setLoadingEditNotification(true))
     }
 
-    console.log('event ', event);
-    console.log('users ', users);
-    console.log('roles ', roles);
+    // console.log('event ', event);
+    // console.log('users ', users);
+    // console.log('roles ', roles);
 
-    const body = {
-     ...event,
+    const body = event ? { ...event } : {
+        id: '4',
+        title: getValues('title'),
+        text: getValues('text'),
+        date: getValues('date'),
+        hour: getValues('hour'),
+        users: [
+            ... users
+        ],
+        author: {
+            id: '0',
+            name: 'Rosiris Romero',
+            address: 'Manzana 12 - 9',
+        },
+        status: { label: 'Programada', value: 0 }
     }
 
     setTimeout(() => {
@@ -146,6 +163,7 @@ function CreateNotification() {
   
         if(!id){
             res = await postNotification(body)
+            dispatch(setNewNotification(body))
             dispatch(setLoadingCreateNotification(false))
         }else{
             res = await putNotification(id, body)
@@ -181,7 +199,9 @@ function CreateNotification() {
     setDialogOpen(false);
   };
 
-  const handleModalSave = () => {    
+  const handleModalSave = () => { 
+    onSubmit() 
+    
     handleClose()
   }
 

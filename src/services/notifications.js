@@ -1,58 +1,55 @@
 import { faker } from '@faker-js/faker';
-import { sample } from 'lodash';
+import { notifications } from '../mock/notifications';
 
-export const getNotificationsList = ({ perPage = 24 } = {}) => [...Array(perPage)].map(() => ({
-    id: faker.datatype.uuid(),
-    title: faker.lorem.sentence(5),
-    text: faker.lorem.paragraph(7),
-    date: faker.date.recent(),
-    hour: faker.date.recent(),
-    users: [...Array(3)].map(() => ({
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-    })),
-    author: {
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-        address: faker.address.cityName() + faker.address.streetAddress(),
-    },
-    status: sample([
-        {
-            label: 'Programada',
-            value: 0
-        },
-        {
-            label: 'Enviada',
-            value: 1
-        }
-    ])
-}));
+export const getNotificationsList = (newRegister) => {
+
+    if(newRegister){
+        const newNotifications = [...notifications]
+
+        newNotifications.unshift({
+            ...newRegister,
+        })
+
+        return newNotifications;
+    }
+
+    return [...notifications]
+}
 
 export const getNotification = (id) => ({
     id,
-    title: faker.lorem.sentence(5),
-    text: faker.lorem.paragraph(7),
+    title: 'Mensualidad mayo vencida',
+    text: 'Realizar el pago de la mensualidad pendiente',
     date: faker.date.recent(),
     hour: faker.date.recent(),
-    users: [...Array(3)].map(() => ({
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-        address: faker.address.cityName() + faker.address.streetAddress(),
-    })),
-    author: {
-        id: faker.datatype.uuid(),
-        name: faker.name.findName(),
-    },
-    status: sample([
+    users: [
         {
-            label: 'Programada',
-            value: 0
+            id: '4',
+            name: 'Carlos Gutiérrez',
+            address: 'Manzana 12 - 4',
         },
         {
-            label: 'Enviada',
-            value: 1
-        }
-    ])
+            id: '3',
+            name: 'Ramón Figuera',
+            address: 'Manzana 5 - 1',
+        },
+        {
+            id: '2',
+            name: 'María Sifuentes',
+            address: 'Manzana 7 - 3',
+        },
+        {
+            id: '1',
+            name: 'Clara Montoya',
+            address: 'Manzana 1 - 8',
+        },
+    ],
+    author: {
+        id: '0',
+        name: 'Rosiris Romero',
+        address: 'Manzana 12 - 9',
+    },
+    status: { label: 'Enviada', value: 1 }
 });
 
 export const postNotification = (body) => {

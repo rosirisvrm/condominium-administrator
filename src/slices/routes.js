@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     previous: '',
     newRegister: null,
+    newNotification: null,
 }
 
 export const routesSlice = createSlice({
@@ -15,12 +16,16 @@ export const routesSlice = createSlice({
         setNewRegister: (state, action) => {
             state.newRegister = action.payload;
         },
+        setNewNotification: (state, action) => {
+            state.newNotification = action.payload;
+        },
     }
 })
 
 export const { 
     setPrevious,
-    setNewRegister
+    setNewRegister,
+    setNewNotification
 } = routesSlice.actions;
 
 export const routesReducer = routesSlice.reducer;
