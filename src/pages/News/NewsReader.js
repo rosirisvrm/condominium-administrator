@@ -142,7 +142,7 @@ function NewsReader() {
                            />
                         </Grid>
 
-                        <Grid xs={12} item>
+                        <Grid xs={12} item sx={{ mt: 4, mb: 4 }}>
                             <Typography variant='body2'>
                                 {news?.content || ''}
                             </Typography>

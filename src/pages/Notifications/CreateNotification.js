@@ -71,6 +71,7 @@ function CreateNotification() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [users, setUsers] = useState([])
   const [roles, setRoles] = useState([])
+  const [isPrograming, setIsPrograming] = useState(false)
 
   const { 
     control, 
@@ -140,7 +141,19 @@ function CreateNotification() {
     // console.log('users ', users);
     // console.log('roles ', roles);
 
-    const body = event ? { ...event } : {
+    const body = event ? {
+        ...event,
+        id: '4',
+        users: [
+            ... users
+        ],
+        author: {
+            id: '0',
+            name: 'Rosiris Romero',
+            address: 'Manzana 12 - 9',
+        },
+        status: { label: 'Enviada', value: 1 }
+    } : {
         id: '4',
         title: getValues('title'),
         text: getValues('text'),
@@ -200,8 +213,9 @@ function CreateNotification() {
   };
 
   const handleModalSave = () => { 
+    setIsPrograming(true)
     onSubmit() 
-    
+
     handleClose()
   }
 
@@ -296,7 +310,7 @@ function CreateNotification() {
                                     <ContainedButton 
                                         defaultPadding 
                                         onClick={handleClickOpen} 
-                                        defaultMarginRight={smUp}
+                                        loading={(!id && isPrograming) ? loadingCreateNotification : loadingEditNotification}
                                     >
                                         Programar
                                     </ContainedButton>
@@ -307,7 +321,7 @@ function CreateNotification() {
                                 <ContainedButton 
                                     type='submit' 
                                     defaultPadding 
-                                    loading={!id ? loadingCreateNotification : loadingEditNotification}
+                                    loading={(!id && !isPrograming) ? loadingCreateNotification : loadingEditNotification}
                                 >
                                     {!id ? 'Agregar' : 'Actualizar'}
                                 </ContainedButton>

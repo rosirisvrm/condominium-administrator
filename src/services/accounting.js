@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { sample } from 'lodash';
-import { expenses, paymentsApproved, paymentsPending, invoices } from '../mock/accounting';
+import { expenses, paymentsApproved, paymentsPending, invoices, homePayments } from '../mock/accounting';
 
 export const getExpenses = (newRegister) => {
 
@@ -29,23 +28,7 @@ export const getExpenses = (newRegister) => {
 
 export const getIncome = (state) => state === 'approved' ? [...paymentsApproved] : [...paymentsPending];
 
-export const getPayments = ({ perPage = 24 } = {}) => ([...Array(perPage)].map(() => ({
-  id: faker.datatype.uuid(),
-  subject: faker.lorem.sentence(4),
-  amount: faker.finance.amount(),
-  reference: faker.datatype.number(),
-  status: sample([
-    { label: 'Pendiente', value: 0 },
-    { label: 'Aprobado', value: 1 },
-    { label: 'Rechazado', value: 2 },
-  ]),
-  date: faker.date.past(),
-  user: {
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.cityName() + faker.address.streetAddress(),
-  }
-})));
+export const getPayments = () => [...homePayments];
 
 export const getInvoices = () => [...invoices];
 
@@ -58,7 +41,7 @@ export const getPayment = (id) => ({
       value: 0,
       label: 'Pendiente',
     },
-    date: '20-05-2023',
+    date: faker.date.recent(),
     user: {
       id: faker.datatype.uuid(),
       name: 'Carlos Gutiérrez',

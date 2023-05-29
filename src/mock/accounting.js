@@ -221,6 +221,88 @@ export const paymentsPending = [
   },
 ];
 
+export const homePayments = [
+  {
+    id: '3',
+    subject: 'Pago de mensualidad de mayo 2023',
+    amount: 5,
+    reference: '23823561',
+    status: {
+      value: 0,
+      label: 'Pendiente',
+    },
+    date: '29-05-2023',
+    user: {
+      id: faker.datatype.uuid(),
+      name: 'Carlos Gutiérrez',
+      address: 'Manzana 12 - 4',
+    },
+    userId: faker.datatype.uuid(),
+    name: 'Carlos Gutiérrez',
+    address: 'Manzana 12 - 4',
+    invoiceNumber: '000263',
+  },
+  {
+    id: '2',
+    subject: 'Mensualidad mayo 2023',
+    amount: 5,
+    reference: faker.datatype.number(),
+    status: {
+      value: 1,
+      label: 'Aprobado',
+    },
+    date: '20-05-2023',
+    user: {
+      id: faker.datatype.uuid(),
+      name: 'Ramón Figuera',
+      address: 'Manzana 5 - 1',
+    },
+    userId: faker.datatype.uuid(),
+    name: 'Ramón Figuera',
+    address: 'Manzana 5 - 1',
+    invoiceNumber: '000262',
+  },
+  {
+    id: '1',
+    subject: 'Pago mayo',
+    amount: 5,
+    reference: faker.datatype.number(),
+    status: {
+      value: 2,
+      label: 'Rechazado',
+    },
+    date: '19-05-2023',
+    user: {
+      id: faker.datatype.uuid(),
+      name: 'María Sifuentes',
+      address: 'Manzana 7 - 3',
+    },
+    userId: faker.datatype.uuid(),
+    name: 'María Sifuentes',
+    address: 'Manzana 7 - 3',
+    invoiceNumber: '000261',
+  },
+  {
+    id: '0',
+    subject: 'Pago cuota mayo 2023',
+    amount: 5,
+    reference: faker.datatype.number(),
+    status: {
+      value: 1,
+      label: 'Aprobado',
+    },
+    date: '18-05-2023',
+    user: {
+      id: faker.datatype.uuid(),
+      name: 'Clara Montoya',
+      address: 'Manzana 1 - 8',
+    },
+    userId: faker.datatype.uuid(),
+    name: 'Clara Montoya',
+    address: 'Manzana 1 - 8',
+    invoiceNumber: '000260',
+  },
+]
 
 export const invoices = [
   {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { Card, Typography, CardHeader, CardContent, Box, Button, Divider } from '@mui/material';
 import { Timeline, TimelineDot, TimelineItem, TimelineContent, TimelineSeparator, TimelineConnector } from '@mui/lab';
@@ -68,6 +68,8 @@ OrderItem.propTypes = {
 };
 
 function OrderItem({ item, isLast }) {
+
+  const navigate = useNavigate()
   
   return (
     <TimelineItem>
@@ -83,10 +85,17 @@ function OrderItem({ item, isLast }) {
       </TimelineSeparator>
 
       <TimelineContent>
-        <Typography variant="subtitle2">{item?.subject || ''}</Typography>
+        <Typography 
+          variant="subtitle2" 
+          sx={{ cursor: 'pointer' }} 
+          onClick={() => navigate(`/dashboard/contabilidad/detalle-pago/${item.id}`)}
+        >
+          {item?.subject || ''}
+        </Typography>
 
         <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {item?.date ? fDateTime(item.date): ''}
+          {/* {item?.date ? fDateTime(item.date): ''} */}
+          <p>{item?.date || ''}</p>
         </Typography>
       </TimelineContent>
     </TimelineItem>

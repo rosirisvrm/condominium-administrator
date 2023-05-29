@@ -41,7 +41,7 @@ function DashboardApp() {
       dispatch(setLoadingPaymentsList(true))
 
       setTimeout(() => {
-        const res = getPayments({ perPage: 5 })
+        const res = getPayments()
         dispatch(setPayments(res))
         dispatch(setLoadingPaymentsList(false))
       }, 2000)
@@ -73,7 +73,7 @@ function DashboardApp() {
             <AppOrderTimeline
               title="Pagos Recientes"
               list={payments}
-              path='/dashboard/contabilidad/pagos'
+              path='/dashboard/contabilidad/ingresos'
               textButton='Ver todos'
               loading={loadingPaymentsList}
             />

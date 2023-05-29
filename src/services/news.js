@@ -23,8 +23,8 @@ export const getNewsList = ({ perPage = 24 } = {}, ) => [
         file: 'reglamento de condominio',
         postedAt: faker.date.recent(),
         author: {
-            id: '0',
-            name: 'Rosiris Romero',
+            id: '1',
+            name: 'Clara Montoya',
         }
     },
     {
@@ -36,8 +36,8 @@ export const getNewsList = ({ perPage = 24 } = {}, ) => [
         file: 'imagen porton',
         postedAt: faker.date.recent(),
         author: {
-            id: '0',
-            name: 'Rosiris Romero',
+            id: '2',
+            name: 'María Sifuentes',
         }
     }
 ]
