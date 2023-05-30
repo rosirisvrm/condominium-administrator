@@ -11,7 +11,7 @@ export const getExpenses = (newRegister) => {
       subject: newRegister.subject,
       amount: newRegister.amount,
       reference: newRegister.reference,
-      status: { label: 'Pendiente', value: 0 },
+      status: { label: 'Completado', value: 1 },
       date: newRegister.date,
       user: {
         id: '0',

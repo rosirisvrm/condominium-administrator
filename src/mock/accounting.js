@@ -6,7 +6,7 @@ export const expenses = [
     subject: 'Pago proveedor luces entrada',
     amount: 100,
     reference: 118725,
-    status: { label: 'Pendiente', value: 0 },
+    status: { label: 'Completado', value: 1 },
     date: faker.date.recent(),
     user: {
       id: '0',
@@ -19,7 +19,7 @@ export const expenses = [
     subject: 'Pago reparación portón',
     amount: 20,
     reference: 9126352,
-    status: { label: 'Pendiente', value: 0 },
+    status: { label: 'Completado', value: 1 },
     date: faker.date.recent(),
     user: {
       id: '0',
