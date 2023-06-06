@@ -1,6 +1,7 @@
 {
   "name": "condominium-administrator",
   "author": "Luis Coronado y Rosiris Romero",
+  "homepage": "https://rosirisvrm.github.io/condominium-administrator",
   "licence": "MIT",
   "version": "1.5.0",
   "private": false,
@@ -9,6 +10,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "lint": "eslint --ext .js,.jsx ./src",
     "lint:fix": "eslint --fix --ext .js,.jsx ./src",
     "clear-all": "rm -rf build node_modules",
@@ -87,6 +90,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^5.0.0",
     "prettier": "^2.7.1"
   },
   "overrides": {
