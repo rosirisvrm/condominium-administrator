@@ -2,7 +2,8 @@
 import 'simplebar/src/simplebar.css';
 
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+// import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 
 import { 
@@ -45,9 +46,9 @@ root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <HelmetProvider>
-        <BrowserRouter>
+        <HashRouter>
           <App />
-        </BrowserRouter>
+        </HashRouter>
       </HelmetProvider>
     </PersistGate>
   </Provider>
