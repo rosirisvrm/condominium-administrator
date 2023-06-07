@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/condominium-administrator/static/css/main.25895456.css",
-    "main.js": "/condominium-administrator/static/js/main.c7d93199.js",
+    "main.js": "/condominium-administrator/static/js/main.57b56de7.js",
     "static/js/787.e5b2a355.chunk.js": "/condominium-administrator/static/js/787.e5b2a355.chunk.js",
     "index.html": "/condominium-administrator/index.html",
     "main.25895456.css.map": "/condominium-administrator/static/css/main.25895456.css.map",
-    "main.c7d93199.js.map": "/condominium-administrator/static/js/main.c7d93199.js.map",
+    "main.57b56de7.js.map": "/condominium-administrator/static/js/main.57b56de7.js.map",
     "787.e5b2a355.chunk.js.map": "/condominium-administrator/static/js/787.e5b2a355.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.25895456.css",
-    "static/js/main.c7d93199.js"
+    "static/js/main.57b56de7.js"
   ]
 }
